@@ -29,7 +29,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("Hash", hashCreator.CreateHash(timeStamp, urlString));
-        headers.Add("Timestamp", GetTimestamp().ToString());
+        headers.Add("Timestamp", timeStamp);
         headers.Add("Authorization", "Here");
 
         return headers;
