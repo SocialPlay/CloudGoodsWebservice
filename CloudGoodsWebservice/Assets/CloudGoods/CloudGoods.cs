@@ -6,6 +6,8 @@ public class CloudGoods : MonoBehaviour {
 
     private static CloudGoods _instance;
 
+    public string appSecret = "K6bFGgvtetjVIZHplj5icXJQAqhPCL"; 
+
     public static CloudGoods Instance()
     {
         if (_instance == null)

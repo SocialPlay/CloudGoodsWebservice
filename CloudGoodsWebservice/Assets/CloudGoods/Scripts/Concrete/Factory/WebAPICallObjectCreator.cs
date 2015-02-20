@@ -12,11 +12,11 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
     public WWW CreateLoginCallObject(string appID, string userEmail, string password)
     {
-        string loginUrl = string.Format("Login?appId={0}&email={1}&password={2}", appID, userEmail, password);
+        string loginUrl = string.Format("appId={0}&email={1}&password={2}", appID, userEmail, password);
 
         Dictionary<string, string> headers = CreateCallHeader( loginUrl);
 
-        string urlString = string.Format(url + "api/CloudGoods/" + loginUrl);
+        string urlString = string.Format(url + "api/CloudGoods/Login?" + loginUrl);
         return new WWW(urlString, null, headers);
     }
 
@@ -28,7 +28,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
         string timeStamp = GetTimestamp().ToString();
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("Hash", hashCreator.CreateHash(urlString, timeStamp));
+        headers.Add("Hash", hashCreator.CreateHash(timeStamp, urlString));
         headers.Add("Timestamp", GetTimestamp().ToString());
         headers.Add("Authorization", "Here");
 
