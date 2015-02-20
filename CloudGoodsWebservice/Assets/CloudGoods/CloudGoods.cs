@@ -24,9 +24,9 @@ public class CloudGoods : MonoBehaviour {
     CallObjectCreator callObjectCreator = new WebAPICallObjectCreator();
     ResponseCreator responseCreator = new LitJsonResponseCreator();
 
-    public void Login(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userName, string userEmail, string password, Action<UserResponse> callback)
+    public void Login(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail, string password, Action<CloudGoodsUser> callback)
     {
-        Instance().StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(AppID, userName, userEmail, password), x => {
+        Instance().StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(AppID, userEmail, password), x => {
             callback(responseCreator.CreateLoginResponse(x));
         }));
     }

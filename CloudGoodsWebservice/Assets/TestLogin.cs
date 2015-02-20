@@ -3,17 +3,12 @@ using System.Collections;
 
 public class TestLogin : MonoBehaviour {
 
-    void Awake()
-    {
-
-    }
-
 	void Start () {
-        CloudGoods.Instance().Login(CloudGoodsPlatform.SocialPlay, "", "lionelsy", "lionel.sy@gmail.com", "123456", Callback);
+        CloudGoods.Instance().Login(CloudGoodsPlatform.SocialPlay, "", "lionel.sy@gmail.com", "123456", Callback);
 	}
 
-    void Callback(UserResponse response)
+    void Callback(CloudGoodsUser response)
     {
-        Debug.Log("Response: " + response.message);
+        Debug.Log("cloud goods user session: " + response.sessionID + " userID: " + response.UserID + " user email: " + response.userEmail + " username: " + response.userName);
     }
 }

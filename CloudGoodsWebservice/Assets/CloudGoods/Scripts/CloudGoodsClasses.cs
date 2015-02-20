@@ -17,18 +17,19 @@ public class GiveOwnerItemWebserviceRequest
 
 public class CloudGoodsUser
 {
-    public string userGuid = "";
+    public string UserID = "";
     public bool isNewUserToWorld = false;
     public string userName = "";
     public string userEmail = "";
-    public Guid sessionID;
-    public Guid userID;
+    public string sessionID;
 
-    public CloudGoodsUser(string newUserGuid, string newUserName, string newUserEmail)
+    public CloudGoodsUser(string newUserId, string newUserName, string newUserEmail, string newSessionID, bool newIsNewUserToWorld)
     {
-        userGuid = newUserGuid;
+        UserID = newUserId;
         userName = newUserName;
         userEmail = newUserEmail;
+        sessionID = newSessionID;
+        isNewUserToWorld = newIsNewUserToWorld;
     }
 }
 
@@ -46,13 +47,13 @@ public class LoginUserInfo
     }
 }
 
-public class UserResponse
+public class UserLoginInfo
 {
     public int code;
     public string message;
     public CloudGoodsUser userInfo;
 
-    public UserResponse(int caseCode, string msg, CloudGoodsUser newUserInfo)
+    public UserLoginInfo(int caseCode, string msg, CloudGoodsUser newUserInfo)
     {
         code = caseCode;
         message = msg;
@@ -67,13 +68,13 @@ public class UserResponse
 
 public class WebserviceError
 {
-    public int ErrorCode;
-    public string ErrorMessage;
+    public int errorCode;
+    public string Message;
 
     public WebserviceError(int newErrorCode, string newErrorMessage)
     {
-        ErrorCode = newErrorCode;
-        ErrorMessage = newErrorMessage;
+        errorCode = newErrorCode;
+        Message = newErrorMessage;
     }
 }
 

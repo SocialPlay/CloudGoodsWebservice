@@ -5,42 +5,46 @@ using LitJson;
 
 public class LitJsonResponseCreator : ResponseCreator {
 
-    public event Action<WebserviceError> ResponseHasError;
+    #region UserManagement
 
-    public bool CheckForWebserviceError(object data)
+    public CloudGoodsUser CreateLoginResponse(string responseData)
     {
-        JsonData jsonData = (JsonData)data;
+        if(!IsValidData(responseData)) return null;
+        if(IsWebserviceError(responseData)) return null;
 
-        if(JsonDataContainsKey(jsonData, "Error"))
+        JsonData jsonData = JsonMapper.ToObject(responseData);
+
+        return new CloudGoodsUser(jsonData["UserId"].ToString(), jsonData["Username"].ToString(), jsonData["Email"].ToString(), jsonData["SessionId"].ToString(), false);
+    }
+
+    #endregion
+
+    #region Utilities
+
+    public bool IsValidData(string data)
+    {
+        try
         {
-            if (ResponseHasError != null)
-            {
-                WebserviceError webServiceError = CreateWebserviceErrorObject(jsonData);
-                ResponseHasError(webServiceError);
-            }
-            return true;
+            JsonData jsonData = JsonMapper.ToObject(data);
+        }
+        catch
+        {
+            throw new Exception("Invalid Data received from webservice");
+        }
+
+        return true;
+    }
+
+    public bool IsWebserviceError(string data)
+    {
+        JsonData jsonData = JsonMapper.ToObject(data);
+
+        if (JsonDataContainsKey(jsonData, "errorCode"))
+        {
+            throw new WebserviceException(jsonData["errorCode"].ToString(), jsonData["message"].ToString());
         }
 
         return false;
-    }
-
-    public UserResponse CreateLoginResponse(string responseData)
-    {
-        JsonData jsonData = JsonMapper.ToObject(responseData);
-
-        if (!CheckForWebserviceError(responseData))
-        {
-            Debug.Log("No error");
-            return new UserResponse(0, "", new CloudGoodsUser("", "", ""));
-        }
-        else
-            return null;
-    }
-
-    public WebserviceError CreateWebserviceErrorObject(JsonData jsonErrorString)
-    {
-        WebserviceError webServiceError = new WebserviceError(int.Parse(jsonErrorString["ErrorCode"].ToString()), jsonErrorString["Message"].ToString());
-        return webServiceError;
     }
 
     public bool JsonDataContainsKey(JsonData data, string key)
@@ -60,5 +64,15 @@ public class LitJsonResponseCreator : ResponseCreator {
             result = true;
         }
         return result;
+    }
+
+    #endregion
+
+}
+
+public class WebserviceException : Exception
+{
+    public WebserviceException(string errorCode, string message) : base("Error " + errorCode + ": " + message)
+    {
     }
 }

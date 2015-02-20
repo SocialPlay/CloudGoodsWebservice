@@ -4,9 +4,9 @@ using System;
 
 public interface ResponseCreator {
 
-    event Action<WebserviceError> ResponseHasError;
+    CloudGoodsUser CreateLoginResponse(string responseData);
 
-    bool CheckForWebserviceError(object data);
+    bool IsValidData(string data);
 
-    UserResponse CreateLoginResponse(string responseData);
+    bool IsWebserviceError(string data);
 }
