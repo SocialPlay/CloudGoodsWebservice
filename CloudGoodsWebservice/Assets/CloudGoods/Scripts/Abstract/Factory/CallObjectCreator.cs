@@ -7,6 +7,8 @@ public interface CallObjectCreator  {
 
     WWW CreateLoginCallObject(string appID, string userEmail, string password);
 
+    WWW CreateGetServerTimeObject();
+
     Dictionary<string, string> CreateCallHeader(string urlString);
 
     int GetTimestamp();

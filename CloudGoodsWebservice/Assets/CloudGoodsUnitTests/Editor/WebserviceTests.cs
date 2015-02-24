@@ -17,9 +17,6 @@ namespace WebserviceTests
         public void Init()
         {
             responseCreator = new LitJsonResponseCreator();
-            //ResponseCreator creator = new Mock<LitJsonResponseCreator>() as ResponseCreator;
-            var creator = new Mock<LitJsonResponseCreator>();
-            creator.Setup(x => x.IsValidData("here")).Returns(false);
         }
 
         #region DataValidationTests

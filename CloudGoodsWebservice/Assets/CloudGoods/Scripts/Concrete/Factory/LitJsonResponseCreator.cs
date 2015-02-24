@@ -19,6 +19,7 @@ public class LitJsonResponseCreator : ResponseCreator {
 
     #endregion
 
+
     #region Utilities
 
     public bool IsValidData(string data)

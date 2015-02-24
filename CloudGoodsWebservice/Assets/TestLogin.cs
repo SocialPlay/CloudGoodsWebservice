@@ -3,9 +3,21 @@ using System.Collections;
 
 public class TestLogin : MonoBehaviour {
 
-	void Start () {
+    void Awake()
+    {
+        CloudGoods.Instance().CloudGoodsInitilized += TestLogin_CloudGoodsInitilized;
+    }
+
+    void Start()
+    {
+        CloudGoods.Instance().Initialize();
+    }
+
+
+    void TestLogin_CloudGoodsInitilized()
+    {
         CloudGoods.Instance().Login(CloudGoodsPlatform.SocialPlay, "", "lionel.sy@gmail.com", "123456", Callback);
-	}
+    }
 
     void Callback(CloudGoodsUser response)
     {
