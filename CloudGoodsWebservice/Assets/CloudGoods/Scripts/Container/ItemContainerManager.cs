@@ -7,7 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class ItemContainerManager
 {
-    public static ContainerAddState.ActionState MoveItem(ItemData movingItemData, ItemContainer lastContainer, ItemContainer targetContainer)
+    public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer lastContainer, ItemContainer targetContainer)
     {
         try
         {
@@ -22,15 +22,15 @@ public class ItemContainerManager
                 Debug.Log(lastContainer.GetContainerRemoveState(movingItemData));
                 if (lastContainer.GetContainerRemoveState(movingItemData) == false)
                 {
-                    return ContainerAddState.ActionState.No;
+                    return ContainerMoveState.ActionState.No;
                 }
             }
 
-            ContainerAddState targetAddState = targetContainer.GetContainerAddState(movingItemData);
+            ContainerMoveState targetAddState = targetContainer.GetContainerAddState(movingItemData);
 
             switch (targetAddState.actionState)
             {
-                case ContainerAddState.ActionState.Add:
+                case ContainerMoveState.ActionState.Add:
 
                     ItemData newItemData = new ItemData()
                         {
@@ -45,7 +45,7 @@ public class ItemContainerManager
                     targetContainer.Add(newItemData, targetAddState.possibleAddAmount);
 
                     break;
-                case ContainerAddState.ActionState.No:
+                case ContainerMoveState.ActionState.No:
                     break;
                 default:
                     break;
@@ -57,8 +57,14 @@ public class ItemContainerManager
         {
             Debug.LogError(e.Message);
 
-            return ContainerAddState.ActionState.No;
+            return ContainerMoveState.ActionState.No;
         }
+    }
+
+
+    public static ContainerMoveState.ActionState RemoveItem(ItemContainer container, ItemData itemData)
+    {
+        return ContainerMoveState.ActionState.Remove;
     }
 }
 

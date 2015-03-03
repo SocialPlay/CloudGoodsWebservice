@@ -80,14 +80,14 @@ public class ItemContainer : MonoBehaviour
         }
     }
 
-    public ContainerAddState GetContainerAddState(ItemData itemData)
+    public ContainerMoveState GetContainerAddState(ItemData itemData)
     {
         if (containerAddRestrictions.Count > 0)
         {
             foreach (IContainerRestriction newRestriction in containerAddRestrictions)
             {
                 if (newRestriction.IsRestricted(ContainerAction.add, itemData))
-                    return new ContainerAddState(ContainerAddState.ActionState.No);
+                    return new ContainerMoveState(ContainerMoveState.ActionState.No);
             }
         }
 
@@ -108,7 +108,7 @@ public class ItemContainer : MonoBehaviour
         return true;
     }
 
-    protected ContainerAddState MyContainerAddState(ItemData modified)
+    protected ContainerMoveState MyContainerAddState(ItemData modified)
     {
         int addAbleAmount = modified.Amount;
 
@@ -118,7 +118,7 @@ public class ItemContainer : MonoBehaviour
             {
                 if (item.IsSameItemAs(modified))
                 {
-                    return new ContainerAddState(ContainerAddState.ActionState.No, 0);
+                    return new ContainerMoveState(ContainerMoveState.ActionState.No, 0);
                 }
             }
 
@@ -126,7 +126,7 @@ public class ItemContainer : MonoBehaviour
                 addAbleAmount = ItemQuantityLimit;
         }
 
-        return new ContainerAddState(ContainerAddState.ActionState.Add, addAbleAmount);
+        return new ContainerMoveState(ContainerMoveState.ActionState.Add, addAbleAmount);
     }
 
     public void Add(ItemData itemData, int amount = -1, bool isSave = true)

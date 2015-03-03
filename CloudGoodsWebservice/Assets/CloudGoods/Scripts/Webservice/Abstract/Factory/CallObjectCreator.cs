@@ -15,5 +15,5 @@ public interface CallObjectCreator  {
 
     int GetTimestamp();
 
-    Guid GenerateNonce();
+    string GenerateNonce();
 }

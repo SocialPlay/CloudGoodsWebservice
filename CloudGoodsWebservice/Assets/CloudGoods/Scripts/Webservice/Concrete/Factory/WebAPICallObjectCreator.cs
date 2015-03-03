@@ -6,8 +6,6 @@ using System;
 public class WebAPICallObjectCreator : CallObjectCreator {
 
     public HashCreator hashCreator = new StandardHashCreator();
-    string url = "http://localhost:2842/";
-    //string url = "http://192.168.0.197/WebService2/";
 
     #region User Management
 
@@ -17,7 +15,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
         Dictionary<string, string> headers = CreateLoginCallHeader( loginUrl);
 
-        string urlString = string.Format(url + "api/CloudGoods/Login" + loginUrl);
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
         return new WWW(urlString, null, headers);
     }
 
@@ -33,7 +31,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
         Dictionary<string, string> headers = CreateLoginCallHeader(loginUrl);
 
-        string urlString = string.Format(url + "api/CloudGoods/UserItems" + loginUrl);
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/UserItems" + loginUrl);
         return new WWW(urlString, null, headers);
     }
 
@@ -43,7 +41,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
     public WWW CreateGetServerTimeObject()
     {
-        string urlString = string.Format(url + "api/CloudGoods/Time");
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Time");
         return new WWW(urlString);
     }
 
@@ -59,12 +57,11 @@ public class WebAPICallObjectCreator : CallObjectCreator {
         
         headers.Add("Hash", hashCreator.CreateHash(timeStamp, urlString));
         headers.Add("Timestamp", timeStamp);
-        headers.Add("Authorization", "Here");
 
         if (!string.IsNullOrEmpty(CloudGoods.Instance.SessionId))
         {
             headers.Add("SessionID", CloudGoods.Instance.SessionId);
-            headers.Add("Nonce", Guid.NewGuid().ToString());
+            headers.Add("Nonce", GenerateNonce());
         }
             
 
@@ -78,9 +75,9 @@ public class WebAPICallObjectCreator : CallObjectCreator {
         return timeStamp;
     }
 
-    public Guid GenerateNonce()
+    public string GenerateNonce()
     {
-        return Guid.NewGuid();
+        return Guid.NewGuid().ToString();
     }
 
     #endregion

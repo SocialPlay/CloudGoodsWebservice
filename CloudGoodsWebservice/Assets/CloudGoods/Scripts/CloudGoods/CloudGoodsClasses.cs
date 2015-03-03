@@ -254,15 +254,15 @@ public class ItemData
 #region Containers
 
 [System.Serializable]
-public class ContainerAddState
+public class ContainerMoveState
 {
-    public enum ActionState { Add, Swap, No }
+    public enum ActionState { Add, Swap, No, Remove }
     public ActionState actionState;
     public int possibleAddAmount;
     public ItemData possibleSwapItem;
 
 
-    public ContainerAddState(ActionState newState = ActionState.No, int possibleAddAmount = 0, ItemData possibleSwapItem = null)
+    public ContainerMoveState(ActionState newState = ActionState.No, int possibleAddAmount = 0, ItemData possibleSwapItem = null)
     {
         this.actionState = newState;
         this.possibleAddAmount = possibleAddAmount;

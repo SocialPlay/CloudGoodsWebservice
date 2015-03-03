@@ -24,9 +24,10 @@ public class LitJsonResponseCreator : ResponseCreator {
 
         JsonData jsonUserItems = JsonMapper.ToObject(responseData);
 
+        List<ItemData> items = new List<ItemData>();
+
         for (int i = 0; i < jsonUserItems.Count; i++)
         {
-            Debug.Log("Item " + (i + 1) + " Found");
             JsonData jsonItemData = jsonUserItems[i];
 
             ItemData itemData = new ItemData()
@@ -39,12 +40,24 @@ public class LitJsonResponseCreator : ResponseCreator {
                 Id = int.Parse(jsonItemData["Id"].ToString()),
                 Location = int.Parse(jsonItemData["location"].ToString()),
                 Name = jsonItemData["name"].ToString(),
-                StackLocationId = jsonItemData["classId"].ToString()
+                StackLocationId = jsonItemData["stackLocationId"].ToString()
             };
+
+            for (int j = 0; j < jsonItemData["behaviours"].Count; j++)
+            {
+                itemData.behaviours.Add(new ItemData.Behaviours() { name = jsonItemData["behaviours"][j]["name"].ToString(), Id = int.Parse(jsonItemData["behaviours"][j]["Id"].ToString()) });
+            }
+
+            for (int j = 0; j < jsonItemData["tags"].Count; j++)
+            {
+                itemData.tags.Add(new ItemData.Tag() { name = jsonItemData["tags"][j]["name"].ToString(), Id = int.Parse(jsonItemData["tags"][j]["Id"].ToString()) });
+            }
+
+            items.Add(itemData);
 
         }
 
-        return new List<ItemData>();
+        return items;
     }
 
     #endregion

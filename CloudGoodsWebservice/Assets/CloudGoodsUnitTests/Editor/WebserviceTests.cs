@@ -87,15 +87,15 @@ namespace WebserviceTests
 
             ItemData itemData = items[0];
 
-            //Assert.AreEqual(itemData.Id, 1);
-            //Assert.AreEqual(itemData.CollectionId, 2);
-            //Assert.AreEqual(itemData.StackLocationId, "1234567");
-            //Assert.AreEqual(itemData.ClassId, 3);
-            //Assert.AreEqual(itemData.Name, "Test Item");
-            //Assert.AreEqual(itemData.Amount, 4);
-            //Assert.AreEqual(itemData.Location, 5);
-            //Assert.AreEqual(itemData.Detail, "Some details here");
-            //Assert.AreEqual(itemData.Energy, 6);
+            Assert.AreEqual(1, itemData.Id);
+            Assert.AreEqual(2, itemData.CollectionId);
+            Assert.AreEqual("1234567", itemData.StackLocationId);
+            Assert.AreEqual(3, itemData.ClassId);
+            Assert.AreEqual("Test Item", itemData.Name);
+            Assert.AreEqual(4, itemData.Amount);
+            Assert.AreEqual(5, itemData.Location);
+            Assert.AreEqual("Some details here", itemData.Detail);
+            Assert.AreEqual(6, itemData.Energy);
 
             for (int i = 0; i < 3; i++)
             {
