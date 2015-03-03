@@ -1,26 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TestLogin : MonoBehaviour {
 
     void Awake()
     {
-        CloudGoods.Instance().CloudGoodsInitilized += TestLogin_CloudGoodsInitilized;
+        CloudGoods.Instance.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
     }
 
-    void Start()
+	// Use this for initialization
+	void Start () {
+        CloudGoods.Instance.Initialize();
+	}
+
+    void Instance_CloudGoodsInitilized()
     {
-        CloudGoods.Instance().Initialize();
+        CloudGoods.Instance.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
+
+        //CloudGoods.Instance.GetUserItems(OnReceivedUserItems);
     }
 
-
-    void TestLogin_CloudGoodsInitilized()
+    void OnReceivedUserItems(List<ItemData> items)
     {
-        CloudGoods.Instance().Login(CloudGoodsPlatform.SocialPlay, "", "lionel.sy@gmail.com", "123456", Callback);
+        foreach (ItemData item in items)
+        {
+            Debug.Log("Item: " + item.Name);
+        }
     }
 
-    void Callback(CloudGoodsUser response)
+    void OnReceivedUser(CloudGoodsUser user)
     {
-        Debug.Log("cloud goods user session: " + response.sessionID + " userID: " + response.UserID + " user email: " + response.userEmail + " username: " + response.userName);
+        Debug.Log("User: " + user.userName);
+        CloudGoods.Instance.GetUserItems(OnReceivedUserItems);
     }
 }
