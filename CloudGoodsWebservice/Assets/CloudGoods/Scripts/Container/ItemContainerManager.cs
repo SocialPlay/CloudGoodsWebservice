@@ -10,6 +10,9 @@ public class ItemContainerManager
 
     public static ContainerMoveState.ActionState AddItem(ItemData addItem, ItemContainer targetContainer)
     {
+        if (addItem.IsLocked)
+            return ContainerMoveState.ActionState.No;
+
         ContainerMoveState targetAddState = targetContainer.GetContainerAddState(addItem);
 
         switch (targetAddState.actionState)
@@ -32,6 +35,9 @@ public class ItemContainerManager
     {
         try
         {
+            if (movingItemData.IsLocked)
+                return ContainerMoveState.ActionState.No;
+
             if (movingItemData == null)
                 throw new Exception("Can Not Move null item");
 
@@ -74,6 +80,10 @@ public class ItemContainerManager
 
     public static ContainerMoveState.ActionState RemoveItem(ItemData RemoveItemData, ItemContainer TargetContainer)
     {
+
+        if (RemoveItemData.IsLocked)
+            return ContainerMoveState.ActionState.No;
+
         if (TargetContainer.GetContainerRemoveState(RemoveItemData) == false)
         {
             return ContainerMoveState.ActionState.No;

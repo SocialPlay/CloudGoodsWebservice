@@ -40,7 +40,9 @@ public class LitJsonResponseCreator : ResponseCreator {
                 Id = int.Parse(jsonItemData["Id"].ToString()),
                 Location = int.Parse(jsonItemData["location"].ToString()),
                 Name = jsonItemData["name"].ToString(),
-                StackLocationId = jsonItemData["stackLocationId"].ToString()
+                StackLocationId = jsonItemData["stackLocationId"].ToString(),
+                Description = jsonItemData["description"].ToString(),
+                ImageName = jsonItemData["imageName"].ToString()
             };
 
             for (int j = 0; j < jsonItemData["behaviours"].Count; j++)
@@ -58,6 +60,18 @@ public class LitJsonResponseCreator : ResponseCreator {
         }
 
         return items;
+    }
+
+    public NewItemStack CreateMoveItemResponse(string responseData)
+    {
+        JsonData jsonMoveitem = JsonMapper.ToObject(responseData);
+
+        NewItemStack itemStack = new NewItemStack()
+        {
+            stackLocationId = jsonMoveitem["newStackId"].ToString()
+        };
+
+        return itemStack;
     }
 
     #endregion

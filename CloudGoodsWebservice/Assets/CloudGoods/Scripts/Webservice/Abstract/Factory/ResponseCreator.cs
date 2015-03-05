@@ -9,6 +9,8 @@ public interface ResponseCreator {
 
     List<ItemData> CreateGetUserItemsResponse(string responseData);
 
+    NewItemStack CreateMoveItemResponse(string responseData);
+
     bool IsValidData(string data);
 
     bool IsWebserviceError(string data);

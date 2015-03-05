@@ -79,8 +79,6 @@ public class ItemContainerDisplay : MonoBehaviour
 
     public virtual void RemovedItem(ItemData itemData, int amount, bool arg3)
     {
-        Debug.Log("removed item: " + itemData);
-
         ItemDataDisplay selected = FindDisplayMatch(itemData);
         if (selected != null)
         {

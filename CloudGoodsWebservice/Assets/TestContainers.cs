@@ -1,39 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TestContainers : MonoBehaviour {
 
     public ItemContainer itemContainer;
 
-	// Use this for initialization
-	void Start () {
-        ItemData itemData = new ItemData()
-        {
-            Id = 1,
-            CollectionId = 2,
-            Amount = 5,
-            ClassId = 10,
-            Energy = 100,
-            Location = 0,
-            Name = "Test Item",
-            StackLocationId = "123456",
-            Detail = "Some test detail here"
-        };
+    // Use this for initialization
+    void Start()
+    {
+        CloudGoods.Instance.Initialize();
+        CloudGoods.Instance.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
+    }
 
-        for (int i = 0; i < 3; i++)
+    void Instance_CloudGoodsInitilized()
+    {
+        CloudGoods.Instance.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
+    }
+
+    void OnReceivedUserItems(List<ItemData> items)
+    {
+        foreach (ItemData item in items)
         {
-            ItemData.Tag tag = new ItemData.Tag() { name = i.ToString(), Id = i };
-            //itemData.tags.Add(tag);
+            Debug.Log("Item: " + item.Name);
         }
+    }
 
-        for (int i = 0; i < 3; i++)
+    void OnReceivedUser(CloudGoodsUser user)
+    {
+        foreach (PersistentItemContainer loader in GameObject.FindObjectsOfType(typeof(PersistentItemContainer)))
         {
-            ItemData.Behaviours behaviour = new ItemData.Behaviours() { name = i.ToString(), Id = i };
-            itemData.behaviours.Add(behaviour);
-        }
 
-        itemContainer.Add(itemData, -1, false);
-	}
+                loader.transform.parent.GetComponent<ItemContainer>().Clear();
+                loader.LoadItems();
+           
+        }
+    }
 
     // Update is called once per frame
     void Update()

@@ -158,6 +158,11 @@ public class PurchasePremiumCurrencyBundleResponse
 
 #region Items
 
+public class NewItemStack
+{
+    public string stackLocationId;
+}
+
 public class StoreItem
 {
     public int ID = 0;
@@ -220,10 +225,13 @@ public class ItemData
     public int Location;
     public string Detail;
     public int Energy;
+    public string Description;
+    public string ImageName;
     public List<Behaviours> behaviours = new List<Behaviours>();
     public List<Tag> tags = new List<Tag>();
 
     public ItemContainer OwnerContainer;
+    public bool IsLocked = false;
 
     public class Tag
     {

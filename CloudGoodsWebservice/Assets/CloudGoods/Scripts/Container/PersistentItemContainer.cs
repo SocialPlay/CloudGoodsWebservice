@@ -14,7 +14,7 @@ public class PersistentItemContainer : MonoBehaviour
 
     public void LoadItems()
     {
-        //CloudGoods.GetOwnerItems(GetOwnerID(), OwnerType.ToString(), Location, RecivedItems);
+        CloudGoods.Instance.GetUserItems(Location, RecivedItems);
     }
 
     void Start()
@@ -41,7 +41,7 @@ public class PersistentItemContainer : MonoBehaviour
 
     #region Loading Items
     protected void RecivedItems(List<ItemData> receivedItems)
-    {      
+    {     
         foreach (ItemData item in receivedItems)
         {
             Container.Add(item, -1, false);
@@ -80,13 +80,12 @@ public class PersistentItemContainer : MonoBehaviour
     {
         if (isSave == true)
         {
-            //Debug.Log("Saving Modified: " + data.stackSize);
-            //data.isLocked = true;
-            //CloudGoods.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), OwnerType.ToString(), Location, delegate(Guid x)
-            //{
-            //    data.stackID = x;
-            //    data.isLocked = false;
-            //});
+            Debug.Log("Mod Item");
+            CloudGoods.Instance.MoveItem(data, Location, data.Amount, x =>
+            {
+                data.StackLocationId = x.stackLocationId;
+                data.IsLocked = false;
+            });
         }
     }
 
@@ -94,12 +93,14 @@ public class PersistentItemContainer : MonoBehaviour
     {
         if (isSave == true)
         {
-            //data.isLocked = true;
-            //CloudGoods.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), OwnerType.ToString(), Location, delegate(Guid x)
-            //{
-            //    data.stackID = x;
-            //    data.isLocked = false;
-            //});
+            Debug.Log("Add Item");
+            data.IsLocked = true;
+
+            CloudGoods.Instance.MoveItem(data, Location, data.Amount, x =>
+            {
+                data.StackLocationId = x.stackLocationId;
+                data.IsLocked = false;
+            });
         }
     }
 

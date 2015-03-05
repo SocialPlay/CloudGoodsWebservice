@@ -80,6 +80,7 @@
      <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\UnityItemDataDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\UnityUIItemDragComponent.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\UnityUIItemDropComponent.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Utilities\ItemTextureCache.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\CallObjectCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\HashCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\ResponseCreator.cs" />

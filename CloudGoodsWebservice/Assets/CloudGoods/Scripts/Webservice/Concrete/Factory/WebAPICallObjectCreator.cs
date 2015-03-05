@@ -5,7 +5,6 @@ using System;
 
 public class WebAPICallObjectCreator : CallObjectCreator
 {
-
     public HashCreator hashCreator = new StandardHashCreator();
 
     public class URLValue
@@ -32,7 +31,6 @@ public class WebAPICallObjectCreator : CallObjectCreator
         string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
 
         Dictionary<string, string> headers = CreateLoginCallHeader(loginUrl);
-
         string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
         return new WWW(urlString, null, headers);
     }
@@ -41,13 +39,17 @@ public class WebAPICallObjectCreator : CallObjectCreator
 
     #region Item Management
 
-    public WWW CreateGetUserItemsCallObject(string SessionID)
+    public WWW CreateGetUserItemsCallObject(int location)
     {      
-
-       return GrenerateWWWCall("UserItems",new URLValue("location",0));
+       return GenerateWWWCall("UserItems",new URLValue("location",location));
     }
 
     #endregion
+
+    public WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType)
+    {
+        return GenerateWWWCall("MoveItem", new URLValue("StackId", stackId), new URLValue("amount", amount), new URLValue("location", location), new URLValue("ownerType", ownerType));
+    }
 
     #region Server Utilities
 
@@ -60,8 +62,6 @@ public class WebAPICallObjectCreator : CallObjectCreator
     #endregion
 
     #region Utilities
-
-
 
     public Dictionary<string, string> CreateLoginCallHeader(string urlString)
     {
@@ -85,7 +85,6 @@ public class WebAPICallObjectCreator : CallObjectCreator
     public int GetTimestamp()
     {
         int timeStamp = DateTime.UtcNow.ConvertToUnixTimestamp() + CloudGoods.Instance.ServerTimeDifference;
-        Debug.Log("Timestamp: " + timeStamp);
         return timeStamp;
     }
 
@@ -94,7 +93,7 @@ public class WebAPICallObjectCreator : CallObjectCreator
         return Guid.NewGuid().ToString();
     }
 
-    public WWW GrenerateWWWCall(string controller, params URLValue[] urlPrams)
+    public WWW GenerateWWWCall(string controller, params URLValue[] urlPrams)
     {
         string createdURL = "";
         foreach (URLValue urlA in urlPrams)

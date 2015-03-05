@@ -7,7 +7,9 @@ public interface CallObjectCreator  {
 
     WWW CreateLoginCallObject(string appID, string userEmail, string password);
 
-    WWW CreateGetUserItemsCallObject(string SessionID);
+    WWW CreateGetUserItemsCallObject(int location);
+
+    WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType);
 
     WWW CreateGetServerTimeObject();
 

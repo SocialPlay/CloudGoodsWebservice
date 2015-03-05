@@ -59,6 +59,16 @@ public class ContainerTests : MonoBehaviour {
         return container;
     }
 
+    private ItemContainerDisplay SetUpContainerWithDisplay()
+    {
+        GameObject containerObj = new GameObject();
+        containerObj.name = "Item Container For Display";
+
+
+
+        return new ItemContainerDisplay();
+    }
+
     [Test]
     public void BasicAddItemDataToContainerUpdatesContainerItemList()
     {
@@ -174,4 +184,35 @@ public class ContainerTests : MonoBehaviour {
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
         Assert.AreEqual("Item Two", ItemContainerOne.containerItems[1].Name);
     }
+
+    [Test]
+    public void AddItemToContainerDisplayContainerItem()
+    {
+
+    }
+
+    [Test]
+    public void AddItemToContainerDisplayCorrectItemTexture()
+    {
+
+    }
+
+    [Test]
+    public void AddNewItemToExistingItemStackUpdatesAmountDisplay()
+    {
+
+    }
+
+    [Test]
+    public void AddMultipleItemsToSingleContainerShowsMultipleDisplays()
+    {
+
+    }
+
+    [Test]
+    public void MoveItemFromOneContainerToAnotherUpdatesDisplay()
+    {
+
+    }
+
 }

@@ -71,15 +71,26 @@ public class CloudGoods : MonoBehaviour {
 
     #region ItemManagement
 
-    public void GetUserItems(Action<List<ItemData>> callback)
+    public void GetUserItems(int location, Action<List<ItemData>> callback)
     {
         if (!isInitialized)
             throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
 
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetUserItemsCallObject(SessionId), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetUserItemsCallObject(location), x =>
         {
             callback(responseCreator.CreateGetUserItemsResponse(x));
         }));
+    }
+
+    public void MoveItem(ItemData item, int location, int amountToMove, Action<NewItemStack> callback)
+    {
+        if (!isInitialized)
+            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
+
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemCallObject(item.StackLocationId, amountToMove, location, "User"), x =>
+            {
+                callback(responseCreator.CreateMoveItemResponse(x));
+            })); 
     }
 
     #endregion

@@ -32,6 +32,6 @@ public class TestLogin : MonoBehaviour {
     void OnReceivedUser(CloudGoodsUser user)
     {
         Debug.Log("User: " + user.userName);
-        CloudGoods.Instance.GetUserItems(OnReceivedUserItems);
+        CloudGoods.Instance.GetUserItems(0, OnReceivedUserItems);
     }
 }

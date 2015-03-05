@@ -71,10 +71,8 @@ public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPo
 
 
         SetAmountText(itemObject.itemData.Amount.ToString());
-        //CloudGoods.GetItemTexture(itemObject.itemData.Name, OnReceivedItemTexture);
+        ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.ImageName, OnReceivedItemTexture);
         //SetFrameColor(ItemQuailityColorSelector.GetColorForItem(itemObject.itemData));
-
-
     }
 
     void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)
