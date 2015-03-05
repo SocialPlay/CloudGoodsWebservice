@@ -23,7 +23,7 @@ public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
             //Should only swap single item in container (first item in container items list)
             ItemData swapItem = itemContainer.containerItems[swapIndex];
 
-            ItemContainerManager.MoveItem(swapItem, itemContainer, addItem.OwnerContainer);
+            ItemContainerManager.MoveItem(swapItem, addItem.OwnerContainer);
             AddItemToContainer(addItem, amount, isSave);
         }
         else

@@ -4,8 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(ItemContainer))]
 public class BasicAddContainer : MonoBehaviour, IContainerAddAction
 {
-
-    private ItemContainer itemContainer;
+    public ItemContainer itemContainer;
 
     void Awake()
     {
@@ -38,15 +37,18 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
 
     private bool AddToExistingStack(ItemData data, int amount, bool isSave)
     {
-
         foreach (ItemData item in itemContainer.containerItems)
         {
+            Debug.Log("Checking Id: " + item.Id + "  with ID: " + data.Id);
+
             if (item.Id.Equals(data.Id))
             {
                 Debug.Log("add to existing stack");
 
                 itemContainer.ModifiedItemEvent(data, isSave);
 
+
+                item.Amount = item.Amount + amount;
                 data.Amount -= amount;
 
                 return true;

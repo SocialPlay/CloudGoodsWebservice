@@ -14,7 +14,7 @@ public class UnityUIItemDropComponent : MonoBehaviour, IDropHandler, IPointerEnt
                 return;
 
             if (originalObj.GetComponent<ItemDataComponent>().itemData.OwnerContainer != GetComponent<ItemContainer>())
-                ItemContainerManager.MoveItem(originalObj.GetComponent<ItemDataComponent>().itemData, originalObj.GetComponent<ItemDataComponent>().itemData.OwnerContainer, GetComponent<ItemContainer>());
+                ItemContainerManager.MoveItem(originalObj.GetComponent<ItemDataComponent>().itemData, GetComponent<ItemContainer>());
         }
 	}
 

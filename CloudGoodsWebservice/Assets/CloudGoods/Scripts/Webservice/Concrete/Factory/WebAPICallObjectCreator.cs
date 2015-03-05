@@ -25,7 +25,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
     public WWW CreateGetUserItemsCallObject(string SessionID)
     {
-        string loginUrl = string.Format("?location={0}&andTags={1}&orTags={2}", 0, "null", "null");
+        string loginUrl = string.Format("?location={0}&andTags={1}&orTags={2}", 0, "", "");
 
         Debug.Log("LoginURL: " + loginUrl);
 

@@ -7,7 +7,28 @@ using UnityEngine;
 [System.Serializable]
 public class ItemContainerManager
 {
-    public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer lastContainer, ItemContainer targetContainer)
+
+    public static ContainerMoveState.ActionState AddItem(ItemData addItem, ItemContainer targetContainer)
+    {
+        ContainerMoveState targetAddState = targetContainer.GetContainerAddState(addItem);
+
+        switch (targetAddState.actionState)
+        {
+            case ContainerMoveState.ActionState.Add:
+
+                targetContainer.Add(addItem, targetAddState.possibleAddAmount);
+
+                break;
+            case ContainerMoveState.ActionState.No:
+                break;
+            default:
+                break;
+        }
+
+        return targetAddState.actionState;
+    }
+
+    public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer targetContainer)
     {
         try
         {
@@ -17,29 +38,18 @@ public class ItemContainerManager
             if (targetContainer == null)
                 throw new Exception("Can not move item to null container");
 
-            if (lastContainer != null)
-            {
-                Debug.Log(lastContainer.GetContainerRemoveState(movingItemData));
-                if (lastContainer.GetContainerRemoveState(movingItemData) == false)
-                {
-                    return ContainerMoveState.ActionState.No;
-                }
-            }
-
             ContainerMoveState targetAddState = targetContainer.GetContainerAddState(movingItemData);
 
             switch (targetAddState.actionState)
             {
                 case ContainerMoveState.ActionState.Add:
 
-                    ItemData newItemData = new ItemData()
-                        {
-
-                        };
+                    ItemData newItemData = movingItemData;
 
                     if (movingItemData.OwnerContainer != null)
                     {
-                        movingItemData.OwnerContainer.Remove(movingItemData, true, targetAddState.possibleAddAmount);
+                        if (RemoveItem(movingItemData, movingItemData.OwnerContainer) == ContainerMoveState.ActionState.No)
+                            return ContainerMoveState.ActionState.No;
                     }
 
                     targetContainer.Add(newItemData, targetAddState.possibleAddAmount);
@@ -62,8 +72,15 @@ public class ItemContainerManager
     }
 
 
-    public static ContainerMoveState.ActionState RemoveItem(ItemContainer container, ItemData itemData)
+    public static ContainerMoveState.ActionState RemoveItem(ItemData RemoveItemData, ItemContainer TargetContainer)
     {
+        if (TargetContainer.GetContainerRemoveState(RemoveItemData) == false)
+        {
+            return ContainerMoveState.ActionState.No;
+        }
+
+        TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
+
         return ContainerMoveState.ActionState.Remove;
     }
 }

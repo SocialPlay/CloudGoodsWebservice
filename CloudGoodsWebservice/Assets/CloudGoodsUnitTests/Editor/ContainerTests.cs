@@ -13,19 +13,10 @@ public class ContainerTests : MonoBehaviour {
     ItemContainer ItemContainerTwo;
     ItemContainer ItemContainerThree;
 
-    ItemData ItemDataOne;
-    ItemData ItemDataTwo;
-
     [SetUp]
     public void Init()
     {
-        ItemContainerOne = new ItemContainer();
-        ItemContainerTwo = new ItemContainer();
-        ItemContainerThree = new ItemContainer();
 
-        ItemDataOne = CreateItemData(1, 10, 100, 20, 1, 0, "Item One", "123456");
-
-        ItemDataTwo = CreateItemData(2, 20, 200, 30, 2, 0, "Item Two", "654321");
     }
 
     private ItemData CreateItemData(int amount, int classId, int collectionId, int energy, int id, int location, string name, string stackLocationId)
@@ -56,12 +47,26 @@ public class ContainerTests : MonoBehaviour {
         return tmpData;
     }
 
-    [Test]
-    public void AddItemDataToContainerUpdatesContainerItemList()
+    private ItemContainer SetUpContainer()
     {
-        ItemContainerOne = new ItemContainer();
+        GameObject containerObj = new GameObject();
+        containerObj.name = "Item Container";
+        ItemContainer container = containerObj.AddComponent<ItemContainer>();
+        container.containerAddAction = containerObj.AddComponent<BasicAddContainer>();
+        BasicAddContainer containerAdd = (BasicAddContainer)container.containerAddAction;
+        containerAdd.itemContainer = container;
 
-        ItemContainerManager.MoveItem(ItemDataOne, null, ItemContainerOne);
+        return container;
+    }
+
+    [Test]
+    public void BasicAddItemDataToContainerUpdatesContainerItemList()
+    {
+        ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
+
+        ItemContainerOne = SetUpContainer();
+
+        ItemContainerManager.AddItem(testItemOne, ItemContainerOne);
 
         Assert.AreEqual(1, ItemContainerOne.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
@@ -70,14 +75,16 @@ public class ContainerTests : MonoBehaviour {
     [Test]
     public void RemoveItemDataFromContainerRemovesDisplay()
     {
-        ItemContainerOne = new ItemContainer();
+        ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
 
-        ItemContainerManager.MoveItem(ItemDataOne, null, ItemContainerOne);
+        ItemContainerOne = SetUpContainer();
+
+        ItemContainerManager.AddItem(testItemOne, ItemContainerOne);
 
         Assert.AreEqual(1, ItemContainerOne.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
 
-        ItemContainerManager.RemoveItem(ItemContainerOne, ItemDataOne);
+        ItemContainerManager.RemoveItem(testItemOne, ItemContainerOne);
 
         Assert.AreEqual(0, ItemContainerOne.containerItems.Count);
     }
@@ -85,15 +92,17 @@ public class ContainerTests : MonoBehaviour {
     [Test]
     public void MoveItemDataFromContainerOneToContainerTwoUpdatesDisplay()
     {
-        ItemContainerOne = new ItemContainer();
-        ItemContainerTwo = new ItemContainer();
+        ItemContainerOne = SetUpContainer();
+        ItemContainerTwo = SetUpContainer();
 
-        ItemContainerManager.MoveItem(ItemDataOne, null, ItemContainerOne);
+        ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
+
+        ItemContainerManager.AddItem(testItemOne, ItemContainerOne);
 
         Assert.AreEqual(1, ItemContainerOne.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
 
-        ItemContainerManager.MoveItem(ItemDataOne, ItemContainerOne, ItemContainerTwo);
+        ItemContainerManager.MoveItem(testItemOne, ItemContainerTwo);
 
         Assert.AreEqual(0, ItemContainerOne.containerItems.Count);
         Assert.AreEqual(1, ItemContainerTwo.containerItems.Count);
@@ -104,35 +113,46 @@ public class ContainerTests : MonoBehaviour {
     [Test]
     public void MoveItemDataFromContainerMergeWithExistsingItem()
     {
-        ItemContainerOne = new ItemContainer();
+        ItemContainerOne = SetUpContainer();
 
-        ItemContainerManager.MoveItem(ItemDataOne, null, ItemContainerOne);
+        ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
+        ItemData testItemTwo = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
+
+        ItemContainerManager.AddItem(testItemOne, ItemContainerOne);
 
         Assert.AreEqual(1, ItemContainerOne.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
         Assert.AreEqual(1, ItemContainerOne.containerItems[0].Amount);
+
+        ItemContainerManager.MoveItem(testItemTwo, ItemContainerOne);
+
+        Assert.AreEqual(1, ItemContainerOne.containerItems.Count);
+        Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
+        Assert.AreEqual(2, ItemContainerOne.containerItems[0].Amount);
 
     }
 
     [Test]
     public void MoveToItemContainerTwoThenThreeUpdatesDisplay()
     {
-        ItemContainerOne = new ItemContainer();
-        ItemContainerTwo = new ItemContainer();
-        ItemContainerThree = new ItemContainer();
+        ItemContainerOne = SetUpContainer();
+        ItemContainerTwo = SetUpContainer();
+        ItemContainerThree = SetUpContainer();
+        ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
 
-        ItemContainerManager.MoveItem(ItemDataOne, null, ItemContainerOne);
+
+        ItemContainerManager.MoveItem(testItemOne, ItemContainerOne);
 
         Assert.AreEqual(1, ItemContainerOne.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
 
-        ItemContainerManager.MoveItem(ItemDataOne, ItemContainerOne, ItemContainerTwo);
+        ItemContainerManager.MoveItem(testItemOne, ItemContainerTwo);
 
         Assert.AreEqual(0, ItemContainerOne.containerItems.Count);
         Assert.AreEqual(1, ItemContainerTwo.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerTwo.containerItems[0].Name);
 
-        ItemContainerManager.MoveItem(ItemDataOne, ItemContainerTwo, ItemContainerThree);
+        ItemContainerManager.MoveItem(testItemOne, ItemContainerThree);
 
         Assert.AreEqual(0, ItemContainerTwo.containerItems.Count);
         Assert.AreEqual(1, ItemContainerThree.containerItems.Count);
@@ -142,10 +162,13 @@ public class ContainerTests : MonoBehaviour {
     [Test]
     public void AddTwoItemsToSingleContainerUpdatesContainerItemList()
     {
-        ItemContainerOne = new ItemContainer();
+        ItemContainerOne = SetUpContainer();
 
-        ItemContainerManager.MoveItem(ItemDataOne, null, ItemContainerOne);
-        ItemContainerManager.MoveItem(ItemDataTwo, null, ItemContainerOne);
+        ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
+        ItemData testItemTwo = CreateItemData(1, 15, 15, 100, 15, 0, "Item Two", "654321");
+
+        ItemContainerManager.MoveItem(testItemOne, ItemContainerOne);
+        ItemContainerManager.MoveItem(testItemTwo, ItemContainerOne);
 
         Assert.AreEqual(2, ItemContainerOne.containerItems.Count);
         Assert.AreEqual("Item One", ItemContainerOne.containerItems[0].Name);
