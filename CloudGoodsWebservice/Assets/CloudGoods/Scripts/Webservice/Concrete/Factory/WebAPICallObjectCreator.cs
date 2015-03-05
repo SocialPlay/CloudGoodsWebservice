@@ -3,9 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class WebAPICallObjectCreator : CallObjectCreator {
+public class WebAPICallObjectCreator : CallObjectCreator
+{
 
     public HashCreator hashCreator = new StandardHashCreator();
+
+    public class URLValue
+    {
+        public string Key;
+        public string Value;
+
+        public URLValue(string key, string value)
+        {
+            Key = key;
+            Value = value;
+        }
+        public URLValue(string key, int value)
+        {
+            Key = key;
+            Value = value.ToString();
+        }
+    }
 
     #region User Management
 
@@ -13,7 +31,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
     {
         string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
 
-        Dictionary<string, string> headers = CreateLoginCallHeader( loginUrl);
+        Dictionary<string, string> headers = CreateLoginCallHeader(loginUrl);
 
         string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
         return new WWW(urlString, null, headers);
@@ -24,15 +42,9 @@ public class WebAPICallObjectCreator : CallObjectCreator {
     #region Item Management
 
     public WWW CreateGetUserItemsCallObject(string SessionID)
-    {
-        string loginUrl = string.Format("?location={0}&andTags={1}&orTags={2}", 0, "", "");
+    {      
 
-        Debug.Log("LoginURL: " + loginUrl);
-
-        Dictionary<string, string> headers = CreateLoginCallHeader(loginUrl);
-
-        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/UserItems" + loginUrl);
-        return new WWW(urlString, null, headers);
+       return GrenerateWWWCall("UserItems",new URLValue("location",0));
     }
 
     #endregion
@@ -49,12 +61,14 @@ public class WebAPICallObjectCreator : CallObjectCreator {
 
     #region Utilities
 
+
+
     public Dictionary<string, string> CreateLoginCallHeader(string urlString)
     {
         string timeStamp = GetTimestamp().ToString();
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
-        
+
         headers.Add("Hash", hashCreator.CreateHash(timeStamp, urlString));
         headers.Add("Timestamp", timeStamp);
 
@@ -63,7 +77,7 @@ public class WebAPICallObjectCreator : CallObjectCreator {
             headers.Add("SessionID", CloudGoods.Instance.SessionId);
             headers.Add("Nonce", GenerateNonce());
         }
-            
+
 
         return headers;
     }
@@ -78,6 +92,22 @@ public class WebAPICallObjectCreator : CallObjectCreator {
     public string GenerateNonce()
     {
         return Guid.NewGuid().ToString();
+    }
+
+    public WWW GrenerateWWWCall(string controller, params URLValue[] urlPrams)
+    {
+        string createdURL = "";
+        foreach (URLValue urlA in urlPrams)
+        {
+            if (createdURL == "")
+                createdURL += "?";
+            else
+                createdURL += "&";
+            createdURL += urlA.Key + "=" + urlA.Value;
+        }
+        Dictionary<string, string> headers = CreateLoginCallHeader(createdURL);
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/" + controller + createdURL);
+        return new WWW(urlString, null, headers);
     }
 
     #endregion
