@@ -2,28 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Text;
 
 public class WebAPICallObjectCreator : CallObjectCreator
 {
 
     public HashCreator hashCreator = new StandardHashCreator();
 
-    public class URLValue
-    {
-        public string Key;
-        public string Value;
-
-        public URLValue(string key, string value)
-        {
-            Key = key;
-            Value = value;
-        }
-        public URLValue(string key, int value)
-        {
-            Key = key;
-            Value = value.ToString();
-        }
-    }
 
     #region User Management
 
@@ -42,9 +27,9 @@ public class WebAPICallObjectCreator : CallObjectCreator
     #region Item Management
 
     public WWW CreateGetUserItemsCallObject(string SessionID)
-    {      
+    {
 
-       return GrenerateWWWCall("UserItems",new URLValue("location",0));
+        return GrenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", 0.ToString()));
     }
 
     #endregion
@@ -94,10 +79,10 @@ public class WebAPICallObjectCreator : CallObjectCreator
         return Guid.NewGuid().ToString();
     }
 
-    public WWW GrenerateWWWCall(string controller, params URLValue[] urlPrams)
+    public WWW GrenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
     {
         string createdURL = "";
-        foreach (URLValue urlA in urlPrams)
+        foreach (KeyValuePair<string, string> urlA in urlPrams)
         {
             if (createdURL == "")
                 createdURL += "?";
@@ -106,10 +91,21 @@ public class WebAPICallObjectCreator : CallObjectCreator
             createdURL += urlA.Key + "=" + urlA.Value;
         }
         Dictionary<string, string> headers = CreateLoginCallHeader(createdURL);
-        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/" + controller + createdURL);
+        string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
+        Debug.Log(urlString);
         return new WWW(urlString, null, headers);
+    }
+
+    public WWW GenerateWWWPost(string controller, object dataObject)
+    {
+        Dictionary<string, string> headers = CreateLoginCallHeader("");
+        headers.Add("Content-Type", "application/json");
+        string urlString = string.Format("{0}api/CloudGoods/{1}", CloudGoodsSettings.Url, controller);
+        byte[] body = Encoding.UTF8.GetBytes(LitJson.JsonMapper.ToJson(dataObject));
+        return new WWW(urlString, body, headers);
     }
 
     #endregion
 
 }
+
