@@ -6,37 +6,6 @@ using System.Text;
 
 public class WebAPICallObjectCreator : CallObjectCreator
 {
-
-    public HashCreator hashCreator = new StandardHashCreator();
-
-
-    #region User Management
-
-    public WWW CreateLoginCallObject(string appID, string userEmail, string password)
-    {
-        string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
-
-        Dictionary<string, string> headers = CreateLoginCallHeader(loginUrl);
-
-        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
-        return new WWW(urlString, null, headers);
-    }
-
-    #endregion
-
-    #region Item Management
-
-    public WWW CreateGetUserItemsCallObject(string SessionID)
-    {
-
-        return GrenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", 0.ToString()));
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
-
-public class WebAPICallObjectCreator : CallObjectCreator
-{
     public HashCreator hashCreator = new StandardHashCreator();
 
     public class URLValue
@@ -72,15 +41,15 @@ public class WebAPICallObjectCreator : CallObjectCreator
     #region Item Management
 
     public WWW CreateGetUserItemsCallObject(int location)
-    {      
-       return GenerateWWWCall("UserItems",new URLValue("location",location));
+    {
+        return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
     }
 
     #endregion
 
     public WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType)
     {
-        return GenerateWWWCall("MoveItem", new URLValue("StackId", stackId), new URLValue("amount", amount), new URLValue("location", location), new URLValue("ownerType", ownerType));
+        return GenerateWWWCall("MoveItem", new KeyValuePair<string, string>("StackId", stackId), new KeyValuePair<string, string>("amount", amount.ToString()), new KeyValuePair<string, string>("location", location.ToString()), new KeyValuePair<string, string>("ownerType", ownerType));
     }
 
     #region Server Utilities
@@ -125,11 +94,7 @@ public class WebAPICallObjectCreator : CallObjectCreator
         return Guid.NewGuid().ToString();
     }
 
-<<<<<<< .mine
-    public WWW GenerateWWWCall(string controller, params URLValue[] urlPrams)
-=======
-    public WWW GrenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
->>>>>>> .theirs
+    public WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
     {
         string createdURL = "";
         foreach (KeyValuePair<string, string> urlA in urlPrams)

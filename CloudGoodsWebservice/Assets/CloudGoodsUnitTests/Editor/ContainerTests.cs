@@ -64,8 +64,6 @@ public class ContainerTests : MonoBehaviour {
         GameObject containerObj = new GameObject();
         containerObj.name = "Item Container For Display";
 
-
-
         return new ItemContainerDisplay();
     }
 
@@ -83,7 +81,7 @@ public class ContainerTests : MonoBehaviour {
     }
 
     [Test]
-    public void RemoveItemDataFromContainerRemovesDisplay()
+    public void RemoveItemData()
     {
         ItemData testItemOne = CreateItemData(1, 10, 10, 100, 10, 0, "Item One", "123456");
 

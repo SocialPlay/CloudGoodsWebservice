@@ -57,20 +57,20 @@ public class WebCallsTest : MonoBehaviour
 
     void LoadUserItems()
     {
-        CloudGoods.Instance.GetUserItems(delegate(List<ItemData> items)
-        {
-            string debugString = "Recived Items";
-            foreach (ItemData item in items)
-            {
-                debugString += "\nName: " + item.Name;
-                debugString += "\n    Amount:" + item.Amount;
-                debugString += "\n    Id: " + item.Id;
-                debugString += "\n    Location: " + item.Location.ToString();
-                debugString += "\n    Detail:" + item.Detail + "\n";
-            }
+        //CloudGoods.Instance.GetUserItems(delegate(List<ItemData> items)
+        //{
+        //    string debugString = "Recived Items";
+        //    foreach (ItemData item in items)
+        //    {
+        //        debugString += "\nName: " + item.Name;
+        //        debugString += "\n    Amount:" + item.Amount;
+        //        debugString += "\n    Id: " + item.Id;
+        //        debugString += "\n    Location: " + item.Location.ToString();
+        //        debugString += "\n    Detail:" + item.Detail + "\n";
+        //    }
 
-            NewDisplayLine(debugString);
-        });
+        //    NewDisplayLine(debugString);
+        //});
     }
 
 

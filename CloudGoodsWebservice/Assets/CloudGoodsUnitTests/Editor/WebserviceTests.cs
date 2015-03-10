@@ -3,7 +3,6 @@ using System.Collections;
 using LitJson;
 using NUnit.Framework;
 using System;
-using Moq;
 using System.Collections.Generic;
 
 namespace WebserviceTests
