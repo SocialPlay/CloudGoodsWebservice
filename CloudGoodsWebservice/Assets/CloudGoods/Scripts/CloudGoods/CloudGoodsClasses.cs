@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
+
 public class SecurePayload
 {
     public string token;
@@ -429,3 +431,139 @@ public class MultipleUserDataValue
 }
 #endregion
 
+
+
+
+
+namespace CloudgoodsClasses
+{
+    public abstract class RequestClass
+    {
+        public abstract string ToHashable();
+    }
+
+    public class OtherOwner
+    {
+        public string Id = "Default";
+        public string type = "User";
+
+        public OtherOwner()
+        {
+            Id = "Default";
+            type = "User";
+        }
+
+        public OtherOwner(string Id, string type)
+        {
+            this.Id = Id;
+            this.type = type;
+        }
+        private string ToHashable()
+        {
+            return Id + type;
+        }
+
+        public static string ToHashable(OtherOwner value)
+        {
+            return value == null ? "" : value.ToHashable();
+        }
+    }
+
+    #region Give Owner Items
+
+    public class GiveOwnerItemRequest : RequestClass
+    {
+        public ItemInfo[] items { get; set; }
+        public OtherOwner otherOwner { get; set; }
+
+        public struct ItemInfo
+        {
+            public int Id;
+            public int amount;
+            public int location;
+        }
+
+        public override string ToHashable()
+        {
+            string final = OtherOwner.ToHashable(otherOwner);
+            foreach (ItemInfo info in items)
+            {
+                final += info.Id + info.amount + info.location;
+            }
+            return final;
+        }
+    }
+
+    public class GiveOwnerItemResponse
+    {
+        public List<string> newStackIds = new List<string>();
+    }
+
+    #endregion
+
+    #region Item voucher
+
+    public class CreateItemVouchersRequest : RequestClass
+    {
+        public int minimumEnergy { get; set; }
+        public int totalEnergy { get; set; }
+        public string andTags = "";
+        public string orTags = "";
+
+        public override string ToHashable()
+        {
+            return minimumEnergy + totalEnergy + andTags + orTags;
+        }
+    }
+
+    public class CreateItemVouchersResponse
+    {
+        public List<ItemVoucher> vouchers;
+
+        public class ItemVoucher
+        {
+            public ItemData item;
+            public int Id;
+        }
+    }
+
+
+
+    public class ConsumeItemVouchersRequest : RequestClass
+    {
+        public List<ItemVoucherSelection> selectedVouchers;
+        public OtherOwner otherOwner { get; set; }
+
+        public override string ToHashable()
+        {
+            string hashValue = OtherOwner.ToHashable(otherOwner);
+            selectedVouchers.ForEach(v => hashValue += v.itemId + v.amount + v.voucherId);
+            return hashValue;
+        }
+
+        public class ItemVoucherSelection
+        {
+            public int voucherId;
+            public int itemId;
+            public int amount;
+            public int location;
+        }
+    }
+
+    public class ConsumeItemVouchersResponse
+    {
+        public List<ConsumeItemVoucherResult> results { get; set; }
+
+        public class ConsumeItemVoucherResult
+        {
+            public int itemId { get; set; }
+            public string stackLocationId { get; set; }
+            public int amount { get; set; }
+        }
+
+    }
+
+    #endregion
+
+
+}

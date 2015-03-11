@@ -6,17 +6,17 @@ public class TestLogin : MonoBehaviour {
 
     void Awake()
     {
-        CloudGoods.Instance.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
+        CloudGoods.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
     }
 
 	// Use this for initialization
 	void Start () {
-        CloudGoods.Instance.Initialize();
+        CloudGoods.Initialize();
 	}
 
     void Instance_CloudGoodsInitilized()
     {
-        CloudGoods.Instance.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
+        CloudGoods.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
 
         //CloudGoods.Instance.GetUserItems(OnReceivedUserItems);
     }
@@ -32,6 +32,6 @@ public class TestLogin : MonoBehaviour {
     void OnReceivedUser(CloudGoodsUser user)
     {
         Debug.Log("User: " + user.userName);
-        CloudGoods.Instance.GetUserItems(0, OnReceivedUserItems);
+        CloudGoods.GetUserItems(0, OnReceivedUserItems);
     }
 }

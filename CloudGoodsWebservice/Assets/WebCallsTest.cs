@@ -2,28 +2,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using LitJson;
+using CloudgoodsClasses;
+
 
 public class WebCallsTest : MonoBehaviour
 {
 
-    string debugDisplay;
+    string debugDisplay = "";
     string last = "";
     WebAPICallObjectCreator objectCreator;
 
+    private List<CreateItemVouchersResponse.ItemVoucher> currentVouchers = new List<CreateItemVouchersResponse.ItemVoucher>();
+
     void OnEnable()
     {
-        CloudGoods.Instance.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
+        CloudGoods.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
     }
 
     void Start()
     {
-        CloudGoods.Instance.Initialize();
+        CloudGoods.Initialize();
         objectCreator = new WebAPICallObjectCreator();
     }
 
     void Instance_CloudGoodsInitilized()
     {
-        CloudGoods.Instance.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
+        CloudGoods.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
 
     }
 
@@ -42,35 +46,70 @@ public class WebCallsTest : MonoBehaviour
 
     private void GiveUserItem()
     {
-        RequestValues requestV = new RequestValues()
-        {
-            items = new ItemInfo[2] { 
-                new ItemInfo() { Id = 111542, location = 0, amount = 2 }, 
-                new ItemInfo() { Id = 111542, location = 1, amount = 3 } 
-            }
-        };
 
-        StartCoroutine(DebugResults(objectCreator.GenerateWWWPost("GiveOwnerItems", requestV)));
+        GiveOwnerItemRequest.ItemInfo[] items = new GiveOwnerItemRequest.ItemInfo[2] { new GiveOwnerItemRequest.ItemInfo() { location = 0, Id = 111542, amount = 5 }, new GiveOwnerItemRequest.ItemInfo() { location = 2, Id = 111542, amount = 1 } };
+
+
+        CloudGoods.GiveOwnerItems(items
+            , delegate(GiveOwnerItemResponse response)
+            {
+                string debugString = "Give Items";
+                foreach (string StackIds in response.newStackIds)
+                {
+                    debugString += "\n" + StackIds;
+                }
+                NewDisplayLine(debugString);
+            });
+
     }
 
+    private void CreateItemVoucher()
+    {
+        CloudGoods.CreateItemVouchers(1, 700, delegate(CreateItemVouchersResponse response)
+        {
+            string debugString = "Created Vouchers Items";
+            foreach (var voucher in response.vouchers)
+            {
+                currentVouchers.Add(voucher);
+                debugString += "\n(" + voucher.Id + ")" + voucher.item.Name;
+            }
+            NewDisplayLine(debugString);
+        });
+    }
 
+    private void ConsumeItemVoucher(CreateItemVouchersResponse.ItemVoucher voucher)
+    {
+
+        List<ConsumeItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<ConsumeItemVouchersRequest.ItemVoucherSelection>() { new ConsumeItemVouchersRequest.ItemVoucherSelection() { amount = voucher.item.Amount, itemId = voucher.item.Id, location = 0, voucherId = voucher.Id } };
+
+        CloudGoods.ConsumeItemVoucher(selectedVouchers, delegate(ConsumeItemVouchersResponse response)
+        {
+            string debugString = "Consume Item Voucher";
+            foreach (var result in response.results)
+            {
+                debugString += "\n" + result.stackLocationId + ":" + result.itemId + "{" + result.amount + "}";
+            }
+
+            NewDisplayLine(debugString);
+        });
+
+    }
 
     void LoadUserItems()
     {
-        //CloudGoods.Instance.GetUserItems(delegate(List<ItemData> items)
-        //{
-        //    string debugString = "Recived Items";
-        //    foreach (ItemData item in items)
-        //    {
-        //        debugString += "\nName: " + item.Name;
-        //        debugString += "\n    Amount:" + item.Amount;
-        //        debugString += "\n    Id: " + item.Id;
-        //        debugString += "\n    Location: " + item.Location.ToString();
-        //        debugString += "\n    Detail:" + item.Detail + "\n";
-        //    }
-
-        //    NewDisplayLine(debugString);
-        //});
+        CloudGoods.GetUserItems(0, delegate(List<ItemData> items)
+        {
+            string debugString = "Recived Items";
+            foreach (ItemData item in items)
+            {
+                debugString += "\nName: " + item.Name;
+                debugString += "\n    Amount:" + item.Amount;
+                debugString += "\n    Id: " + item.Id;
+                debugString += "\n    Location: " + item.Location.ToString();
+                debugString += "\n    Detail:" + item.Detail + "\n";
+            }
+            NewDisplayLine(debugString);
+        });
     }
 
 
@@ -80,18 +119,18 @@ public class WebCallsTest : MonoBehaviour
         GUILayout.BeginArea(new Rect(Screen.width / 2, 0, Screen.width, Screen.height));
         Color orig = GUI.color;
         GUI.color = Color.green;
-        GUILayout.Label(last);
+        GUILayout.TextArea(last);
         GUI.color = orig;
-        GUILayout.Label(debugDisplay);
+        GUILayout.TextArea(debugDisplay);
         GUILayout.EndArea();
     }
 
     void drawLeft()
     {
         GUILayout.BeginArea(new Rect(25, 25, Screen.width / 2 - 50, Screen.height - 50));
-        if (CloudGoods.Instance.User != null)
+        if (CloudGoods.User != null)
         {
-            GUILayout.Label("Welcome " + CloudGoods.Instance.User.userName + ".");
+            GUILayout.Label("Welcome " + CloudGoods.User.userName + ".");
         }
         else
         {
@@ -108,24 +147,24 @@ public class WebCallsTest : MonoBehaviour
         {
             GiveUserItem();
         }
+        if (GUILayout.Button("Create Item Voucher"))
+        {
+            CreateItemVoucher();
+        }
 
+        GUILayout.FlexibleSpace();
+        for (int i = currentVouchers.Count < 3 ? 0 : currentVouchers.Count - 3; i < currentVouchers.Count; i++)
+        {
+            if (GUILayout.Button(string.Format("({0}) {1} : {2}", currentVouchers[i].Id, currentVouchers[i].item.Id, currentVouchers[i].item.Amount)))
+            {
+                ConsumeItemVoucher(currentVouchers[i]);
+                currentVouchers.Remove(currentVouchers[i]);
+                return;
+            }
+        }
         GUILayout.EndArea();
     }
 
-
-    public class ItemInfo
-    {
-        public int Id { get; set; }
-        public int amount { get; set; }
-        public int location { get; set; }
-    }
-
-    public class RequestValues
-    {
-        public ItemInfo[] items { get; set; }
-        public string ownerType = "User";
-        public int otherOwner = -1;
-    }
 
 
     IEnumerator DebugResults(WWW www)

@@ -9,13 +9,13 @@ public class TestContainers : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        CloudGoods.Instance.Initialize();
-        CloudGoods.Instance.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
+        CloudGoods.Initialize();
+        CloudGoods.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
     }
 
     void Instance_CloudGoodsInitilized()
     {
-        CloudGoods.Instance.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
+        CloudGoods.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
     }
 
     void OnReceivedUserItems(List<ItemData> items)
