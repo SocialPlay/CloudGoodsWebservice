@@ -8,105 +8,137 @@ using System.Collections.Generic;
 [TestFixture]
 public class ItemContainerManagerTests : MonoBehaviour {
 
+    List<ItemContainer> ItemContainers;
+    List<ItemData> ItemDatas;
+    ContainerTestUtilities containerTestUtilities;
+
     [SetUp]
     public void Init()
     {
-
+        containerTestUtilities = new ContainerTestUtilities();
+        ItemContainers = new List<ItemContainer>();
+        ItemDatas = new List<ItemData>();
     }
 
     [Test]
     public void AddItem_BasicAdd_ReturnsStateAdd()
     {
+        ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, container));
     }
 
     [Test]
-    public void AddItem_InvalidForContainer_ReturnsStateNo()
+    public void AddItem_RestrictedForContainer_ReturnsStateNo()
     {
+        ItemContainer container = containerTestUtilities.SetUpContainer(true, false,ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.AddItem(itemData, container));
     }
 
     [Test]
     public void AddItem_ItemLocked_ReturnsStateNo()
     {
+        ItemContainer container = containerTestUtilities.SetUpContainer(false, false,ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", true);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.AddItem(itemData, container));
     }
 
     [Test]
-    public void MoveItem_InvalidRemoveItem_ReturnsStateNo()
+    public void MoveItem_RestrictedRemoveItem_ReturnsStateNo()
     {
+        ItemContainer containerOne = containerTestUtilities.SetUpContainer(false, true, ItemContainers);
+        ItemContainer containerTwo = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, containerOne));
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.MoveItem(itemData, containerTwo));
     }
 
     [Test]
-    public void MoveItem_ValidRemoveItemInvalidAddItem_ReturnsStateNo()
+    public void MoveItem_ValidRemoveItemRestrictedAddItem_ReturnsStateNo()
     {
+        ItemContainer containerOne = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemContainer containerTwo = containerTestUtilities.SetUpContainer(true, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, containerOne));
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.MoveItem(itemData, containerTwo));
     }
 
     [Test]
     public void MoveItem_ValidRemoveItemValidAddItem_ReturnsStateAdd()
     {
+        ItemContainer containerOne = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemContainer containerTwo = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, containerOne));
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.MoveItem(itemData, containerTwo));
     }
 
     [Test]
     public void MoveItem_ItemLockedReturnsStateNo()
     {
+        ItemContainer containerOne = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemContainer containerTwo = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, containerOne));
+
+        itemData.IsLocked = true;
+
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.MoveItem(itemData, containerTwo));
     }
 
     [Test]
-    public void RemoveItem_InvalidRemoveItem_ReturnsStateNo()
+    public void RemoveItem_RestrictedRemoveItem_ReturnsStateNo()
     {
+        ItemContainer container = containerTestUtilities.SetUpContainer(false, true, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, container));
+
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.RemoveItem(itemData, container));
     }
 
     [Test]
     public void RemoveItem_ValidRemoveItem_ReturnsStateRemove()
     {
+        ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, container));
+
+        Assert.AreEqual(ContainerMoveState.ActionState.Remove, ItemContainerManager.RemoveItem(itemData, container));
     }
-
 
     [Test]
     public void RemoveItem_ItemLocked_ReturnsStateNo()
     {
+        ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
+        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, ItemContainerManager.AddItem(itemData, container));
+
+        itemData.IsLocked = true;
+
+        Assert.AreEqual(ContainerMoveState.ActionState.No, ItemContainerManager.RemoveItem(itemData, container));
     }
 
-    public void SetupContainerWithRestricton()
+
+    [TearDown]
+    public void FinishedTestCleanUp()
     {
+        ItemContainer[] objects = GameObject.FindObjectsOfType<ItemContainer>();
 
-    }
-
-    public ItemData CreateItemData(int amount, int classId, int collectionId, int energy, int id, int location, string name, string stackLocationId)
-    {
-        ItemData tmpData = new ItemData()
+        foreach (ItemContainer container in objects)
         {
-            Amount = amount,
-            ClassId = classId,
-            CollectionId = collectionId,
-            Detail = "Some Details Here",
-            Energy = energy,
-            Id = id,
-            Location = location,
-            Name = name,
-            StackLocationId = stackLocationId
-        };
-
-        for (int i = 0; i < 3; i++)
-        {
-            tmpData.behaviours.Add(new ItemData.Behaviours() { name = i.ToString(), Id = i });
+            DestroyImmediate(container.gameObject);
         }
-
-        for (int i = 0; i < 3; i++)
-        {
-            tmpData.tags.Add(new ItemData.Tag() { name = i.ToString(), Id = i });
-        }
-
-        return tmpData;
     }
-
 
 }

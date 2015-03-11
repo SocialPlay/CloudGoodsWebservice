@@ -84,14 +84,13 @@ public class ItemContainerManager
         if (RemoveItemData.IsLocked)
             return ContainerMoveState.ActionState.No;
 
-        if (TargetContainer.GetContainerRemoveState(RemoveItemData) == false)
+        if (TargetContainer.GetContainerRemoveState(RemoveItemData).actionState == ContainerMoveState.ActionState.Remove)
         {
-            return ContainerMoveState.ActionState.No;
+            TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
+            return ContainerMoveState.ActionState.Remove;
         }
 
-        TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
-
-        return ContainerMoveState.ActionState.Remove;
+        return ContainerMoveState.ActionState.No;
     }
 }
 

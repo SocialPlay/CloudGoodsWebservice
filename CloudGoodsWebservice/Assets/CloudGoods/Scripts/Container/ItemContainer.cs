@@ -94,18 +94,18 @@ public class ItemContainer : MonoBehaviour
         return MyContainerAddState(itemData);
     }
 
-    public bool GetContainerRemoveState(ItemData itemData)
+    public ContainerMoveState GetContainerRemoveState(ItemData itemData)
     {
         if (containerRemoveRestrictions.Count > 0)
         {
             foreach (IContainerRestriction newRestriction in containerRemoveRestrictions)
             {
                 if (newRestriction.IsRestricted(ContainerAction.remove, itemData))
-                    return false;
+                    return new ContainerMoveState(ContainerMoveState.ActionState.No);
             }
         }
 
-        return true;
+        return new ContainerMoveState(ContainerMoveState.ActionState.Remove);
     }
 
     protected ContainerMoveState MyContainerAddState(ItemData modified)

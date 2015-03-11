@@ -49,8 +49,9 @@
      <Compile Include="Assets\CloudGoods\Scripts\Editor\AboutCloudGoodsWindow.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Editor\CloudGoodsSettingsInspector.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Editor\ItemComponentSetupInspector.cs" />
-     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTestUtilities.cs" />
      <Compile Include="Assets\CloudGoodsUnitTests\Editor\ItemContainerManagerTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ItemContainerTests.cs" />
      <Compile Include="Assets\CloudGoodsUnitTests\Editor\WebserviceTests.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionComponentEditor.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionExplorerWindow.cs" />
