@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using CloudgoodsClasses;
 
 public interface ResponseCreator {
 
@@ -10,6 +11,13 @@ public interface ResponseCreator {
     List<ItemData> CreateGetUserItemsResponse(string responseData);
 
     NewItemStack CreateMoveItemResponse(string responseData);
+
+    GiveOwnerItemResponse CreateGiveOwnerItemResponse(string responseData);
+
+    CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData);
+
+    ConsumeItemVouchersResponse CreteConsomeItemVoucherResponse(string responseData);
+ 
 
     bool IsValidData(string data);
 

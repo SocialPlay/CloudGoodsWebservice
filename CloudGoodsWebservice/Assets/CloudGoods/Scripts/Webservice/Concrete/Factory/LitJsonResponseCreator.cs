@@ -3,8 +3,10 @@ using System.Collections;
 using System;
 using LitJson;
 using System.Collections.Generic;
+using CloudgoodsClasses;
 
-public class LitJsonResponseCreator : ResponseCreator {
+public class LitJsonResponseCreator : ResponseCreator
+{
 
     #region UserManagement
 
@@ -74,6 +76,22 @@ public class LitJsonResponseCreator : ResponseCreator {
         return itemStack;
     }
 
+    public GiveOwnerItemResponse CreateGiveOwnerItemResponse(string responseData)
+    {
+        return JsonMapper.ToObject<GiveOwnerItemResponse>(responseData);
+    }
+
+    public CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData)
+    {
+        return JsonMapper.ToObject<CreateItemVouchersResponse>(responseData);
+    }
+
+    public ConsumeItemVouchersResponse CreteConsomeItemVoucherResponse(string responseData)
+    {
+        return JsonMapper.ToObject<ConsumeItemVouchersResponse>(responseData);
+    }
+
+
     #endregion
 
     #region Utilities
@@ -125,11 +143,15 @@ public class LitJsonResponseCreator : ResponseCreator {
 
     #endregion
 
+
+
+
 }
 
 public class WebserviceException : Exception
 {
-    public WebserviceException(string errorCode, string message) : base("Error " + errorCode + ": " + message)
+    public WebserviceException(string errorCode, string message)
+        : base("Error " + errorCode + ": " + message)
     {
     }
 }

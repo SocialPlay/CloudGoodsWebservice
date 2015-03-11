@@ -2,20 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using CloudgoodsClasses;
 
-public interface CallObjectCreator  {
+public interface CallObjectCreator
+{
 
     WWW CreateLoginCallObject(string appID, string userEmail, string password);
 
-    //WWW CreateGiveUserItemsCallObject(
+    WWW CreateGiveOwnerItemsCallObject(GiveOwnerItemRequest request);
 
-    WWW CreateGetUserItemsCallObject(int location);
+    WWW CreateGetOwnerItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 
-    WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType);
+    WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType = "User", string ownerId="Default");
 
     WWW CreateGetServerTimeObject();
 
-    Dictionary<string, string> CreateLoginCallHeader(string urlString);
+    WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
+
+    WWW CreateConsumeItemVouchersCall(ConsumeItemVouchersRequest request);
+
+    Dictionary<string, string> CreateHeaders(string urlString);
+
+    Dictionary<string, string> CreatePostHeaders(RequestClass requestObject);
 
     int GetTimestamp();
 
