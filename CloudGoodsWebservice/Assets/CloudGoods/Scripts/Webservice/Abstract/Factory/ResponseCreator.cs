@@ -8,15 +8,15 @@ public interface ResponseCreator {
 
     CloudGoodsUser CreateLoginResponse(string responseData);
 
-    List<ItemData> CreateGetUserItemsResponse(string responseData);
+    List<ItemData> CreateItemDataListResponse(string responseData);
 
-    NewItemStack CreateMoveItemResponse(string responseData);
+    MoveItemResponse CreateMoveItemResponse(string responseData);
 
     GiveOwnerItemResponse CreateGiveOwnerItemResponse(string responseData);
 
     CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData);
 
-    ConsumeItemVouchersResponse CreteConsomeItemVoucherResponse(string responseData);
+    RedeemItemVouchersResponse CreteRedeemItemVoucherResponse(string responseData);
  
 
     bool IsValidData(string data);

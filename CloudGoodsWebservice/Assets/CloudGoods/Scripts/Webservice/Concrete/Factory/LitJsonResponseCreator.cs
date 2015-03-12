@@ -12,68 +12,21 @@ public class LitJsonResponseCreator : ResponseCreator
 
     public CloudGoodsUser CreateLoginResponse(string responseData)
     {
-        JsonData jsonData = JsonMapper.ToObject(responseData);
-
-        return new CloudGoodsUser(jsonData["UserId"].ToString(), jsonData["Username"].ToString(), jsonData["Email"].ToString(), jsonData["SessionId"].ToString(), false);
+        return JsonMapper.ToObject<CloudGoodsUser>(responseData);
     }
 
     #endregion
 
     #region Item Management
 
-    public List<ItemData> CreateGetUserItemsResponse(string responseData)
+    public List<ItemData> CreateItemDataListResponse(string responseData)
     {
-
-        JsonData jsonUserItems = JsonMapper.ToObject(responseData);
-
-        List<ItemData> items = new List<ItemData>();
-
-        for (int i = 0; i < jsonUserItems.Count; i++)
-        {
-            JsonData jsonItemData = jsonUserItems[i];
-
-            ItemData itemData = new ItemData()
-            {
-                Amount = int.Parse(jsonItemData["amount"].ToString()),
-                ClassId = int.Parse(jsonItemData["classId"].ToString()),
-                CollectionId = int.Parse(jsonItemData["collectionId"].ToString()),
-                Detail = jsonItemData["detail"].ToString(),
-                Energy = int.Parse(jsonItemData["energy"].ToString()),
-                Id = int.Parse(jsonItemData["Id"].ToString()),
-                Location = int.Parse(jsonItemData["location"].ToString()),
-                Name = jsonItemData["name"].ToString(),
-                StackLocationId = jsonItemData["stackLocationId"].ToString(),
-                Description = jsonItemData["description"].ToString(),
-                ImageName = jsonItemData["imageName"].ToString()
-            };
-
-            for (int j = 0; j < jsonItemData["behaviours"].Count; j++)
-            {
-                itemData.behaviours.Add(new ItemData.Behaviours() { name = jsonItemData["behaviours"][j]["name"].ToString(), Id = int.Parse(jsonItemData["behaviours"][j]["Id"].ToString()) });
-            }
-
-            for (int j = 0; j < jsonItemData["tags"].Count; j++)
-            {
-                itemData.tags.Add(new ItemData.Tag() { name = jsonItemData["tags"][j]["name"].ToString(), Id = int.Parse(jsonItemData["tags"][j]["Id"].ToString()) });
-            }
-
-            items.Add(itemData);
-
-        }
-
-        return items;
+        return JsonMapper.ToObject<List<ItemData>>(responseData);
     }
 
-    public NewItemStack CreateMoveItemResponse(string responseData)
+    public MoveItemResponse CreateMoveItemResponse(string responseData)
     {
-        JsonData jsonMoveitem = JsonMapper.ToObject(responseData);
-
-        NewItemStack itemStack = new NewItemStack()
-        {
-            stackLocationId = jsonMoveitem["newStackId"].ToString()
-        };
-
-        return itemStack;
+        return JsonMapper.ToObject<MoveItemResponse>(responseData);
     }
 
     public GiveOwnerItemResponse CreateGiveOwnerItemResponse(string responseData)
@@ -86,9 +39,9 @@ public class LitJsonResponseCreator : ResponseCreator
         return JsonMapper.ToObject<CreateItemVouchersResponse>(responseData);
     }
 
-    public ConsumeItemVouchersResponse CreteConsomeItemVoucherResponse(string responseData)
+    public RedeemItemVouchersResponse CreteRedeemItemVoucherResponse(string responseData)
     {
-        return JsonMapper.ToObject<ConsumeItemVouchersResponse>(responseData);
+        return JsonMapper.ToObject<RedeemItemVouchersResponse>(responseData);
     }
 
 

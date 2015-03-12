@@ -11,15 +11,15 @@ public interface CallObjectCreator
 
     WWW CreateGiveOwnerItemsCallObject(GiveOwnerItemRequest request);
 
-    WWW CreateGetOwnerItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
+    WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 
-    WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType = "User", string ownerId="Default");
+    WWW CreateMoveItemsCallObject(MoveItemsRequest request);
 
     WWW CreateGetServerTimeObject();
 
     WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
 
-    WWW CreateConsumeItemVouchersCall(ConsumeItemVouchersRequest request);
+    WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
 
     Dictionary<string, string> CreateHeaders(string urlString);
 

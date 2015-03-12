@@ -54,7 +54,7 @@ public class CloudGoods : MonoBehaviour
     private void _Login(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail, string password, Action<CloudGoodsUser> callback)
     {
         if (!isInitialized)
-            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
+            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Initialize() first");
 
         Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(CloudGoodsSettings.AppID, userEmail, password), x =>
         {
@@ -71,25 +71,37 @@ public class CloudGoods : MonoBehaviour
     private void _GetUserItems(int location, Action<List<ItemData>> callback)
     {
         if (!isInitialized)
-            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
+            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Initialize() first");
 
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetOwnerItemsCallObject(location), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetUserItemsCallObject(location), x =>
         {
-            callback(responseCreator.CreateGetUserItemsResponse(x));
+            callback(responseCreator.CreateItemDataListResponse(x));
         }));
     }
 
-    public static void MoveItem(ItemData item, int location, int amountToMove, Action<NewItemStack> callback)
+    public static void MoveItem(ItemData item, int location, int amountToMove, Action<MoveItemResponse> callback, OtherOwner otherOwner = null)
     {
-        Instance._MoveItem(item, location, amountToMove, callback);
+        List<MoveItemsRequest.MoveOrder> orders = new List<MoveItemsRequest.MoveOrder>(){
+             new MoveItemsRequest.MoveOrder(){
+                     stackId = item.StackLocationId,
+         amount = amountToMove,
+           location =location
+             }
+        };
+        Instance._MoveItems(orders, callback);
     }
 
-    private void _MoveItem(ItemData item, int location, int amountToMove, Action<NewItemStack> callback)
+    public static void MoveItems(List<MoveItemsRequest.MoveOrder> orders, Action<MoveItemResponse> callback, OtherOwner otherOwner = null)
+    {
+        Instance._MoveItems(orders, callback);
+    }
+
+    private void _MoveItems(List<MoveItemsRequest.MoveOrder> orders, Action<MoveItemResponse> callback, OtherOwner otherOwner = null)
     {
         if (!isInitialized)
-            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
+            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Initialize() first");
 
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemCallObject(item.StackLocationId, amountToMove, location, "User"), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemsCallObject(new MoveItemsRequest() { moveOrders = orders, otherOwner = otherOwner }), x =>
             {
                 callback(responseCreator.CreateMoveItemResponse(x));
             }));
@@ -109,26 +121,26 @@ public class CloudGoods : MonoBehaviour
     }
 
 
-    public static void ConsumeItemVoucher(List<ConsumeItemVouchersRequest.ItemVoucherSelection> selections, Action<ConsumeItemVouchersResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
+    public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<RedeemItemVouchersResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
     {
-        Instance._ConsumeItemVoucher(selections, callback, otherOwner);
+        Instance._RedeemItemVoucher(selections, callback, otherOwner);
     }
 
 
-    private void _ConsumeItemVoucher(List<ConsumeItemVouchersRequest.ItemVoucherSelection> selections, Action<ConsumeItemVouchersResponse> callback, OtherOwner otherOwner = null)
+    private void _RedeemItemVoucher(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<RedeemItemVouchersResponse> callback, OtherOwner otherOwner = null)
     {
         if (!isInitialized)
-            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
+            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Initialize() first");
 
-        CloudgoodsClasses.ConsumeItemVouchersRequest request = new CloudgoodsClasses.ConsumeItemVouchersRequest()
+        CloudgoodsClasses.RedeemItemVouchersRequest request = new CloudgoodsClasses.RedeemItemVouchersRequest()
         {
             selectedVouchers = selections,
             otherOwner = otherOwner
         };
 
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumeItemVouchersCall(request), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateRedeemItemVouchersCall(request), x =>
         {
-            callback(responseCreator.CreteConsomeItemVoucherResponse(x));
+            callback(responseCreator.CreteRedeemItemVoucherResponse(x));
         }));
     }
 
@@ -140,7 +152,7 @@ public class CloudGoods : MonoBehaviour
     private void _CreateItemVouchers(int minEnergy, int total, Action<CreateItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
     {
         if (!isInitialized)
-            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Instance().Initialize() first");
+            throw new Exception("Cloud Goods has not yet been initialized. Before making any webservice calls with the CloudGoods class, you must call CloudGoods.Initialize() first");
 
         CloudgoodsClasses.CreateItemVouchersRequest request = new CreateItemVouchersRequest()
         {

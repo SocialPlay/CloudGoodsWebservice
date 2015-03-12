@@ -35,7 +35,7 @@ public class WebCallsTest : MonoBehaviour
     {
 
         string debugString = "login Info\nName: " + user.userName;
-        debugString += "\nId: " + user.UserID;
+        debugString += "\nId: " + user.userID;
         debugString += "\nEmail: " + user.userEmail;
         debugString += "\nIs New: " + user.isNewUserToWorld;
         debugString += "\nSession:" + user.sessionID.ToString();
@@ -80,9 +80,9 @@ public class WebCallsTest : MonoBehaviour
     private void ConsumeItemVoucher(CreateItemVouchersResponse.ItemVoucher voucher)
     {
 
-        List<ConsumeItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<ConsumeItemVouchersRequest.ItemVoucherSelection>() { new ConsumeItemVouchersRequest.ItemVoucherSelection() { amount = voucher.item.Amount, itemId = voucher.item.Id, location = 0, voucherId = voucher.Id } };
+        List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { amount = voucher.item.Amount, itemId = voucher.item.Id, location = 0, voucherId = voucher.Id } };
 
-        CloudGoods.ConsumeItemVoucher(selectedVouchers, delegate(ConsumeItemVouchersResponse response)
+        CloudGoods.RedeemItemVouchers(selectedVouchers, delegate(RedeemItemVouchersResponse response)
         {
             string debugString = "Consume Item Voucher";
             foreach (var result in response.results)
@@ -121,7 +121,7 @@ public class WebCallsTest : MonoBehaviour
         GUI.color = Color.green;
         GUILayout.TextArea(last);
         GUI.color = orig;
-        GUILayout.TextArea(debugDisplay);
+        GUILayout.TextField(debugDisplay);
         GUILayout.EndArea();
     }
 

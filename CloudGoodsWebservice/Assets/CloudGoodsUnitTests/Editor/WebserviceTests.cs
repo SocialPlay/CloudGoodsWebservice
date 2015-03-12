@@ -68,7 +68,7 @@ namespace WebserviceTests
             CloudGoodsUser loginInfo = responseCreator.CreateLoginResponse(mockJsonstring);
 
             Assert.AreEqual("Test User", loginInfo.userName);
-            Assert.AreEqual("01", loginInfo.UserID);
+            Assert.AreEqual("01", loginInfo.userID);
             Assert.AreEqual("test@user.com", loginInfo.userEmail);
             Assert.AreEqual("ae3af4a3-de7e-4d59-818e-10b11030df1e", loginInfo.sessionID);
         }
@@ -82,7 +82,7 @@ namespace WebserviceTests
         {
             string mockJsonstring = "[{\"Id\":1,\"collectionId\":2,\"stackLocationId\":\"1234567\",\"classId\":3,\"name\":\"Test Item\",\"amount\":4,\"location\":5,\"detail\":\"Some details here\",\"energy\":6,\"behaviours\":[{\"name\":\"0\",\"Id\":0},{\"name\":\"1\",\"Id\":1}],\"tags\":[{\"name\":\"0\",\"Id\":0},{\"name\":\"1\",\"Id\":1},{\"name\":\"2\",\"Id\":2}]},{\"Id\":1,\"collectionId\":2,\"stackLocationId\":\"1234567\",\"classId\":3,\"name\":\"Test Item\",\"amount\":4,\"location\":5,\"detail\":\"Some details here\",\"energy\":6,\"behaviours\":[{\"name\":\"0\",\"Id\":0},{\"name\":\"1\",\"Id\":1}],\"tags\":[{\"name\":\"0\",\"Id\":0},{\"name\":\"1\",\"Id\":1},{\"name\":\"2\",\"Id\":2}]}]";
 
-            List<ItemData> items = responseCreator.CreateGetUserItemsResponse(mockJsonstring);
+            List<ItemData> items = responseCreator.CreateItemDataListResponse(mockJsonstring);
 
             ItemData itemData = items[0];
 

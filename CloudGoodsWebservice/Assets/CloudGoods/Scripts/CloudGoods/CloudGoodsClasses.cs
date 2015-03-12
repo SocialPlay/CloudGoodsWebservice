@@ -19,20 +19,11 @@ public class GiveOwnerItemWebserviceRequest
 
 public class CloudGoodsUser
 {
-    public string UserID = "";
+    public string userID = "";
     public bool isNewUserToWorld = false;
     public string userName = "";
     public string userEmail = "";
     public string sessionID;
-
-    public CloudGoodsUser(string newUserId, string newUserName, string newUserEmail, string newSessionID, bool newIsNewUserToWorld)
-    {
-        UserID = newUserId;
-        userName = newUserName;
-        userEmail = newUserEmail;
-        sessionID = newSessionID;
-        isNewUserToWorld = newIsNewUserToWorld;
-    }
 }
 
 public class LoginUserInfo
@@ -529,7 +520,7 @@ namespace CloudgoodsClasses
 
 
 
-    public class ConsumeItemVouchersRequest : RequestClass
+    public class RedeemItemVouchersRequest : RequestClass
     {
         public List<ItemVoucherSelection> selectedVouchers;
         public OtherOwner otherOwner { get; set; }
@@ -550,7 +541,7 @@ namespace CloudgoodsClasses
         }
     }
 
-    public class ConsumeItemVouchersResponse
+    public class RedeemItemVouchersResponse
     {
         public List<ConsumeItemVoucherResult> results { get; set; }
 
@@ -565,5 +556,41 @@ namespace CloudgoodsClasses
 
     #endregion
 
+    #region Move Items
+    public class MoveItemsRequest : RequestClass
+    {
+        public List<MoveOrder> moveOrders = new List<MoveOrder>();
+        public OtherOwner otherOwner = null;
 
+        public override string ToHashable()
+        {
+            string results = "";
+            foreach (MoveOrder order in moveOrders)
+            {
+                results += order.ToHashable();
+            }
+            results += OtherOwner.ToHashable(otherOwner);
+            return results;
+        }
+
+        public class MoveOrder
+        {
+            public string stackId;
+            public int amount;
+            public int location;
+
+            public string ToHashable()
+            {
+                return stackId + amount + location;
+            }
+        }
+
+
+    }
+
+    public class MoveItemResponse
+    {
+        public List<string> updatedStackIds;
+    }
+    #endregion
 }
