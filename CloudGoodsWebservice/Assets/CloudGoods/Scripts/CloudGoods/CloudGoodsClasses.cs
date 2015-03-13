@@ -206,7 +206,7 @@ public class BehaviourDefinition
 }
 
 
-[System.Serializable]
+
 public class ItemData
 {
     public string StackLocationId;
@@ -435,10 +435,16 @@ namespace CloudgoodsClasses
         public abstract string ToHashable();
     }
 
-
     public class UpdatedStacksResponse
     {
-        public List<string> UpdatedStackIds;
+        public List<SimpleItemInfo> UpdatedStackIds;
+
+        public class SimpleItemInfo
+        {
+            public string StackId;
+            public int Amount;
+            public int Location;
+        }
     }
 
     public class OtherOwner

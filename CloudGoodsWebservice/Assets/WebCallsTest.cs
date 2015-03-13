@@ -8,23 +8,22 @@ namespace WebCallTests
 {
     public class WebCallsTest : MonoBehaviour
     {
-
-        string debugDisplay = "";
-        string last = "";
-        WebAPICallObjectCreator objectCreator;
+        string DebugDisplay = "";
+        string Last = "";
 
         public enum ItemAction
         {
             moveToVault,
             UpdateStackByFive,
             UpdateStackToOne,
-            RemoveStack
+            RemoveStack,
+            None
         }
 
-        public ItemAction currentAction;
+        public ItemAction CurrentAction;
 
-        private List<ItemData> usersItems = new List<ItemData>();
-        private List<CreateItemVouchersResponse.ItemVoucher> currentVouchers = new List<CreateItemVouchersResponse.ItemVoucher>();
+        private List<ItemData> UsersItems = new List<ItemData>();
+        private List<CreateItemVouchersResponse.ItemVoucher> CurrentVouchers = new List<CreateItemVouchersResponse.ItemVoucher>();
 
         void OnEnable()
         {
@@ -34,7 +33,6 @@ namespace WebCallTests
         void Start()
         {
             CloudGoods.Initialize();
-            objectCreator = new WebAPICallObjectCreator();
         }
 
         void Instance_CloudGoodsInitilized()
@@ -45,14 +43,12 @@ namespace WebCallTests
 
         void OnReceivedUser(CloudGoodsUser user)
         {
-
             string debugString = "login Info\nName: " + user.UserName;
             debugString += "\nId: " + user.UserID;
             debugString += "\nEmail: " + user.UserEmail;
             debugString += "\nIs New: " + user.IsNewUserToWorld;
             debugString += "\nSession:" + user.SessionID.ToString();
             NewDisplayLine(debugString);
-
         }
 
 
@@ -66,18 +62,11 @@ namespace WebCallTests
             }
         };
 
-            CloudGoods.UpdateItemsByIds(infos
-                , delegate(UpdatedStacksResponse response)
-                {
-                    string debugString = "Update Items";
-                    foreach (var item in response.UpdatedStackIds)
-                    {
-                        debugString += "\n" + item;
-                    }
-                    NewDisplayLine(debugString);
-                });
+            CloudGoods.UpdateItemsByIds(infos, DisplayUpdatedItems);
+
 
         }
+
 
         private void CreateItemVoucher()
         {
@@ -86,7 +75,7 @@ namespace WebCallTests
                 string debugString = "Created Vouchers Items";
                 foreach (var voucher in response.Vouchers)
                 {
-                    currentVouchers.Add(voucher);
+                    CurrentVouchers.Add(voucher);
                     debugString += "\n(" + voucher.Id + ")" + voucher.Item.Name;
                 }
                 NewDisplayLine(debugString);
@@ -116,7 +105,7 @@ namespace WebCallTests
             CloudGoods.GetUserItems(0, delegate(List<ItemData> items)
             {
                 string debugString = "Recived Items";
-                usersItems.Clear();
+                UsersItems.Clear();
                 foreach (ItemData item in items)
                 {
                     debugString += "\nName: " + item.Name;
@@ -125,12 +114,50 @@ namespace WebCallTests
                     debugString += "\n    Location: " + item.Location.ToString();
                     debugString += "\n    Detail:" + item.Detail;
                     debugString += "\n    SLID:" + item.StackLocationId + "\n";
-                    usersItems.Add(item);
+                    UsersItems.Add(item);
                 }
                 NewDisplayLine(debugString);
             });
         }
 
+
+        private void DisplayUpdatedItems(UpdatedStacksResponse response)
+        {
+            string debugString = "Update Items";
+            foreach (var item in response.UpdatedStackIds)
+            {
+                debugString += "\n" + item.StackId;
+                debugString += "\n  Amount: " + item.Amount;
+                debugString += "\n  Location: " + item.Location;
+
+                ItemData data = UsersItems.Find(x => x.StackLocationId == item.StackId);
+                if (data != null)
+                {
+                    data.Amount = item.Amount;
+                    data.Location = item.Location;
+                }
+            }
+            NewDisplayLine(debugString);
+        }
+
+        private void PerformCurrentAction(ItemData item)
+        {
+            switch (CurrentAction)
+            {
+                case ItemAction.moveToVault:
+                    CloudGoods.MoveItem(item, 0, item.Amount, DisplayUpdatedItems);
+                    break;
+                case ItemAction.UpdateStackByFive:
+              
+                    break;
+                case ItemAction.UpdateStackToOne:
+                    break;
+                case ItemAction.RemoveStack:
+                    break;
+                default:
+                    break;
+            }
+        }
 
         void OnGUI()
         {
@@ -138,9 +165,9 @@ namespace WebCallTests
             GUILayout.BeginArea(new Rect(Screen.width / 2, 0, Screen.width, Screen.height));
             Color orig = GUI.color;
             GUI.color = Color.green;
-            GUILayout.TextArea(last);
+            GUILayout.TextArea(Last);
             GUI.color = orig;
-            GUILayout.TextField(debugDisplay);
+            GUILayout.TextField(DebugDisplay);
             GUILayout.EndArea();
         }
 
@@ -172,11 +199,11 @@ namespace WebCallTests
             }
             GUILayout.FlexibleSpace();
             GUILayout.Label("Users Items");
-            if (GUILayout.Button(currentAction.ToReadable()))
+            if (GUILayout.Button(CurrentAction.ToReadable()))
             {
-                currentAction = currentAction.Next();
+                CurrentAction = CurrentAction.Next();
             }
-            foreach (ItemData item in usersItems)
+            foreach (ItemData item in UsersItems)
             {
                 if (GUILayout.Button(string.Format("{0}:{1} - {2}", item.Name, item.Amount, item.Location)))
                 {
@@ -185,41 +212,24 @@ namespace WebCallTests
 
             GUILayout.FlexibleSpace();
             GUILayout.Label("Item Vouchers");
-            for (int i = currentVouchers.Count < 3 ? 0 : currentVouchers.Count - 3; i < currentVouchers.Count; i++)
+            for (int i = CurrentVouchers.Count < 3 ? 0 : CurrentVouchers.Count - 3; i < CurrentVouchers.Count; i++)
             {
-                if (GUILayout.Button(string.Format("({0}) {1} : {2}", currentVouchers[i].Id, currentVouchers[i].Item.Id, currentVouchers[i].Item.Amount)))
+                if (GUILayout.Button(string.Format("({0}) {1} : {2}", CurrentVouchers[i].Id, CurrentVouchers[i].Item.Id, CurrentVouchers[i].Item.Amount)))
                 {
-                    ConsumeItemVoucher(currentVouchers[i]);
-                    currentVouchers.Remove(currentVouchers[i]);
+                    ConsumeItemVoucher(CurrentVouchers[i]);
+                    CurrentVouchers.Remove(CurrentVouchers[i]);
                     return;
                 }
             }
             GUILayout.EndArea();
         }
 
-
-
-        IEnumerator DebugResults(WWW www)
-        {
-            yield return www;
-
-            // check for errors
-            if (www.error == null)
-            {
-                NewDisplayLine(www.text);
-                Debug.LogWarning(www.text);
-            }
-            else
-            {
-                NewDisplayLine(www.error);
-            }
-        }
-
         void NewDisplayLine(string line)
         {
-            debugDisplay = last + "\n" + debugDisplay;
-            last = line;
+            DebugDisplay = Last + "\n" + DebugDisplay;
+            Last = line;
         }
+
 
 
 
@@ -245,9 +255,10 @@ namespace WebCallTests
         }
         public static WebCallsTest.ItemAction Next(this WebCallsTest.ItemAction action)
         {
-            if ((int)action == 3)
+            action += 1;
+            if (action == WebCallsTest.ItemAction.None)
             {
-                return WebCallsTest.ItemAction.moveToVault;
+                return 0;
             }
             return action + 1;
         }

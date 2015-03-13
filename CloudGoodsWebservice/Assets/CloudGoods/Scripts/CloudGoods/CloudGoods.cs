@@ -127,6 +127,31 @@ public class CloudGoods : MonoBehaviour
         }));
     }
 
+    public static void UpdateItemById(string stackId, int amount, int location, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+    {
+        List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders = new List<UpdateItemsByStackIdRequest.UpdateOrderByStackId>(){
+            new UpdateItemsByStackIdRequest.UpdateOrderByStackId(){
+                stackId = stackId,
+                amount = amount,
+                location = location
+            }
+        };
+        Instance._UpdateItemByStackIds(orders, callback, otherOwner);
+    }
+
+    public static void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
+    {
+        Instance._UpdateItemByStackIds(orders, callback, destinationOwner);
+    }
+
+    private void _UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
+    {
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByStackIdRequestCallObject(new UpdateItemsByStackIdRequest() { orders = orders, otherOwner = destinationOwner }), x =>
+        {
+            callback(responseCreator.CreateUpdatedStacksResponse(x));
+        }));
+    }
+
 
     public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<RedeemItemVouchersResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
     {
@@ -168,6 +193,8 @@ public class CloudGoods : MonoBehaviour
             callback(responseCreator.CreateCreateItemVoucherResponse(x));
         }));
     }
+
+
 
 
     #region Coroutines
