@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using LitJson;
+using CloudGoodsClasses;
 
 public class PersistentItemContainer : MonoBehaviour
 {

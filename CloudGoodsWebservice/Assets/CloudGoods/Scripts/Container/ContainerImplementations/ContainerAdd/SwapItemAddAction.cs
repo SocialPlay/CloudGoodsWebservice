@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CloudGoodsClasses;
 
 public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
 {

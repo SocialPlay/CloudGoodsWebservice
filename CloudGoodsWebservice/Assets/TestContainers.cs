@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using CloudGoodsClasses;
 
 public class TestContainers : MonoBehaviour {
 
@@ -26,7 +27,7 @@ public class TestContainers : MonoBehaviour {
         }
     }
 
-    void OnReceivedUser(CloudGoodsUser user)
+    void OnReceivedUser(CloudGoodsClasses.CloudGoodsUser user)
     {
         foreach (PersistentItemContainer loader in GameObject.FindObjectsOfType(typeof(PersistentItemContainer)))
         {

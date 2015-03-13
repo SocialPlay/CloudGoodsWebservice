@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using LitJson;
 using System.Collections.Generic;
-using CloudgoodsClasses;
+using CloudGoodsClasses;
 
 public class LitJsonResponseCreator : ResponseCreator
 {

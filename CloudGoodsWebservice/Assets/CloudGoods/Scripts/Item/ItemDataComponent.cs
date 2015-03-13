@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using CloudGoodsClasses;
 
 public class ItemDataComponent : MonoBehaviour
 {

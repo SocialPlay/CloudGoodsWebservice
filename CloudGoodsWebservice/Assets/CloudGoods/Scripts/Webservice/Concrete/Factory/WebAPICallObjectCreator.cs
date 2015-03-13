@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Text;
-using CloudgoodsClasses;
+using CloudGoodsClasses;
 using CloudGoodsUtilities;
 
 public class WebAPICallObjectCreator : CallObjectCreator

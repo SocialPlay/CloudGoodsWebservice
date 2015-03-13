@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CloudGoodsClasses;
 
 [RequireComponent(typeof(ItemContainer))]
 public class BasicAddContainer : MonoBehaviour, IContainerAddAction

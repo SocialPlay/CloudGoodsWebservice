@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using CloudgoodsClasses;
+using CloudGoodsClasses;
 
 public interface CallObjectCreator
 {
