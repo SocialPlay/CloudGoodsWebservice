@@ -12,9 +12,9 @@ public class ItemContainerRestrictor : MonoBehaviour
         NoAction
     }
 
-    public RestrictorState restrictorState = RestrictorState.Normal;
+    public RestrictorState ContainerRestrictorState = RestrictorState.Normal;
 
-    public ItemContainer restrictedContainer;
+    public ItemContainer RestrictedContainer;
 
     void Awake()
     {
@@ -23,14 +23,14 @@ public class ItemContainerRestrictor : MonoBehaviour
 
     public void CheckForValidRestrictedContainer()
     {
-        if (!restrictedContainer)
+        if (!RestrictedContainer)
             throw new Exception("ItemContainerRestrictor could not find a container to restrict.");
     }
 
 
     public bool IsRestricted(ContainerAction action)
     {
-        switch (restrictorState)
+        switch (ContainerRestrictorState)
         {
             case RestrictorState.Normal:
                 return false;                

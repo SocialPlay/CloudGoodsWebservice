@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
 
-    public List<int> classIDList = new List<int>();
+    public List<int> ClassIDList = new List<int>();
     public bool IsExcluded = false;
 
     ItemContainer restrictedContainer;
@@ -12,14 +12,14 @@ public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
     void Awake()
     {
         restrictedContainer = GetComponent<ItemContainer>();
-        restrictedContainer.containerAddRestrictions.Add(this);
+        restrictedContainer.ContainerAddRestrictions.Add(this);
     }
 
     public bool IsRestricted(ContainerAction action, ItemData itemData)
     {
         if (IsExcluded)
         {
-            if (classIDList.Exists(x => x == itemData.ClassId))
+            if (ClassIDList.Exists(x => x == itemData.ClassId))
             {
                 Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");
                 return true;
@@ -29,7 +29,7 @@ public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
         }
         else
         {
-            if (classIDList.Exists(x => x == itemData.ClassId))
+            if (ClassIDList.Exists(x => x == itemData.ClassId))
                 return false;
            
             Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");

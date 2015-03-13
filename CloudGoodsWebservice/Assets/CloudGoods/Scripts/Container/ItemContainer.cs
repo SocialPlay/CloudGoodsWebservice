@@ -10,14 +10,14 @@ public class ItemContainer : MonoBehaviour
 
     public bool IsItemQuantityLimited = false;
 
-    public PersistentItemContainer itemLoader;
+    public PersistentItemContainer ItemLoader;
 
     public List<ItemData> containerItems = new List<ItemData>();
 
-    public List<IContainerRestriction> containerAddRestrictions = new List<IContainerRestriction>();
-    public List<IContainerRestriction> containerRemoveRestrictions = new List<IContainerRestriction>();
+    public List<IContainerRestriction> ContainerAddRestrictions = new List<IContainerRestriction>();
+    public List<IContainerRestriction> ContainerRemoveRestrictions = new List<IContainerRestriction>();
 
-    public IContainerAddAction containerAddAction;
+    public IContainerAddAction ContainerAddAction;
 
     public event Action<ItemData, bool> AddedItem;
     public event Action<ItemData, bool> ModifiedItem;
@@ -28,12 +28,12 @@ public class ItemContainer : MonoBehaviour
 
     void Awake()
     {
-        if (itemLoader == null) itemLoader = GetComponentInChildren<PersistentItemContainer>();
+        if (ItemLoader == null) ItemLoader = GetComponentInChildren<PersistentItemContainer>();
 
         if (GetComponent(typeof(IContainerAddAction)) == null)
-            containerAddAction = gameObject.AddComponent<BasicAddContainer>();
+            ContainerAddAction = gameObject.AddComponent<BasicAddContainer>();
         else
-            containerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
+            ContainerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
 
         //CloudGoods.OnRegisteredUserToSession += OnRegisteredSession;
     }
@@ -82,9 +82,9 @@ public class ItemContainer : MonoBehaviour
 
     public ContainerMoveState GetContainerAddState(ItemData itemData)
     {
-        if (containerAddRestrictions.Count > 0)
+        if (ContainerAddRestrictions.Count > 0)
         {
-            foreach (IContainerRestriction newRestriction in containerAddRestrictions)
+            foreach (IContainerRestriction newRestriction in ContainerAddRestrictions)
             {
                 if (newRestriction.IsRestricted(ContainerAction.add, itemData))
                     return new ContainerMoveState(ContainerMoveState.ActionState.No);
@@ -96,9 +96,9 @@ public class ItemContainer : MonoBehaviour
 
     public ContainerMoveState GetContainerRemoveState(ItemData itemData)
     {
-        if (containerRemoveRestrictions.Count > 0)
+        if (ContainerRemoveRestrictions.Count > 0)
         {
-            foreach (IContainerRestriction newRestriction in containerRemoveRestrictions)
+            foreach (IContainerRestriction newRestriction in ContainerRemoveRestrictions)
             {
                 if (newRestriction.IsRestricted(ContainerAction.remove, itemData))
                     return new ContainerMoveState(ContainerMoveState.ActionState.No);
@@ -131,7 +131,7 @@ public class ItemContainer : MonoBehaviour
 
     public void Add(ItemData itemData, int amount = -1, bool isSave = true)
     {
-        containerAddAction.AddItem(itemData, amount, isSave);
+        ContainerAddAction.AddItem(itemData, amount, isSave);
     }
 
 
@@ -186,9 +186,9 @@ public class ItemContainer : MonoBehaviour
 
     public void RefreshContainer()
     {
-        if (itemLoader != null)
+        if (ItemLoader != null)
         {
-            itemLoader.LoadItems();
+            ItemLoader.LoadItems();
             Clear();
         }
     }

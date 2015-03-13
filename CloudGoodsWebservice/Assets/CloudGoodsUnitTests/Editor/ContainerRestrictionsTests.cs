@@ -101,7 +101,7 @@ public class ContainerRestrictionsTests : MonoBehaviour {
         objectsForCleanUp.Add(restrictionObject);
 
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false);
-        restriction.restrictedContainer = container;
+        restriction.RestrictedContainer = container;
         objectsForCleanUp.Add(container.gameObject);
 
         restriction.ContainerItemLimit = 0;
@@ -119,7 +119,7 @@ public class ContainerRestrictionsTests : MonoBehaviour {
         objectsForCleanUp.Add(restrictionObject);
 
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false);
-        restriction.restrictedContainer = container;
+        restriction.RestrictedContainer = container;
         objectsForCleanUp.Add(container.gameObject);
 
         restriction.ContainerItemLimit = 1;
@@ -310,7 +310,7 @@ public class ContainerRestrictionsTests : MonoBehaviour {
         ClassIDRestriction restriction = restrictionObject.AddComponent<ClassIDRestriction>();
         objectsForCleanUp.Add(restrictionObject);
 
-        restriction.classIDList.Add(classID);
+        restriction.ClassIDList.Add(classID);
         restriction.IsExcluded = isExcluded;
         return restriction;
     }

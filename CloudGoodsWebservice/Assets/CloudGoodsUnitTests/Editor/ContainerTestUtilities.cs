@@ -9,20 +9,20 @@ public class ContainerTestUtilities  {
         GameObject containerObj = new GameObject();
         containerObj.name = "Item Container";
         ItemContainer container = containerObj.AddComponent<ItemContainer>();
-        container.containerAddAction = containerObj.AddComponent<BasicAddContainer>();
-        BasicAddContainer containerAdd = (BasicAddContainer)container.containerAddAction;
-        containerAdd.itemContainer = container;
+        container.ContainerAddAction = containerObj.AddComponent<BasicAddContainer>();
+        BasicAddContainer containerAdd = (BasicAddContainer)container.ContainerAddAction;
+        containerAdd.ItemContainer = container;
 
 
         ClassIDRestriction restriction = containerObj.AddComponent<ClassIDRestriction>();
-        restriction.classIDList.Add(10);
+        restriction.ClassIDList.Add(10);
         restriction.IsExcluded = true;
 
         if (isRestrictedAdd)
-            container.containerAddRestrictions.Add(restriction);
+            container.ContainerAddRestrictions.Add(restriction);
 
         if (isRestrictedRemove)
-            container.containerRemoveRestrictions.Add(restriction);
+            container.ContainerRemoveRestrictions.Add(restriction);
 
         if (listContainer != null)
             listContainer.Add(container);

@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 public class SecurePayload
 {
-    public string token;
-    public string data;
+    public string Token;
+    public string Data;
 }
 
 public class GiveOwnerItemWebserviceRequest
 {
     //public List<WebModels.ItemsInfo> listOfItems;
     //public WebModels.OwnerTypes OwnerType;
-    public string ownerID;
-    public string appID;
+    public string OwnerID;
+    public string AppID;
 }
 
 public class CloudGoodsUser

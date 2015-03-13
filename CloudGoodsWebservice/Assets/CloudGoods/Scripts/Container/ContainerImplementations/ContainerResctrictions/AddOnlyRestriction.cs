@@ -8,7 +8,7 @@ public class AddOnlyRestriction : MonoBehaviour, IContainerRestriction {
     void Awake()
     {
         restrictedContainer = GetComponent<ItemContainer>();
-        restrictedContainer.containerRemoveRestrictions.Add(this);
+        restrictedContainer.ContainerRemoveRestrictions.Add(this);
     }
 
     public bool IsRestricted(ContainerAction containerAction, ItemData itemData)

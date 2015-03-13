@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 public class ItemContainerDisplay : MonoBehaviour
 {
-    public ItemContainer myContainer;
+    public ItemContainer MyContainer;
     // public GameObject displayObject;
-    public Transform childTarget;
+    public Transform ChildTarget;
 
     private List<ItemDataDisplay> currentDisplayObjects = new List<ItemDataDisplay>();
 
@@ -35,18 +35,18 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void OnEnable()
     {
-        myContainer.AddedItem += AddedItem;
-        myContainer.ModifiedItem += ModifiedItem;
-        myContainer.RemovedItem += RemovedItem;
-        myContainer.ClearItems += ClearItems;
+        MyContainer.AddedItem += AddedItem;
+        MyContainer.ModifiedItem += ModifiedItem;
+        MyContainer.RemovedItem += RemovedItem;
+        MyContainer.ClearItems += ClearItems;
     }
 
     void OnDisable()
     {
-        myContainer.AddedItem -= AddedItem;
-        myContainer.ModifiedItem -= ModifiedItem;
-        myContainer.RemovedItem -= RemovedItem;
-        myContainer.ClearItems -= ClearItems;
+        MyContainer.AddedItem -= AddedItem;
+        MyContainer.ModifiedItem -= ModifiedItem;
+        MyContainer.RemovedItem -= RemovedItem;
+        MyContainer.ClearItems -= ClearItems;
     }
 
     public virtual void AddedItem(ItemData itemData, bool isSaving)
@@ -56,7 +56,7 @@ public class ItemContainerDisplay : MonoBehaviour
         newDisplay.itemObject = newItem.GetComponent<ItemDataComponent>();
         newItem.GetComponent<ItemDataComponent>().itemData = itemData;
         newItem.name = itemData.Name;
-        newItem.transform.SetParent(childTarget);
+        newItem.transform.SetParent(ChildTarget);
         newItem.transform.localPosition = Vector3.zero;
         newItem.transform.localScale = Vector3.one;
         currentDisplayObjects.Add(newDisplay);

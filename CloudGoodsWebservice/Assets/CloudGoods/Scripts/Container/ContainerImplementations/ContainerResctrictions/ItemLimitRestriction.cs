@@ -4,19 +4,19 @@ using System.Collections;
 public class ItemLimitRestriction : MonoBehaviour, IContainerRestriction {
 
     public int ContainerItemLimit = 0;
-    public ItemContainer restrictedContainer;
+    public ItemContainer RestrictedContainer;
 
     void Awake()
     {
-        restrictedContainer = GetComponent<ItemContainer>();
-        restrictedContainer.containerAddRestrictions.Add(this);
+        RestrictedContainer = GetComponent<ItemContainer>();
+        RestrictedContainer.ContainerAddRestrictions.Add(this);
     }
 
     public bool IsRestricted(ContainerAction containerAction, ItemData itemData)
     {
         if (containerAction == ContainerAction.add)
         {
-            if (restrictedContainer.containerItems.Count >= ContainerItemLimit)
+            if (RestrictedContainer.containerItems.Count >= ContainerItemLimit)
             {
                 Debug.LogWarning("Item Resticted for being added to container because it has a Item Limit Restriction");
                 return true;

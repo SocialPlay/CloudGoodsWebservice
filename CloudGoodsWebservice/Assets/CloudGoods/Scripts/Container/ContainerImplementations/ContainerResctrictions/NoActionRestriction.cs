@@ -8,8 +8,8 @@ public class NoActionRestriction : MonoBehaviour, IContainerRestriction {
     void Awake()
     {
         restrictedContainer = GetComponent<ItemContainer>();
-        restrictedContainer.containerRemoveRestrictions.Add(this);
-        restrictedContainer.containerAddRestrictions.Add(this);
+        restrictedContainer.ContainerRemoveRestrictions.Add(this);
+        restrictedContainer.ContainerAddRestrictions.Add(this);
     }
 
     public bool IsRestricted(ContainerAction containerAction, ItemData itemData)

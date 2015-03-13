@@ -4,11 +4,11 @@ using System.Collections;
 [RequireComponent(typeof(ItemContainer))]
 public class BasicAddContainer : MonoBehaviour, IContainerAddAction
 {
-    public ItemContainer itemContainer;
+    public ItemContainer ItemContainer;
 
     void Awake()
     {
-        itemContainer = GetComponent<ItemContainer>();
+        ItemContainer = GetComponent<ItemContainer>();
     }
 
     public void AddItem(ItemData addItem, int amount, bool isSave)
@@ -16,28 +16,28 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
         if (amount == -1 || amount > addItem.Amount)
         {
             amount = addItem.Amount;
-            addItem.OwnerContainer = itemContainer;
+            addItem.OwnerContainer = ItemContainer;
             if (!AddToExistingStack(addItem, addItem.Amount, isSave))
             {
-                itemContainer.containerItems.Add(addItem);
-                itemContainer.AddItemEvent(addItem, isSave);
+                ItemContainer.containerItems.Add(addItem);
+                ItemContainer.AddItemEvent(addItem, isSave);
             }
         }
         else
         {
-            addItem.OwnerContainer = itemContainer;
+            addItem.OwnerContainer = ItemContainer;
             if (!AddToExistingStack(addItem, amount, isSave))
             {
                 addItem.Amount = amount;
-                itemContainer.containerItems.Add(addItem);
-                itemContainer.AddItemEvent(addItem, isSave);
+                ItemContainer.containerItems.Add(addItem);
+                ItemContainer.AddItemEvent(addItem, isSave);
             }
         }
     }
 
     private bool AddToExistingStack(ItemData data, int amount, bool isSave)
     {
-        foreach (ItemData item in itemContainer.containerItems)
+        foreach (ItemData item in ItemContainer.containerItems)
         {
             Debug.Log("Checking Id: " + item.Id + "  with ID: " + data.Id);
 
@@ -45,7 +45,7 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
             {
                 Debug.Log("add to existing stack");
 
-                itemContainer.ModifiedItemEvent(data, isSave);
+                ItemContainer.ModifiedItemEvent(data, isSave);
 
 
                 item.Amount = item.Amount + amount;
