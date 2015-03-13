@@ -34,7 +34,7 @@ public class PersistentItemContainer : MonoBehaviour
             case ItemOwnerTypes.Session:
                 return CloudGoods.User.sessionID.ToString();
             case ItemOwnerTypes.User:
-                return CloudGoods.User.UserID.ToString();
+                return CloudGoods.User.userID.ToString();
         }
         return "";
 
@@ -82,9 +82,9 @@ public class PersistentItemContainer : MonoBehaviour
         if (isSave == true)
         {
             Debug.Log("Mod Item");
-            CloudGoods.MoveItem(data, Location, data.Amount, x =>
+            CloudGoods.MoveItem(data, Location, data.amount, x =>
             {
-                data.StackLocationId = x.stackLocationId;
+                data.stackLocationId = x.updatedStackIds[0];
                 data.IsLocked = false;
             });
         }
@@ -97,9 +97,9 @@ public class PersistentItemContainer : MonoBehaviour
             Debug.Log("Add Item");
             data.IsLocked = true;
 
-            CloudGoods.MoveItem(data, Location, data.Amount, x =>
+            CloudGoods.MoveItem(data, Location, data.amount, x =>
             {
-                data.StackLocationId = x.stackLocationId;
+                data.stackLocationId = x.updatedStackIds[0];
                 data.IsLocked = false;
             });
         }

@@ -9,17 +9,19 @@ public interface CallObjectCreator
 
     WWW CreateLoginCallObject(string appID, string userEmail, string password);
 
-    WWW CreateGiveOwnerItemsCallObject(GiveOwnerItemRequest request);
+    WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 
-    WWW CreateGetOwnerItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
-
-    WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType = "User", string ownerId="Default");
+    WWW CreateMoveItemsCallObject(MoveItemsRequest request);
 
     WWW CreateGetServerTimeObject();
 
     WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
 
-    WWW CreateConsumeItemVouchersCall(ConsumeItemVouchersRequest request);
+    WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
+
+    WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request);
+
+    WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request);
 
     Dictionary<string, string> CreateHeaders(string urlString);
 

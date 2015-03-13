@@ -36,29 +36,34 @@ public class WebAPICallObjectCreator : CallObjectCreator
         return new WWW(urlString, null, headers);
     }
 
-    public WWW CreateGetOwnerItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
+    public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
     {
-        return GenerateWWWCall("OwnerItems", new KeyValuePair<string, string>("location", location.ToString()));
+        return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
     }
 
-    public WWW CreateMoveItemCallObject(string stackId, int amount, int location, string ownerType = "User", string ownerId = "Default")
+    public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
     {
-        return GenerateWWWCall("MoveItem", new KeyValuePair<string, string>("StackId", stackId), new KeyValuePair<string, string>("amount", amount.ToString()), new KeyValuePair<string, string>("location", location.ToString()), new KeyValuePair<string, string>("ownerType", ownerType));
-    }
+        return GenerateWWWPost("MoveItems", request);
+   }
 
     public WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request)
     {
         return GenerateWWWPost("CreateItemVouchers", request);
     }
 
-    public WWW CreateConsumeItemVouchersCall(ConsumeItemVouchersRequest request)
+    public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
     {
         return GenerateWWWPost("ConsumeItemVouchers", request);
     }
 
-    public WWW CreateGiveOwnerItemsCallObject(GiveOwnerItemRequest request)
+    public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
     {
-        return GenerateWWWPost("GiveOwnerItems", request);
+        return GenerateWWWPost("UpdateItemsById", request);
+    }
+
+    public WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request)
+    {
+        return GenerateWWWPost("UpdateItemsByStackId", request);
     }
 
 
@@ -127,7 +132,6 @@ public class WebAPICallObjectCreator : CallObjectCreator
         }
         Dictionary<string, string> headers = CreateHeaders(createdURL);
         string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
-        Debug.Log(urlString);
         return new WWW(urlString, null, headers);
     }
 
@@ -142,6 +146,9 @@ public class WebAPICallObjectCreator : CallObjectCreator
     }
 
     #endregion
+
+
+
 
 
 

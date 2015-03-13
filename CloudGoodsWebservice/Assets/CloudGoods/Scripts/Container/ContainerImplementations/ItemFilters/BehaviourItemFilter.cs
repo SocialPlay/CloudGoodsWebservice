@@ -12,7 +12,7 @@ public class BehaviourItemFilter : ContainerItemFilter
         bool found = false;
         foreach (BehaviourPair behaviour in Behaviours)
         {
-            if (item.ClassId == behaviour.classID)
+            if (item.classId == behaviour.classID)
             {
                 foreach (ItemData.Behaviours itemBehaviour in item.behaviours)
                 {
