@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using LitJson;
-using CloudgoodsClasses;
+using CloudGoodsClasses;
 
 namespace WebCallTests
 {

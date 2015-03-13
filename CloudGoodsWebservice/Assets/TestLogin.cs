@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using CloudGoodsClasses;
 
 public class TestLogin : MonoBehaviour {
 
@@ -29,7 +30,7 @@ public class TestLogin : MonoBehaviour {
         }
     }
 
-    void OnReceivedUser(CloudGoodsUser user)
+    void OnReceivedUser(CloudGoodsClasses.CloudGoodsUser user)
     {
         Debug.Log("User: " + user.UserName);
         CloudGoods.GetUserItems(0, OnReceivedUserItems);

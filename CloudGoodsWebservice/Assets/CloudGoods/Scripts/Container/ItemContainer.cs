@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using CloudGoodsClasses;
 
 public class ItemContainer : MonoBehaviour
 {
