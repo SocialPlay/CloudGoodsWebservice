@@ -25,13 +25,13 @@ public class TestLogin : MonoBehaviour {
     {
         foreach (ItemData item in items)
         {
-            Debug.Log("Item: " + item.name);
+            Debug.Log("Item: " + item.Name);
         }
     }
 
     void OnReceivedUser(CloudGoodsUser user)
     {
-        Debug.Log("User: " + user.userName);
+        Debug.Log("User: " + user.UserName);
         CloudGoods.GetUserItems(0, OnReceivedUserItems);
     }
 }

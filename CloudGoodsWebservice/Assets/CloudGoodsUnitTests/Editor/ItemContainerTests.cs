@@ -23,7 +23,7 @@ public class ItemContainerTests : MonoBehaviour {
         ItemContainer container = containerTestUtilities.SetUpContainer(true, false, ItemContainers);
         ItemData itemData = containerTestUtilities.CreateItemData(10, 11, 10, 10, 10, 0, "Test Item", "123456", false);
 
-        Assert.AreEqual(ContainerMoveState.ActionState.Add, container.GetContainerAddState(itemData).actionState);
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, container.GetContainerAddState(itemData).ContainerActionState);
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class ItemContainerTests : MonoBehaviour {
         ItemContainer container = containerTestUtilities.SetUpContainer(true, false, ItemContainers);
         ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
-        Assert.AreEqual(ContainerMoveState.ActionState.No, container.GetContainerAddState(itemData).actionState);
+        Assert.AreEqual(ContainerMoveState.ActionState.No, container.GetContainerAddState(itemData).ContainerActionState);
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class ItemContainerTests : MonoBehaviour {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
         ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
-        Assert.AreEqual(ContainerMoveState.ActionState.Add, container.GetContainerAddState(itemData).actionState);
+        Assert.AreEqual(ContainerMoveState.ActionState.Add, container.GetContainerAddState(itemData).ContainerActionState);
     }
 
     [Test]
@@ -50,7 +50,7 @@ public class ItemContainerTests : MonoBehaviour {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, true, ItemContainers);
         ItemData itemData = containerTestUtilities.CreateItemData(10, 11, 10, 10, 10, 0, "Test Item", "123456", false);
 
-        Assert.AreEqual(ContainerMoveState.ActionState.Remove, container.GetContainerRemoveState(itemData).actionState);
+        Assert.AreEqual(ContainerMoveState.ActionState.Remove, container.GetContainerRemoveState(itemData).ContainerActionState);
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class ItemContainerTests : MonoBehaviour {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, true, ItemContainers);
         ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
-        Assert.AreEqual(ContainerMoveState.ActionState.No, container.GetContainerRemoveState(itemData).actionState);
+        Assert.AreEqual(ContainerMoveState.ActionState.No, container.GetContainerRemoveState(itemData).ContainerActionState);
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class ItemContainerTests : MonoBehaviour {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
         ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
-        Assert.AreEqual(ContainerMoveState.ActionState.Remove, container.GetContainerRemoveState(itemData).actionState);
+        Assert.AreEqual(ContainerMoveState.ActionState.Remove, container.GetContainerRemoveState(itemData).ContainerActionState);
     }
 
     [Test]

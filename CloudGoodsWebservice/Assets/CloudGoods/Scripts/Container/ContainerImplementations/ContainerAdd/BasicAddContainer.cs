@@ -15,9 +15,9 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
     {
         if (amount == -1 || amount > addItem.Amount)
         {
-            amount = addItem.amount;
+            amount = addItem.Amount;
             addItem.OwnerContainer = itemContainer;
-            if (!AddToExistingStack(addItem, addItem.amount, isSave))
+            if (!AddToExistingStack(addItem, addItem.Amount, isSave))
             {
                 itemContainer.containerItems.Add(addItem);
                 itemContainer.AddItemEvent(addItem, isSave);
@@ -28,7 +28,7 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
             addItem.OwnerContainer = itemContainer;
             if (!AddToExistingStack(addItem, amount, isSave))
             {
-                addItem.amount = amount;
+                addItem.Amount = amount;
                 itemContainer.containerItems.Add(addItem);
                 itemContainer.AddItemEvent(addItem, isSave);
             }
@@ -48,8 +48,8 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
                 itemContainer.ModifiedItemEvent(data, isSave);
 
 
-                item.amount = item.amount + amount;
-                data.amount -= amount;
+                item.Amount = item.Amount + amount;
+                data.Amount -= amount;
 
                 return true;
             }

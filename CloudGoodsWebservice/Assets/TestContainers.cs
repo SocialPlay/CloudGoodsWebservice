@@ -22,7 +22,7 @@ public class TestContainers : MonoBehaviour {
     {
         foreach (ItemData item in items)
         {
-            Debug.Log("Item: " + item.name);
+            Debug.Log("Item: " + item.Name);
         }
     }
 

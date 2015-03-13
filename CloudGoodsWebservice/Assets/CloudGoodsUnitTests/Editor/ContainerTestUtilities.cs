@@ -34,26 +34,26 @@ public class ContainerTestUtilities  {
     {
         ItemData tmpData = new ItemData()
         {
-            amount = amount,
-            classId = classId,
-            collectionId = collectionId,
-            detail = "Some Details Here",
-            energy = energy,
+            Amount = amount,
+            ClassId = classId,
+            CollectionId = collectionId,
+            Detail = "Some Details Here",
+            Energy = energy,
             Id = id,
-            location = location,
-            name = name,
-            stackLocationId = stackLocationId,
+            Location = location,
+            Name = name,
+            StackLocationId = stackLocationId,
             IsLocked = isLocked
         };
 
         for (int i = 0; i < 3; i++)
         {
-            tmpData.behaviours.Add(new ItemData.Behaviours() { name = i.ToString(), Id = i });
+            tmpData.Behaviours.Add(new ItemData.Behaviour() { Name = i.ToString(), Id = i });
         }
 
         for (int i = 0; i < 3; i++)
         {
-            tmpData.tags.Add(new ItemData.Tag() { name = i.ToString(), Id = i });
+            tmpData.Tags.Add(new ItemData.Tag() { Name = i.ToString(), Id = i });
         }
 
         return tmpData;

@@ -8,7 +8,7 @@ public class CollectionIDItemFilter : ItemDataSelector
     {
         foreach (int CollectionID in CollectionIDs)
         {
-            if (CollectionID == item.collectionId)
+            if (CollectionID == item.CollectionId)
             {
                 if (!IsInverted)
                     return true;

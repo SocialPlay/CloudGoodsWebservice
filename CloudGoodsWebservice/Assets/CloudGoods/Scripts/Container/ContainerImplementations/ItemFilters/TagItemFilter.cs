@@ -12,7 +12,7 @@ public class TagItemFilter : ContainerItemFilter
         bool found = false;
         foreach (string tag in Tags)
         {
-            if (item.tags.Exists(x => x.name == tag))
+            if (item.Tags.Exists(x => x.Name == tag))
             {
                 found = true;
             }

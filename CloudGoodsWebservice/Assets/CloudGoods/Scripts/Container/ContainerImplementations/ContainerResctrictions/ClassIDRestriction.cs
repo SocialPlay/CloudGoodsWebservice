@@ -19,7 +19,7 @@ public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
     {
         if (IsExcluded)
         {
-            if (classIDList.Exists(x => x == itemData.classId))
+            if (classIDList.Exists(x => x == itemData.ClassId))
             {
                 Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");
                 return true;
@@ -29,7 +29,7 @@ public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
         }
         else
         {
-            if (classIDList.Exists(x => x == itemData.classId))
+            if (classIDList.Exists(x => x == itemData.ClassId))
                 return false;
            
             Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");

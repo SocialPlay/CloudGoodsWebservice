@@ -34,7 +34,7 @@ public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPo
 
     protected void Update()
     {
-        SetAmountText(itemObject.itemData.amount.ToString());
+        SetAmountText(itemObject.itemData.Amount.ToString());
 
         if (first_click)
         {
@@ -70,8 +70,8 @@ public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPo
         itemObject = this.GetComponent<ItemDataComponent>();
 
 
-        SetAmountText(itemObject.itemData.amount.ToString());
-        ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.imageName, OnReceivedItemTexture);
+        SetAmountText(itemObject.itemData.Amount.ToString());
+        ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.ImageName, OnReceivedItemTexture);
         //SetFrameColor(ItemQuailityColorSelector.GetColorForItem(itemObject.itemData));
     }
 

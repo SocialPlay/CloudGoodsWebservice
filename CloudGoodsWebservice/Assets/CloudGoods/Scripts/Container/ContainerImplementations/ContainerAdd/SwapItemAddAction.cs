@@ -36,7 +36,7 @@ public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
     {
         if (amount == -1)
         {
-            amount = addItem.amount;
+            amount = addItem.Amount;
             addItem.OwnerContainer = itemContainer;
 
             itemContainer.containerItems.Add(addItem);
@@ -45,7 +45,7 @@ public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
         }
         else
         {
-            addItem.amount = amount;
+            addItem.Amount = amount;
             addItem.OwnerContainer = itemContainer;
 
             itemContainer.containerItems.Add(addItem);

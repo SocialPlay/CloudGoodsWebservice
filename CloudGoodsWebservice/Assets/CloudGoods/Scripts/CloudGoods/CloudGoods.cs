@@ -60,7 +60,7 @@ public class CloudGoods : MonoBehaviour
         Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(CloudGoodsSettings.AppID, userEmail, password), x =>
         {
             User = responseCreator.CreateLoginResponse(x);
-            SessionId = User.sessionID;
+            SessionId = User.SessionID;
             callback(User);
         }));
     }
@@ -81,7 +81,7 @@ public class CloudGoods : MonoBehaviour
     {
         List<MoveItemsRequest.MoveOrder> orders = new List<MoveItemsRequest.MoveOrder>(){
              new MoveItemsRequest.MoveOrder(){
-                     stackId = item.stackLocationId,
+                     stackId = item.StackLocationId,
          amount = amountToMove,
            location =location
              }
@@ -138,8 +138,8 @@ public class CloudGoods : MonoBehaviour
     {
         CloudgoodsClasses.RedeemItemVouchersRequest request = new CloudgoodsClasses.RedeemItemVouchersRequest()
             {
-                selectedVouchers = selections,
-                otherOwner = otherOwner
+                SelectedVouchers = selections,
+                OtherOwner = otherOwner
             };
 
         Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateRedeemItemVouchersCall(request), x =>
@@ -157,10 +157,10 @@ public class CloudGoods : MonoBehaviour
     {
         CloudgoodsClasses.CreateItemVouchersRequest request = new CreateItemVouchersRequest()
         {
-            minimumEnergy = minEnergy,
-            totalEnergy = total,
-            andTags = andTags.ToCommaSeparated(),
-            orTags = orTags.ToCommaSeparated()
+            MinimumEnergy = minEnergy,
+            TotalEnergy = total,
+            AndTags = andTags.ToCommaSeparated(),
+            OrTags = orTags.ToCommaSeparated()
         };
 
         Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateCreateItemVouchersCall(request), x =>

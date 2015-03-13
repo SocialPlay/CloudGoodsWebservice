@@ -15,11 +15,11 @@ public class ItemContainerManager
 
         ContainerMoveState targetAddState = targetContainer.GetContainerAddState(addItem);
 
-        switch (targetAddState.actionState)
+        switch (targetAddState.ContainerActionState)
         {
             case ContainerMoveState.ActionState.Add:
 
-                targetContainer.Add(addItem, targetAddState.possibleAddAmount);
+                targetContainer.Add(addItem, targetAddState.PossibleAddAmount);
 
                 break;
             case ContainerMoveState.ActionState.No:
@@ -28,7 +28,7 @@ public class ItemContainerManager
                 break;
         }
 
-        return targetAddState.actionState;
+        return targetAddState.ContainerActionState;
     }
 
     public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer targetContainer)
@@ -46,7 +46,7 @@ public class ItemContainerManager
 
             ContainerMoveState targetAddState = targetContainer.GetContainerAddState(movingItemData);
 
-            switch (targetAddState.actionState)
+            switch (targetAddState.ContainerActionState)
             {
                 case ContainerMoveState.ActionState.Add:
 
@@ -58,7 +58,7 @@ public class ItemContainerManager
                             return ContainerMoveState.ActionState.No;
                     }
 
-                    targetContainer.Add(newItemData, targetAddState.possibleAddAmount);
+                    targetContainer.Add(newItemData, targetAddState.PossibleAddAmount);
 
                     break;
                 case ContainerMoveState.ActionState.No:
@@ -67,7 +67,7 @@ public class ItemContainerManager
                     break;
             }
 
-            return targetAddState.actionState;
+            return targetAddState.ContainerActionState;
         }
         catch (Exception e)
         {
@@ -84,9 +84,9 @@ public class ItemContainerManager
         if (RemoveItemData.IsLocked)
             return ContainerMoveState.ActionState.No;
 
-        if (TargetContainer.GetContainerRemoveState(RemoveItemData).actionState == ContainerMoveState.ActionState.Remove)
+        if (TargetContainer.GetContainerRemoveState(RemoveItemData).ContainerActionState == ContainerMoveState.ActionState.Remove)
         {
-            TargetContainer.Remove(RemoveItemData, false, RemoveItemData.amount);
+            TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
             return ContainerMoveState.ActionState.Remove;
         }
 

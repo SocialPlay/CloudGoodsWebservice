@@ -110,7 +110,7 @@ public class ItemContainer : MonoBehaviour
 
     protected ContainerMoveState MyContainerAddState(ItemData modified)
     {
-        int addAbleAmount = modified.amount;
+        int addAbleAmount = modified.Amount;
 
         if (IsItemQuantityLimited == true)
         {
@@ -154,10 +154,10 @@ public class ItemContainer : MonoBehaviour
         {
             if (item.IsSameItemAs(modified))
             {
-                if (amount == -1 || item.amount <= amount)
+                if (amount == -1 || item.Amount <= amount)
                     containerItems.Remove(item);
 
-                modified.amount-= amount;
+                modified.Amount-= amount;
 
                 RemoveItemEvent(item, amount, isMoving);
                 return;
@@ -172,7 +172,7 @@ public class ItemContainer : MonoBehaviour
         {
             if (item.IsSameItemAs(modified))
             {
-                return item.amount;
+                return item.Amount;
             }
         }
         return 0;
@@ -205,12 +205,12 @@ public class ItemContainer : MonoBehaviour
 
             if (!string.IsNullOrEmpty(givenUserItem.StackLocationId))
             {
-                givenItemData = containerItems.FirstOrDefault(x => x.stackLocationId == givenUserItem.StackLocationId);
+                givenItemData = containerItems.FirstOrDefault(x => x.StackLocationId == givenUserItem.StackLocationId);
 
                 if (givenItemData != null)
                 {
                     IsItemInContainer = true;
-                    givenItemData.amount = givenUserItem.Amount;
+                    givenItemData.Amount = givenUserItem.Amount;
                 }
             }
             else
@@ -220,7 +220,7 @@ public class ItemContainer : MonoBehaviour
                 if (givenItemData != null)
                 {
                     IsItemInContainer = true;
-                    givenItemData.amount += givenUserItem.Amount;
+                    givenItemData.Amount += givenUserItem.Amount;
                 }
             }
         }

@@ -55,7 +55,7 @@ public class ItemContainerDisplay : MonoBehaviour
         ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
         newDisplay.itemObject = newItem.GetComponent<ItemDataComponent>();
         newItem.GetComponent<ItemDataComponent>().itemData = itemData;
-        newItem.name = itemData.name;
+        newItem.name = itemData.Name;
         newItem.transform.SetParent(childTarget);
         newItem.transform.localPosition = Vector3.zero;
         newItem.transform.localScale = Vector3.one;
@@ -69,8 +69,8 @@ public class ItemContainerDisplay : MonoBehaviour
         {
             if (display.itemObject.itemData.IsSameItemAs(itemData))
             {
-                display.itemObject.itemData.amount += itemData.amount;
-                display.SetAmountText(display.itemObject.itemData.amount.ToString());
+                display.itemObject.itemData.Amount += itemData.Amount;
+                display.SetAmountText(display.itemObject.itemData.Amount.ToString());
                 return;
             }
         }
@@ -82,7 +82,7 @@ public class ItemContainerDisplay : MonoBehaviour
         ItemDataDisplay selected = FindDisplayMatch(itemData);
         if (selected != null)
         {
-            if (itemData.amount<= 0)
+            if (itemData.Amount<= 0)
             {
                 currentDisplayObjects.Remove(selected);
                 Destroy(selected.gameObject);

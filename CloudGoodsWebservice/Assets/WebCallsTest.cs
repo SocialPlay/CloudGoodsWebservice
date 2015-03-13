@@ -46,11 +46,11 @@ namespace WebCallTests
         void OnReceivedUser(CloudGoodsUser user)
         {
 
-            string debugString = "login Info\nName: " + user.userName;
-            debugString += "\nId: " + user.userID;
-            debugString += "\nEmail: " + user.userEmail;
-            debugString += "\nIs New: " + user.isNewUserToWorld;
-            debugString += "\nSession:" + user.sessionID.ToString();
+            string debugString = "login Info\nName: " + user.UserName;
+            debugString += "\nId: " + user.UserID;
+            debugString += "\nEmail: " + user.UserEmail;
+            debugString += "\nIs New: " + user.IsNewUserToWorld;
+            debugString += "\nSession:" + user.SessionID.ToString();
             NewDisplayLine(debugString);
 
         }
@@ -70,7 +70,7 @@ namespace WebCallTests
                 , delegate(UpdatedStacksResponse response)
                 {
                     string debugString = "Update Items";
-                    foreach (var item in response.updatedStackIds)
+                    foreach (var item in response.UpdatedStackIds)
                     {
                         debugString += "\n" + item;
                     }
@@ -84,10 +84,10 @@ namespace WebCallTests
             CloudGoods.CreateItemVouchers(1, 700, delegate(CreateItemVouchersResponse response)
             {
                 string debugString = "Created Vouchers Items";
-                foreach (var voucher in response.vouchers)
+                foreach (var voucher in response.Vouchers)
                 {
                     currentVouchers.Add(voucher);
-                    debugString += "\n(" + voucher.Id + ")" + voucher.item.name;
+                    debugString += "\n(" + voucher.Id + ")" + voucher.Item.Name;
                 }
                 NewDisplayLine(debugString);
             });
@@ -96,14 +96,14 @@ namespace WebCallTests
         private void ConsumeItemVoucher(CreateItemVouchersResponse.ItemVoucher voucher)
         {
 
-            List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { amount = voucher.item.amount, itemId = voucher.item.Id, location = 0, voucherId = voucher.Id } };
+            List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Item.Amount, ItemId = voucher.Item.Id, Location = 0, VoucherId = voucher.Id } };
 
             CloudGoods.RedeemItemVouchers(selectedVouchers, delegate(RedeemItemVouchersResponse response)
             {
                 string debugString = "Consume Item Voucher";
                 foreach (var result in response.results)
                 {
-                    debugString += "\n" + result.stackLocationId + ":" + result.itemId + "{" + result.amount + "}";
+                    debugString += "\n" + result.StackLocationId + ":" + result.ItemId + "{" + result.Amount + "}";
                 }
 
                 NewDisplayLine(debugString);
@@ -119,12 +119,12 @@ namespace WebCallTests
                 usersItems.Clear();
                 foreach (ItemData item in items)
                 {
-                    debugString += "\nName: " + item.name;
-                    debugString += "\n    Amount:" + item.amount;
+                    debugString += "\nName: " + item.Name;
+                    debugString += "\n    Amount:" + item.Amount;
                     debugString += "\n    Id: " + item.Id;
-                    debugString += "\n    Location: " + item.location.ToString();
-                    debugString += "\n    Detail:" + item.detail;
-                    debugString += "\n    SLID:" + item.stackLocationId + "\n";
+                    debugString += "\n    Location: " + item.Location.ToString();
+                    debugString += "\n    Detail:" + item.Detail;
+                    debugString += "\n    SLID:" + item.StackLocationId + "\n";
                     usersItems.Add(item);
                 }
                 NewDisplayLine(debugString);
@@ -149,7 +149,7 @@ namespace WebCallTests
             GUILayout.BeginArea(new Rect(25, 25, Screen.width / 2 - 50, Screen.height - 50));
             if (CloudGoods.User != null)
             {
-                GUILayout.Label("Welcome " + CloudGoods.User.userName + ".");
+                GUILayout.Label("Welcome " + CloudGoods.User.UserName + ".");
             }
             else
             {
@@ -178,7 +178,7 @@ namespace WebCallTests
             }
             foreach (ItemData item in usersItems)
             {
-                if (GUILayout.Button(string.Format("{0}:{1} - {2}", item.name, item.amount, item.location)))
+                if (GUILayout.Button(string.Format("{0}:{1} - {2}", item.Name, item.Amount, item.Location)))
                 {
                 }
             }
@@ -187,7 +187,7 @@ namespace WebCallTests
             GUILayout.Label("Item Vouchers");
             for (int i = currentVouchers.Count < 3 ? 0 : currentVouchers.Count - 3; i < currentVouchers.Count; i++)
             {
-                if (GUILayout.Button(string.Format("({0}) {1} : {2}", currentVouchers[i].Id, currentVouchers[i].item.Id, currentVouchers[i].item.amount)))
+                if (GUILayout.Button(string.Format("({0}) {1} : {2}", currentVouchers[i].Id, currentVouchers[i].Item.Id, currentVouchers[i].Item.Amount)))
                 {
                     ConsumeItemVoucher(currentVouchers[i]);
                     currentVouchers.Remove(currentVouchers[i]);

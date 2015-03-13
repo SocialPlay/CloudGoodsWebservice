@@ -19,54 +19,54 @@ public class GiveOwnerItemWebserviceRequest
 
 public class CloudGoodsUser
 {
-    public string userID = "";
-    public bool isNewUserToWorld = false;
-    public string userName = "";
-    public string userEmail = "";
-    public string sessionID;
+    public string UserID = "";
+    public bool IsNewUserToWorld = false;
+    public string UserName = "";
+    public string UserEmail = "";
+    public string SessionID;
 }
 
 public class LoginUserInfo
 {
     public Guid ID;
-    public string name;
-    public string email;
+    public string Name;
+    public string Email;
 
     public LoginUserInfo(Guid userID, string userName, string userEmail)
     {
         ID = userID;
-        name = userName;
-        email = userEmail;
+        Name = userName;
+        Email = userEmail;
     }
 }
 
 public class UserLoginInfo
 {
-    public int code;
-    public string message;
-    public CloudGoodsUser userInfo;
+    public int Code;
+    public string Message;
+    public CloudGoodsUser UserInfo;
 
     public UserLoginInfo(int caseCode, string msg, CloudGoodsUser newUserInfo)
     {
-        code = caseCode;
-        message = msg;
-        userInfo = newUserInfo;
+        Code = caseCode;
+        Message = msg;
+        UserInfo = newUserInfo;
     }
 
     public override string ToString()
     {
-        return "Code :" + code + "\nMessage :" + message;
+        return "Code :" + Code + "\nMessage :" + Message;
     }
 }
 
 public class WebserviceError
 {
-    public int errorCode;
+    public int ErrorCode;
     public string Message;
 
     public WebserviceError(int newErrorCode, string newErrorMessage)
     {
-        errorCode = newErrorCode;
+        ErrorCode = newErrorCode;
         Message = newErrorMessage;
     }
 }
@@ -153,33 +153,33 @@ public class PurchasePremiumCurrencyBundleResponse
 
 public class NewItemStack
 {
-    public string stackLocationId;
+    public string StackLocationId;
 }
 
 public class StoreItem
 {
     public int ID = 0;
-    public string itemName = "";
-    public List<StoreItemDetail> itemDetail = new List<StoreItemDetail>();
-    public DateTime addedDate;
-    public string behaviours;
-    public List<string> tags;
-    public int itemID = 0;
-    public int premiumCurrencyValue = 0;
-    public int standardCurrencyValue = 0;
-    public string imageURL = "";
+    public string ItemName = "";
+    public List<StoreItemDetail> ItemDetail = new List<StoreItemDetail>();
+    public DateTime AddedDate;
+    public string Behaviours;
+    public List<string> Tags;
+    public int ItemID = 0;
+    public int PremiumCurrencyValue = 0;
+    public int StandardCurrencyValue = 0;
+    public string ImageURL = "";
 }
 
 public class StoreItemDetail
 {
-    public string propertyName;
-    public int propertyValue;
-    public bool invertEnergy;
+    public string PropertyName;
+    public int PropertyValue;
+    public bool InvertEnergy;
 }
 
 public class GeneratedItems
 {
-    public List<ItemData> generatedItems;
+    public List<ItemData> Items;
     public int GenerationID;
 }
 
@@ -209,34 +209,34 @@ public class BehaviourDefinition
 [System.Serializable]
 public class ItemData
 {
-    public string stackLocationId;
+    public string StackLocationId;
     public int Id;
-    public int collectionId;
-    public int classId;
-    public string name;
-    public int amount;
-    public int location;
-    public string detail;
-    public int energy;
-    public int quality;
-    public string description;
-    public string imageName;
-    public string assetBundleURL;
-    public List<Behaviours> behaviours = new List<Behaviours>();
-    public List<Tag> tags = new List<Tag>();
+    public int CollectionId;
+    public int ClassId;
+    public string Name;
+    public int Amount;
+    public int Location;
+    public string Detail;
+    public int Energy;
+    public int Quality;
+    public string Description;
+    public string ImageName;
+    public string AssetBundleURL;
+    public List<Behaviour> Behaviours = new List<Behaviour>();
+    public List<Tag> Tags = new List<Tag>();
 
     public ItemContainer OwnerContainer;
     public bool IsLocked = false;
 
     public class Tag
     {
-        public string name;
+        public string Name;
         public int Id;
     }
 
-    public class Behaviours
+    public class Behaviour
     {
-        public string name;
+        public string Name;
         public int Id;
     }
 
@@ -260,16 +260,16 @@ public class ItemData
 public class ContainerMoveState
 {
     public enum ActionState { Add, Swap, No, Remove }
-    public ActionState actionState;
-    public int possibleAddAmount;
-    public ItemData possibleSwapItem;
+    public ActionState ContainerActionState;
+    public int PossibleAddAmount;
+    public ItemData PossibleSwapItem;
 
 
     public ContainerMoveState(ActionState newState = ActionState.No, int possibleAddAmount = 0, ItemData possibleSwapItem = null)
     {
-        this.actionState = newState;
-        this.possibleAddAmount = possibleAddAmount;
-        this.possibleSwapItem = possibleSwapItem;
+        this.ContainerActionState = newState;
+        this.PossibleAddAmount = possibleAddAmount;
+        this.PossibleSwapItem = possibleSwapItem;
     }
 }
 
@@ -307,7 +307,7 @@ public abstract class ItemStackRestrictionHandler
         restrictions = GetRestrictionsFor(target);
         foreach (ItemContainerStackRestrictions restriction in restrictions)
         {
-            int restrictedAmount = restriction.GetRestrictionForType(data.classId);
+            int restrictedAmount = restriction.GetRestrictionForType(data.ClassId);
             if (restrictedAmount != -1)
             {
                 return restrictedAmount;
@@ -438,28 +438,28 @@ namespace CloudgoodsClasses
 
     public class UpdatedStacksResponse
     {
-        public List<string> updatedStackIds;
+        public List<string> UpdatedStackIds;
     }
 
     public class OtherOwner
     {
         public string Id = "Default";
-        public string type = "User";
+        public string Type = "User";
 
         public OtherOwner()
         {
             Id = "Default";
-            type = "User";
+            Type = "User";
         }
 
         public OtherOwner(string Id, string type)
         {
             this.Id = Id;
-            this.type = type;
+            this.Type = type;
         }
         private string ToHashable()
         {
-            return Id + type;
+            return Id + Type;
         }
 
         public static string ToHashable(OtherOwner value)
@@ -472,24 +472,24 @@ namespace CloudgoodsClasses
 
     public class CreateItemVouchersRequest : RequestClass
     {
-        public int minimumEnergy { get; set; }
-        public int totalEnergy { get; set; }
-        public string andTags = "";
-        public string orTags = "";
+        public int MinimumEnergy { get; set; }
+        public int TotalEnergy { get; set; }
+        public string AndTags = "";
+        public string OrTags = "";
 
         public override string ToHashable()
         {
-            return minimumEnergy + totalEnergy + andTags + orTags;
+            return MinimumEnergy + TotalEnergy + AndTags + OrTags;
         }
     }
 
     public class CreateItemVouchersResponse
     {
-        public List<ItemVoucher> vouchers;
+        public List<ItemVoucher> Vouchers;
 
         public class ItemVoucher
         {
-            public ItemData item;
+            public ItemData Item;
             public int Id;
         }
     }
@@ -498,22 +498,22 @@ namespace CloudgoodsClasses
 
     public class RedeemItemVouchersRequest : RequestClass
     {
-        public List<ItemVoucherSelection> selectedVouchers;
-        public OtherOwner otherOwner { get; set; }
+        public List<ItemVoucherSelection> SelectedVouchers;
+        public OtherOwner OtherOwner { get; set; }
 
         public override string ToHashable()
         {
-            string hashValue = OtherOwner.ToHashable(otherOwner);
-            selectedVouchers.ForEach(v => hashValue += v.itemId + v.amount + v.voucherId);
-            return hashValue;
+            string HashValue = OtherOwner.ToHashable(OtherOwner);
+            SelectedVouchers.ForEach(v => HashValue += v.ItemId + v.Amount + v.VoucherId);
+            return HashValue;
         }
 
         public class ItemVoucherSelection
         {
-            public int voucherId;
-            public int itemId;
-            public int amount;
-            public int location;
+            public int VoucherId;
+            public int ItemId;
+            public int Amount;
+            public int Location;
         }
     }
 
@@ -523,9 +523,9 @@ namespace CloudgoodsClasses
 
         public class ConsumeItemVoucherResult
         {
-            public int itemId { get; set; }
-            public string stackLocationId { get; set; }
-            public int amount { get; set; }
+            public int ItemId { get; set; }
+            public string StackLocationId { get; set; }
+            public int Amount { get; set; }
         }
 
     }
