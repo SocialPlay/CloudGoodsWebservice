@@ -13,9 +13,8 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
 
     public void AddItem(ItemData addItem, int amount, bool isSave)
     {
-        if (amount == -1)
+        if (amount == -1 || amount > addItem.Amount)
         {
-            amount = addItem.Amount;
             addItem.OwnerContainer = itemContainer;
             if (!AddToExistingStack(addItem, addItem.Amount, isSave))
             {

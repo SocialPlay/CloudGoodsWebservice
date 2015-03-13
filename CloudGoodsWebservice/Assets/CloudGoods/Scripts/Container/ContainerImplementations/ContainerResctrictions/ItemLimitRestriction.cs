@@ -4,7 +4,7 @@ using System.Collections;
 public class ItemLimitRestriction : MonoBehaviour, IContainerRestriction {
 
     public int ContainerItemLimit = 0;
-    ItemContainer restrictedContainer;
+    public ItemContainer restrictedContainer;
 
     void Awake()
     {

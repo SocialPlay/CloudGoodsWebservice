@@ -92,7 +92,7 @@ public class ItemContainerTests : MonoBehaviour {
     }
 
     [TearDown]
-    public void FinishedTestCleanUp()
+    public void CleanUp()
     {
         ItemContainer[] objects = GameObject.FindObjectsOfType<ItemContainer>();
 

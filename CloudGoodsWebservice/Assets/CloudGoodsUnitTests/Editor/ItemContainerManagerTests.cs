@@ -4,7 +4,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-
 [TestFixture]
 public class ItemContainerManagerTests : MonoBehaviour {
 
@@ -131,7 +130,7 @@ public class ItemContainerManagerTests : MonoBehaviour {
 
 
     [TearDown]
-    public void FinishedTestCleanUp()
+    public void CleanUp()
     {
         ItemContainer[] objects = GameObject.FindObjectsOfType<ItemContainer>();
 
