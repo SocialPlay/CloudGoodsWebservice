@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using CloudGoodsClasses;
 
-
 namespace CloudGoodsClasses
 {
     public abstract class RequestClass
@@ -178,17 +177,17 @@ namespace CloudGoodsClasses
     #region Move Items
     public class MoveItemsRequest : RequestClass
     {
-        public List<MoveOrder> moveOrders = new List<MoveOrder>();
-        public OtherOwner otherOwner = null;
+        public List<MoveOrder> MoveOrders = new List<MoveOrder>();
+        public OtherOwner OtherOwner = null;
 
         public override string ToHashable()
         {
             string results = "";
-            foreach (MoveOrder order in moveOrders)
+            foreach (MoveOrder order in MoveOrders)
             {
                 results += order.ToHashable();
             }
-            results += OtherOwner.ToHashable(otherOwner);
+            results += OtherOwner.ToHashable(OtherOwner);
             return results;
         }
 
@@ -209,14 +208,14 @@ namespace CloudGoodsClasses
 
     public class UpdateItemByIdRequest : RequestClass
     {
-        public List<UpdateOrderByID> orders = new List<UpdateOrderByID>();
-        public OtherOwner otherOwner;
+        public List<UpdateOrderByID> Orders = new List<UpdateOrderByID>();
+        public OtherOwner OtherOwner;
 
         public override string ToHashable()
         {
             string resluts = "";
-            orders.ForEach(x => resluts += x.ToHashable());
-            resluts += OtherOwner.ToHashable(otherOwner);
+            Orders.ForEach(x => resluts += x.ToHashable());
+            resluts += OtherOwner.ToHashable(OtherOwner);
             return resluts;
         }
 
@@ -236,14 +235,14 @@ namespace CloudGoodsClasses
     public class UpdateItemsByStackIdRequest : RequestClass
     {
 
-        public List<UpdateOrderByStackId> orders = new List<UpdateOrderByStackId>();
-        public OtherOwner otherOwner;
+        public List<UpdateOrderByStackId> Orders = new List<UpdateOrderByStackId>();
+        public OtherOwner OtherOwner;
 
         public override string ToHashable()
         {
             string resluts = "";
-            orders.ForEach(x => resluts += x.ToHashable());
-            resluts += OtherOwner.ToHashable(otherOwner);
+            Orders.ForEach(x => resluts += x.ToHashable());
+            resluts += OtherOwner.ToHashable(OtherOwner);
             return resluts;
         }
 

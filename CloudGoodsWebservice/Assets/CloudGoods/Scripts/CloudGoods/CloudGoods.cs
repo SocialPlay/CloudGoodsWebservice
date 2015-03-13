@@ -96,7 +96,7 @@ public class CloudGoods : MonoBehaviour
 
     private void _MoveItems(List<MoveItemsRequest.MoveOrder> orders, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
     {
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemsCallObject(new MoveItemsRequest() { moveOrders = orders, otherOwner = otherOwner }), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemsCallObject(new MoveItemsRequest() { MoveOrders = orders, OtherOwner = otherOwner }), x =>
             {
                 callback(responseCreator.CreateUpdatedStacksResponse(x));
             }));
@@ -121,7 +121,7 @@ public class CloudGoods : MonoBehaviour
 
     private void _UpdateItemsByIds(List<UpdateItemByIdRequest.UpdateOrderByID> orders, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
     {
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByIdRequestCallObject(new UpdateItemByIdRequest() { orders = orders, otherOwner = otherOwner }), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByIdRequestCallObject(new UpdateItemByIdRequest() { Orders = orders, OtherOwner = otherOwner }), x =>
         {
             callback(responseCreator.CreateUpdatedStacksResponse(x));
         }));
