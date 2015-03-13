@@ -56,9 +56,14 @@ public class WebAPICallObjectCreator : CallObjectCreator
         return GenerateWWWPost("ConsumeItemVouchers", request);
     }
 
-    public WWW CreateGiveOwnerItemsCallObject(GiveOwnerItemRequest request)
+    public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
     {
-        return GenerateWWWPost("GiveOwnerItems", request);
+        return GenerateWWWPost("UpdateItemsById", request);
+    }
+
+    public WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request)
+    {
+        return GenerateWWWPost("UpdateItemsByStackId", request);
     }
 
 
@@ -141,6 +146,9 @@ public class WebAPICallObjectCreator : CallObjectCreator
     }
 
     #endregion
+
+
+
 
 
 

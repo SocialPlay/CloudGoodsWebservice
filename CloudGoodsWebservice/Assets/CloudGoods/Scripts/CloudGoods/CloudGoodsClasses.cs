@@ -209,17 +209,19 @@ public class BehaviourDefinition
 [System.Serializable]
 public class ItemData
 {
+    public string stackLocationId;
     public int Id;
-    public int CollectionId;
-    public string StackLocationId;
-    public int ClassId;
-    public string Name;
-    public int Amount;
-    public int Location;
-    public string Detail;
-    public int Energy;
-    public string Description;
-    public string ImageName;
+    public int collectionId;
+    public int classId;
+    public string name;
+    public int amount;
+    public int location;
+    public string detail;
+    public int energy;
+    public int quality;
+    public string description;
+    public string imageName;
+    public string assetBundleURL;
     public List<Behaviours> behaviours = new List<Behaviours>();
     public List<Tag> tags = new List<Tag>();
 
@@ -305,7 +307,7 @@ public abstract class ItemStackRestrictionHandler
         restrictions = GetRestrictionsFor(target);
         foreach (ItemContainerStackRestrictions restriction in restrictions)
         {
-            int restrictedAmount = restriction.GetRestrictionForType(data.ClassId);
+            int restrictedAmount = restriction.GetRestrictionForType(data.classId);
             if (restrictedAmount != -1)
             {
                 return restrictedAmount;
@@ -433,6 +435,12 @@ namespace CloudgoodsClasses
         public abstract string ToHashable();
     }
 
+
+    public class UpdatedStacksResponse
+    {
+        public List<string> updatedStackIds;
+    }
+
     public class OtherOwner
     {
         public string Id = "Default";
@@ -459,38 +467,6 @@ namespace CloudgoodsClasses
             return value == null ? "" : value.ToHashable();
         }
     }
-
-    #region Give Owner Items
-
-    public class GiveOwnerItemRequest : RequestClass
-    {
-        public ItemInfo[] items { get; set; }
-        public OtherOwner otherOwner { get; set; }
-
-        public struct ItemInfo
-        {
-            public int Id;
-            public int amount;
-            public int location;
-        }
-
-        public override string ToHashable()
-        {
-            string final = OtherOwner.ToHashable(otherOwner);
-            foreach (ItemInfo info in items)
-            {
-                final += info.Id + info.amount + info.location;
-            }
-            return final;
-        }
-    }
-
-    public class GiveOwnerItemResponse
-    {
-        public List<string> newStackIds = new List<string>();
-    }
-
-    #endregion
 
     #region Item voucher
 
@@ -588,9 +564,58 @@ namespace CloudgoodsClasses
 
     }
 
-    public class MoveItemResponse
+    public class UpdateItemByIdRequest : RequestClass
     {
-        public List<string> updatedStackIds;
+        public List<UpdateOrderByID> orders = new List<UpdateOrderByID>();
+        public OtherOwner otherOwner;
+
+        public override string ToHashable()
+        {
+            string resluts = "";
+            orders.ForEach(x => resluts += x.ToHashable());
+            resluts += OtherOwner.ToHashable(otherOwner);
+            return resluts;
+        }
+
+        public class UpdateOrderByID : RequestClass
+        {
+            public int itemId;
+            public int amount;
+            public int location;
+
+            public override string ToHashable()
+            {
+                return itemId.ToString() + amount.ToString() + location.ToString();
+            }
+        }
     }
+
+    public class UpdateItemsByStackIdRequest : RequestClass
+    {
+
+        public List<UpdateOrderByStackId> orders = new List<UpdateOrderByStackId>();
+        public OtherOwner otherOwner;
+
+        public override string ToHashable()
+        {
+            string resluts = "";
+            orders.ForEach(x => resluts += x.ToHashable());
+            resluts += OtherOwner.ToHashable(otherOwner);
+            return resluts;
+        }
+
+        public class UpdateOrderByStackId : RequestClass
+        {
+            public string stackId;
+            public int amount;
+            public int location;
+
+            public override string ToHashable()
+            {
+                return stackId + amount + location;
+            }
+        }
+    }
+
     #endregion
 }

@@ -11,7 +11,7 @@ public class ClassIDItemFilter : ContainerItemFilter
         bool found = false;
         foreach (int classID in ClassIDs)
         {
-            if (item.ClassId == classID)
+            if (item.classId == classID)
             {
                 found= true;
                 break;

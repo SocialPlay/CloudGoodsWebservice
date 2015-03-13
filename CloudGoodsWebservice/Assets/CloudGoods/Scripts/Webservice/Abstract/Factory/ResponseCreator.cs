@@ -10,9 +10,7 @@ public interface ResponseCreator {
 
     List<ItemData> CreateItemDataListResponse(string responseData);
 
-    MoveItemResponse CreateMoveItemResponse(string responseData);
-
-    GiveOwnerItemResponse CreateGiveOwnerItemResponse(string responseData);
+    UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData);
 
     CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData);
 

@@ -34,15 +34,15 @@ public class ContainerTestUtilities  {
     {
         ItemData tmpData = new ItemData()
         {
-            Amount = amount,
-            ClassId = classId,
-            CollectionId = collectionId,
-            Detail = "Some Details Here",
-            Energy = energy,
+            amount = amount,
+            classId = classId,
+            collectionId = collectionId,
+            detail = "Some Details Here",
+            energy = energy,
             Id = id,
-            Location = location,
-            Name = name,
-            StackLocationId = stackLocationId,
+            location = location,
+            name = name,
+            stackLocationId = stackLocationId,
             IsLocked = isLocked
         };
 

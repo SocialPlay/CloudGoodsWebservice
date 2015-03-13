@@ -24,14 +24,14 @@ public class LitJsonResponseCreator : ResponseCreator
         return JsonMapper.ToObject<List<ItemData>>(responseData);
     }
 
-    public MoveItemResponse CreateMoveItemResponse(string responseData)
+    public UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData)
     {
-        return JsonMapper.ToObject<MoveItemResponse>(responseData);
+        return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
     }
 
-    public GiveOwnerItemResponse CreateGiveOwnerItemResponse(string responseData)
+    public UpdatedStacksResponse CreateGiveOwnerItemResponse(string responseData)
     {
-        return JsonMapper.ToObject<GiveOwnerItemResponse>(responseData);
+        return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
     }
 
     public CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData)

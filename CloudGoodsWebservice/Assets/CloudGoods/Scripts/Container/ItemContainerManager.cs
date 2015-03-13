@@ -86,7 +86,7 @@ public class ItemContainerManager
 
         if (TargetContainer.GetContainerRemoveState(RemoveItemData).actionState == ContainerMoveState.ActionState.Remove)
         {
-            TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
+            TargetContainer.Remove(RemoveItemData, false, RemoveItemData.amount);
             return ContainerMoveState.ActionState.Remove;
         }
 

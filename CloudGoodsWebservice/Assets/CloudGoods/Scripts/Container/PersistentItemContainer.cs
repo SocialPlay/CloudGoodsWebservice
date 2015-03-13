@@ -82,9 +82,9 @@ public class PersistentItemContainer : MonoBehaviour
         if (isSave == true)
         {
             Debug.Log("Mod Item");
-            CloudGoods.MoveItem(data, Location, data.Amount, x =>
+            CloudGoods.MoveItem(data, Location, data.amount, x =>
             {
-                data.StackLocationId = x.updatedStackIds[0];
+                data.stackLocationId = x.updatedStackIds[0];
                 data.IsLocked = false;
             });
         }
@@ -97,9 +97,9 @@ public class PersistentItemContainer : MonoBehaviour
             Debug.Log("Add Item");
             data.IsLocked = true;
 
-            CloudGoods.MoveItem(data, Location, data.Amount, x =>
+            CloudGoods.MoveItem(data, Location, data.amount, x =>
             {
-                data.StackLocationId = x.updatedStackIds[0];
+                data.stackLocationId = x.updatedStackIds[0];
                 data.IsLocked = false;
             });
         }
