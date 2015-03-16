@@ -17,6 +17,8 @@ public interface CallObjectCreator
 
     WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
 
+    WWW CreateItemVoucherCall(int voucherId);
+
     WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
 
     WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request);

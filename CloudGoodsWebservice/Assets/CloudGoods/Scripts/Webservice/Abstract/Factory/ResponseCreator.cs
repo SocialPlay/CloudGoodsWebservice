@@ -12,9 +12,7 @@ public interface ResponseCreator {
 
     UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData);
 
-    CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData);
-
-    RedeemItemVouchersResponse CreteRedeemItemVoucherResponse(string responseData);
+    ItemVouchersResponse CreateItemVoucherResponse(string responseData);
  
 
     bool IsValidData(string data);

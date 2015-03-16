@@ -85,7 +85,7 @@ public class PersistentItemContainer : MonoBehaviour
             Debug.Log("Mod Item");
             CallHandler.MoveItem(data, Location, data.Amount, x =>
             {
-                data.StackLocationId = x.UpdatedStackIds[0];
+                data.StackLocationId = x.UpdatedStackIds[0].StackId;
                 data.IsLocked = false;
             });
         }
@@ -100,7 +100,7 @@ public class PersistentItemContainer : MonoBehaviour
 
             CallHandler.MoveItem(data, Location, data.Amount, x =>
             {
-                data.StackLocationId = x.UpdatedStackIds[0];
+                data.StackLocationId = x.UpdatedStackIds[0].StackId;
                 data.IsLocked = false;
             });
         }

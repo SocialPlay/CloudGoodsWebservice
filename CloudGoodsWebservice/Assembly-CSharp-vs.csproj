@@ -61,23 +61,25 @@
      <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\ItemLimitRestriction.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\NoActionRestriction.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\RemoveOnlyRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ItemFilters\BehaviourItemFilter.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ItemFilters\ClassIDItemFilter.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ItemFilters\CollectionIDItemFilter.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ItemFilters\ContainerItemFilter.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ItemFilters\ItemIDItemFilter.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ItemFilters\TagItemFilter.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainer.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainerDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainerManager.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainerRestrictor.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Container\PersistentItemContainer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\UI\ItemContainerDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\ItemDataComponent.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\ItemDataSelector.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\ItemPrefabInitilizer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ITooltipSetup.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\IgnoreRaycast.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ItemDataDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityItemDataDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDragComponent.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDropComponent.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\IGridLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\UIGridLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\InputValueChange.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\IgnoreRaycast.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\ItemDataDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\UnityItemDataDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\UnityUIItemDragComponent.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Item\UIDisplay\UnityUIItemDropComponent.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\ItemTextureCache.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\CallObjectCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\HashCreator.cs" />
@@ -85,6 +87,8 @@
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\LitJsonResponseCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\StandardHashCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\WebAPICallObjectCreator.cs" />
+     <Compile Include="Assets\TestContainers.cs" />
+     <Compile Include="Assets\TestLogin.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />
@@ -126,6 +130,7 @@
      <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\TestRunnerCallbackList.cs" />
      <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\TestRunnerConfigurator.cs" />
      <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestingAssets\CallTesting.cs" />
+     <Compile Include="Assets\WebCallsTest.cs" />
      <None Include="Assets\UnityTestTools\Examples\IntegrationTestsFrameworkExamples\AngryBotsTests\Shaders\Fx\Cursor.shader" />
      <None Include="Assets\UnityTestTools\LICENSE.txt" />
      <None Include="Assets\UnityTestTools\Examples\IntegrationTestsFrameworkExamples\AngryBotsTests\Shaders\Fx\ParticleAdditiveBlend.shader" />
@@ -146,28 +151,40 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="JsonFx.Json">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
  </Reference>
  <Reference Include="LitJson">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
+ </Reference>
+ <Reference Include="Newtonsoft.Json">
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="protobuf-net">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
+ </Reference>
+ <Reference Include="SocialPlay.Data">
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/SocialPlay.Data.dll</HintPath>
+ </Reference>
+ <Reference Include="SocialPlay.Generic">
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/SocialPlay.Generic.dll</HintPath>
+ </Reference>
+ <Reference Include="SocialPlay.Service">
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/SocialPlay.Service.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil.Mdb">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.Mdb.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.Mdb.dll</HintPath>
  </Reference>
  <Reference Include="nunit.core">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.dll</HintPath>
  </Reference>
  <Reference Include="nunit.core.interfaces">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.interfaces.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.interfaces.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.framework.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.framework.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
