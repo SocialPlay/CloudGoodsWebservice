@@ -2,6 +2,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using CloudGoods.Container;
 
 public class UnityUIItemDropComponent : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {

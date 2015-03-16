@@ -4,18 +4,24 @@ using System;
 using System.Collections.Generic;
 using CloudGoods.Models;
 
-public interface ResponseCreator {
+namespace CloudGoods.Webservice
+{
 
-    CloudGoodsUser CreateLoginResponse(string responseData);
+    public interface ResponseCreator
+    {
 
-    List<ItemData> CreateItemDataListResponse(string responseData);
+        CloudGoodsUser CreateLoginResponse(string responseData);
 
-    UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData);
+        List<ItemData> CreateItemDataListResponse(string responseData);
 
-    ItemVouchersResponse CreateItemVoucherResponse(string responseData);
- 
+        UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData);
 
-    bool IsValidData(string data);
+        ItemVouchersResponse CreateItemVoucherResponse(string responseData);
 
-    bool IsWebserviceError(string data);
+
+        bool IsValidData(string data);
+
+        bool IsWebserviceError(string data);
+    }
+
 }

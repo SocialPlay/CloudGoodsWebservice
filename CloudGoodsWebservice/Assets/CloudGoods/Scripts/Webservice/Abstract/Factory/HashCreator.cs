@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface HashCreator {
+namespace CloudGoods.Webservice
+{
+    public interface HashCreator
+    {
 
-	string CreateHash(params string[] values);
+        string CreateHash(params string[] values);
+    }
 }

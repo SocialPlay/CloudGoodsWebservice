@@ -3,119 +3,125 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using LitJson;
-using CallHandler.Models;
+using CloudGoods;
+using CloudGoods.Models;
+using CloudGoods.Emuns;
 
-public class PersistentItemContainer : MonoBehaviour
+namespace CloudGoods.Container
 {
-    public Action<List<ItemData>, ItemContainer> LoadedItemsForContainerEvent;
 
-    public ItemContainer Container;
-    public ItemOwnerTypes OwnerType;
-    public int Location;
-
-    public void LoadItems()
+    public class PersistentItemContainer : MonoBehaviour
     {
-        CallHandler.GetUserItems(Location, RecivedItems);
-    }
+        public Action<List<ItemData>, ItemContainer> LoadedItemsForContainerEvent;
 
-    void Start()
-    {
-        if (Container == null)
+        public ItemContainer Container;
+        public ItemOwnerTypes OwnerType;
+        public int Location;
+
+        public void LoadItems()
         {
-            Container = this.GetComponent<ItemContainer>();
-        }
-    }
-
-    protected string GetOwnerID()
-    {
-        switch (OwnerType)
-        {
-            //case ItemOwnerTypes.Instance:
-            //    return ItemSystemGameData.InstanceID.ToString();
-            case ItemOwnerTypes.Session:
-                return CallHandler.User.SessionID.ToString();
-            case ItemOwnerTypes.User:
-                return CallHandler.User.UserID.ToString();
-        }
-        return "";
-
-    }
-
-    #region Loading Items
-    protected void RecivedItems(List<ItemData> receivedItems)
-    {
-        foreach (ItemData item in receivedItems)
-        {
-            Container.Add(item, -1, false);
+            CallHandler.GetUserItems(Location, RecivedItems);
         }
 
-        if (LoadedItemsForContainerEvent != null)
+        void Start()
         {
-            LoadedItemsForContainerEvent(receivedItems, Container);
-        }
-    }
-    #endregion
-
-    #region Saving Items
-
-    void OnEnable()
-    {
-        if (Container != null)
-        {
-            Container.AddedItem += AddedItem;
-            Container.ModifiedItem += ModifiedItem;
-            Container.RemovedItem += RemovedItem;
-        }
-    }
-
-    void OnDisable()
-    {
-        if (Container != null)
-        {
-            Container.ModifiedItem -= ModifiedItem;
-            Container.AddedItem -= AddedItem;
-            Container.RemovedItem -= RemovedItem;
-        }
-    }
-
-    void ModifiedItem(ItemData data, bool isSave)
-    {
-        if (isSave == true)
-        {
-            Debug.Log("Mod Item");
-            CallHandler.MoveItem(data, Location, data.Amount, x =>
+            if (Container == null)
             {
-                data.StackLocationId = x.UpdatedStackIds[0].StackId;
-                data.IsLocked = false;
-            });
+                Container = this.GetComponent<ItemContainer>();
+            }
         }
-    }
 
-    void AddedItem(ItemData data, bool isSave)
-    {
-        if (isSave == true)
+        protected string GetOwnerID()
         {
-            Debug.Log("Add Item");
-            data.IsLocked = true;
-
-            CallHandler.MoveItem(data, Location, data.Amount, x =>
+            switch (OwnerType)
             {
-                data.StackLocationId = x.UpdatedStackIds[0].StackId;
-                data.IsLocked = false;
-            });
-        }
-    }
+                //case ItemOwnerTypes.Instance:
+                //    return ItemSystemGameData.InstanceID.ToString();
+                case ItemOwnerTypes.Session:
+                    return CallHandler.User.SessionID.ToString();
+                case ItemOwnerTypes.User:
+                    return CallHandler.User.UserID.ToString();
+            }
+            return "";
 
-    void RemovedItem(ItemData data, int amount, bool isMoving)
-    {
-        if (!isMoving)
+        }
+
+        #region Loading Items
+        protected void RecivedItems(List<ItemData> receivedItems)
         {
-            //CloudGoods.DeductStackAmount(data.stackID, -amount, delegate(string x)
-            //{
-            //    data.isLocked = false;
-            //});
-        }
-    }
+            foreach (ItemData item in receivedItems)
+            {
+                Container.Add(item, -1, false);
+            }
 
-    #endregion
+            if (LoadedItemsForContainerEvent != null)
+            {
+                LoadedItemsForContainerEvent(receivedItems, Container);
+            }
+        }
+        #endregion
+
+        #region Saving Items
+
+        void OnEnable()
+        {
+            if (Container != null)
+            {
+                Container.AddedItem += AddedItem;
+                Container.ModifiedItem += ModifiedItem;
+                Container.RemovedItem += RemovedItem;
+            }
+        }
+
+        void OnDisable()
+        {
+            if (Container != null)
+            {
+                Container.ModifiedItem -= ModifiedItem;
+                Container.AddedItem -= AddedItem;
+                Container.RemovedItem -= RemovedItem;
+            }
+        }
+
+        void ModifiedItem(ItemData data, bool isSave)
+        {
+            if (isSave == true)
+            {
+                Debug.Log("Mod Item");
+                CallHandler.MoveItem(data, Location, data.Amount, x =>
+                {
+                    data.StackLocationId = x.UpdatedStackIds[0].StackId;
+                    data.IsLocked = false;
+                });
+            }
+        }
+
+        void AddedItem(ItemData data, bool isSave)
+        {
+            if (isSave == true)
+            {
+                Debug.Log("Add Item");
+                data.IsLocked = true;
+
+                CallHandler.MoveItem(data, Location, data.Amount, x =>
+                {
+                    data.StackLocationId = x.UpdatedStackIds[0].StackId;
+                    data.IsLocked = false;
+                });
+            }
+        }
+
+        void RemovedItem(ItemData data, int amount, bool isMoving)
+        {
+            if (!isMoving)
+            {
+                //CloudGoods.DeductStackAmount(data.stackID, -amount, delegate(string x)
+                //{
+                //    data.isLocked = false;
+                //});
+            }
+        }
+
+        #endregion
+    }
 }

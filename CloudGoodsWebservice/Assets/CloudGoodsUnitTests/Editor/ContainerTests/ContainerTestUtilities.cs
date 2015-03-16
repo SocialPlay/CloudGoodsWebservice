@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using CallHandler.Models;
+using CloudGoods.Models;
+using CloudGoods.Container;
+using CloudGoods.Container.Restrcitions;
 
 public class ContainerTestUtilities  {
 
@@ -31,7 +33,7 @@ public class ContainerTestUtilities  {
         return container;
     }
 
-    public ItemData CreateItemData(int amount, int classId, int collectionId, int energy, int id, int location, string name, string stackLocationId, bool isLocked)
+    public CloudGoods.Models.ItemData CreateItemData(int amount, int classId, int collectionId, int energy, int id, int location, string name, string stackLocationId, bool isLocked)
     {
         ItemData tmpData = new ItemData()
         {

@@ -1,25 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CallHandler.Models;
+using CloudGoods.Models;
+using CloudGoods.Container.Restrcitions;
 
-public class RemoveOnlyRestriction : MonoBehaviour, IContainerRestriction {
+namespace CloudGoods.Container.Restrcitions
+{
 
-    ItemContainer restrictedContainer;
-
-    void Awake()
+    public class RemoveOnlyRestriction : MonoBehaviour, IContainerRestriction
     {
-        restrictedContainer = GetComponent<ItemContainer>();
-        restrictedContainer.ContainerAddRestrictions.Add(this);
-    }
 
-    public bool IsRestricted(ContainerAction containerAction, ItemData itemData)
-    {
-        if (containerAction == ContainerAction.add)
+        ItemContainer restrictedContainer;
+
+        void Awake()
         {
-            Debug.LogWarning("Item Resticted for being added to container because it has a Remove Only Restriction");
-            return true;
+            restrictedContainer = GetComponent<ItemContainer>();
+            restrictedContainer.ContainerAddRestrictions.Add(this);
         }
-        else
-            return false;
+
+        public bool IsRestricted(ContainerAction containerAction, ItemData itemData)
+        {
+            if (containerAction == ContainerAction.add)
+            {
+                Debug.LogWarning("Item Resticted for being added to container because it has a Remove Only Restriction");
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }

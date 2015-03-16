@@ -3,13 +3,14 @@ using System.Collections;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using CallHandler.Models;
+using CloudGoods.Models;
+using CloudGoods.Container;
 
 [TestFixture]
 public class ItemContainerManagerTests : MonoBehaviour {
 
     List<ItemContainer> ItemContainers;
-    List<ItemData> ItemDatas;
+    List<CloudGoods.Models.ItemData> ItemDatas;
     ContainerTestUtilities containerTestUtilities;
 
     [SetUp]

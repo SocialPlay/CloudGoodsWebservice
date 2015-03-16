@@ -3,63 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using CallHandler.Models;
+using CloudGoods.Models;
 
-[System.Serializable]
-public class ItemContainerManager
+namespace CloudGoods.Container
 {
 
-    public static ContainerMoveState.ActionState AddItem(ItemData addItem, ItemContainer targetContainer)
+    [System.Serializable]
+    public class ItemContainerManager
     {
-        if (addItem.IsLocked)
-            return ContainerMoveState.ActionState.No;
 
-        ContainerMoveState targetAddState = targetContainer.GetContainerAddState(addItem);
-
-        switch (targetAddState.ContainerActionState)
+        public static ContainerMoveState.ActionState AddItem(ItemData addItem, ItemContainer targetContainer)
         {
-            case ContainerMoveState.ActionState.Add:
-
-                targetContainer.Add(addItem, targetAddState.PossibleAddAmount);
-
-                break;
-            case ContainerMoveState.ActionState.No:
-                break;
-            default:
-                break;
-        }
-
-        return targetAddState.ContainerActionState;
-    }
-
-    public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer targetContainer)
-    {
-        try
-        {
-            if (movingItemData.IsLocked)
+            if (addItem.IsLocked)
                 return ContainerMoveState.ActionState.No;
 
-            if (movingItemData == null)
-                throw new Exception("Can Not Move null item");
-
-            if (targetContainer == null)
-                throw new Exception("Can not move item to null container");
-
-            ContainerMoveState targetAddState = targetContainer.GetContainerAddState(movingItemData);
+            ContainerMoveState targetAddState = targetContainer.GetContainerAddState(addItem);
 
             switch (targetAddState.ContainerActionState)
             {
                 case ContainerMoveState.ActionState.Add:
 
-                    ItemData newItemData = movingItemData;
-
-                    if (movingItemData.OwnerContainer != null)
-                    {
-                        if (RemoveItem(movingItemData, movingItemData.OwnerContainer) == ContainerMoveState.ActionState.No)
-                            return ContainerMoveState.ActionState.No;
-                    }
-
-                    targetContainer.Add(newItemData, targetAddState.PossibleAddAmount);
+                    targetContainer.Add(addItem, targetAddState.PossibleAddAmount);
 
                     break;
                 case ContainerMoveState.ActionState.No:
@@ -70,28 +34,68 @@ public class ItemContainerManager
 
             return targetAddState.ContainerActionState;
         }
-        catch (Exception e)
+
+        public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer targetContainer)
         {
-            Debug.LogError(e.Message);
+            try
+            {
+                if (movingItemData.IsLocked)
+                    return ContainerMoveState.ActionState.No;
+
+                if (movingItemData == null)
+                    throw new Exception("Can Not Move null item");
+
+                if (targetContainer == null)
+                    throw new Exception("Can not move item to null container");
+
+                ContainerMoveState targetAddState = targetContainer.GetContainerAddState(movingItemData);
+
+                switch (targetAddState.ContainerActionState)
+                {
+                    case ContainerMoveState.ActionState.Add:
+
+                        ItemData newItemData = movingItemData;
+
+                        if (movingItemData.OwnerContainer != null)
+                        {
+                            if (RemoveItem(movingItemData, movingItemData.OwnerContainer) == ContainerMoveState.ActionState.No)
+                                return ContainerMoveState.ActionState.No;
+                        }
+
+                        targetContainer.Add(newItemData, targetAddState.PossibleAddAmount);
+
+                        break;
+                    case ContainerMoveState.ActionState.No:
+                        break;
+                    default:
+                        break;
+                }
+
+                return targetAddState.ContainerActionState;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+
+                return ContainerMoveState.ActionState.No;
+            }
+        }
+
+
+        public static ContainerMoveState.ActionState RemoveItem(ItemData RemoveItemData, ItemContainer TargetContainer)
+        {
+
+            if (RemoveItemData.IsLocked)
+                return ContainerMoveState.ActionState.No;
+
+            if (TargetContainer.GetContainerRemoveState(RemoveItemData).ContainerActionState == ContainerMoveState.ActionState.Remove)
+            {
+                TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
+                return ContainerMoveState.ActionState.Remove;
+            }
 
             return ContainerMoveState.ActionState.No;
         }
-    }
-
-
-    public static ContainerMoveState.ActionState RemoveItem(ItemData RemoveItemData, ItemContainer TargetContainer)
-    {
-
-        if (RemoveItemData.IsLocked)
-            return ContainerMoveState.ActionState.No;
-
-        if (TargetContainer.GetContainerRemoveState(RemoveItemData).ContainerActionState == ContainerMoveState.ActionState.Remove)
-        {
-            TargetContainer.Remove(RemoveItemData, false, RemoveItemData.Amount);
-            return ContainerMoveState.ActionState.Remove;
-        }
-
-        return ContainerMoveState.ActionState.No;
     }
 }
 

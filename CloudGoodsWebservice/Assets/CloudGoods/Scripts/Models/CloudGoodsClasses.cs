@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CloudGoods.Models;
+using CloudGoods.Container;
 
 namespace CloudGoods.Models
 {

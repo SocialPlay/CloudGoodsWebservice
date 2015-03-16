@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Text;
-using CallHandler.Models;
+using CloudGoods;
+using CloudGoods.Models;
 using CloudGoodsUtilities;
+using CloudGoods.Webservice;
 
 public class WebAPICallObjectCreator : CallObjectCreator
 {

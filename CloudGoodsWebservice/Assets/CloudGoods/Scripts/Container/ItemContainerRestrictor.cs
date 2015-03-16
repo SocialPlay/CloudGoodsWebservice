@@ -1,54 +1,58 @@
 ﻿using System;
-
+using CloudGoods.Container.Restrcitions;
 using UnityEngine;
 
-public class ItemContainerRestrictor : MonoBehaviour
+namespace CloudGoods.Container
 {
-    public enum RestrictorState
+
+    public class ItemContainerRestrictor : MonoBehaviour
     {
-        Normal,
-        AddOnly,
-        RemoveOnly,
-        NoAction
-    }
-
-    public RestrictorState ContainerRestrictorState = RestrictorState.Normal;
-
-    public ItemContainer RestrictedContainer;
-
-    void Awake()
-    {
-        CheckForValidRestrictedContainer();
-    }
-
-    public void CheckForValidRestrictedContainer()
-    {
-        if (!RestrictedContainer)
-            throw new Exception("ItemContainerRestrictor could not find a container to restrict.");
-    }
-
-
-    public bool IsRestricted(ContainerAction action)
-    {
-        switch (ContainerRestrictorState)
+        public enum RestrictorState
         {
-            case RestrictorState.Normal:
-                return false;                
-            case RestrictorState.AddOnly:
-                if (action == ContainerAction.add)
-                {
-                    return false;
-                }
-                return true;
-            case RestrictorState.RemoveOnly:
-                if (action == ContainerAction.remove)
-                {
-                    return false;
-                }
-                return true;
-            case RestrictorState.NoAction:
-                return true;           
+            Normal,
+            AddOnly,
+            RemoveOnly,
+            NoAction
         }
-        return true;
+
+        public RestrictorState ContainerRestrictorState = RestrictorState.Normal;
+
+        public ItemContainer RestrictedContainer;
+
+        void Awake()
+        {
+            CheckForValidRestrictedContainer();
+        }
+
+        public void CheckForValidRestrictedContainer()
+        {
+            if (!RestrictedContainer)
+                throw new Exception("ItemContainerRestrictor could not find a container to restrict.");
+        }
+
+
+        public bool IsRestricted(ContainerAction action)
+        {
+            switch (ContainerRestrictorState)
+            {
+                case RestrictorState.Normal:
+                    return false;
+                case RestrictorState.AddOnly:
+                    if (action == ContainerAction.add)
+                    {
+                        return false;
+                    }
+                    return true;
+                case RestrictorState.RemoveOnly:
+                    if (action == ContainerAction.remove)
+                    {
+                        return false;
+                    }
+                    return true;
+                case RestrictorState.NoAction:
+                    return true;
+            }
+            return true;
+        }
     }
 }

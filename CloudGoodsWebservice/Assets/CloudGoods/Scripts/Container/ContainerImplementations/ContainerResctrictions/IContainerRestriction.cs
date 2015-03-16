@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IContainerRestriction {
-
-    bool IsRestricted(ContainerAction action, CallHandler.Models.ItemData itemData);
-}
-
-public enum ContainerAction
+namespace CloudGoods.Container.Restrcitions
 {
-    add,
-    remove
+    public interface IContainerRestriction
+    {
+
+        bool IsRestricted(ContainerAction action, CloudGoods.Models.ItemData itemData);
+    }
+
+    public enum ContainerAction
+    {
+        add,
+        remove
+    }
 }

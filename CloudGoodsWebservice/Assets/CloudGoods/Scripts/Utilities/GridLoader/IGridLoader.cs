@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
-using CallHandler.Models;
+using CloudGoods.Models;
 
 namespace SocialPlay.Generic
 {

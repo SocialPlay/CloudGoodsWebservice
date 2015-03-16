@@ -1,66 +1,72 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CallHandler.Models;
+using CloudGoods.Models;
+using CloudGoods.Container;
 
-public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
+namespace CloudGoods.Container
 {
-    // which index of the container items will be swapped (default first item)
-    public int swapIndex = 0;
 
-    //The amount of items needed in container until it is required to swap
-    public int swapItemLimit = 0;
-
-    private ItemContainer itemContainer;
-
-    void Awake()
+    public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
     {
-        itemContainer = GetComponent<ItemContainer>();
-    }
+        // which index of the container items will be swapped (default first item)
+        public int swapIndex = 0;
 
-    public void AddItem(ItemData addItem, int amount, bool isSave)
-    {
-        if (IsSwapNeeded())
+        //The amount of items needed in container until it is required to swap
+        public int swapItemLimit = 0;
+
+        private ItemContainer itemContainer;
+
+        void Awake()
         {
-            //Should only swap single item in container (first item in container items list)
-            ItemData swapItem = itemContainer.containerItems[swapIndex];
-
-            ItemContainerManager.MoveItem(swapItem, addItem.OwnerContainer);
-            AddItemToContainer(addItem, amount, isSave);
+            itemContainer = GetComponent<ItemContainer>();
         }
-        else
+
+        public void AddItem(ItemData addItem, int amount, bool isSave)
         {
-            AddItemToContainer(addItem, amount, isSave);
-        }
-    }
+            if (IsSwapNeeded())
+            {
+                //Should only swap single item in container (first item in container items list)
+                ItemData swapItem = itemContainer.containerItems[swapIndex];
 
-    void AddItemToContainer(ItemData addItem, int amount, bool isSave)
-    {
-        if (amount == -1)
+                ItemContainerManager.MoveItem(swapItem, addItem.OwnerContainer);
+                AddItemToContainer(addItem, amount, isSave);
+            }
+            else
+            {
+                AddItemToContainer(addItem, amount, isSave);
+            }
+        }
+
+        void AddItemToContainer(ItemData addItem, int amount, bool isSave)
         {
-            amount = addItem.Amount;
-            addItem.OwnerContainer = itemContainer;
+            if (amount == -1)
+            {
+                amount = addItem.Amount;
+                addItem.OwnerContainer = itemContainer;
 
-            itemContainer.containerItems.Add(addItem);
-            itemContainer.AddItemEvent(addItem, isSave);
+                itemContainer.containerItems.Add(addItem);
+                itemContainer.AddItemEvent(addItem, isSave);
 
+            }
+            else
+            {
+                addItem.Amount = amount;
+                addItem.OwnerContainer = itemContainer;
+
+                itemContainer.containerItems.Add(addItem);
+                itemContainer.AddItemEvent(addItem, isSave);
+            }
         }
-        else
+
+        bool IsSwapNeeded()
         {
-            addItem.Amount = amount;
-            addItem.OwnerContainer = itemContainer;
-
-            itemContainer.containerItems.Add(addItem);
-            itemContainer.AddItemEvent(addItem, isSave);
+            if (itemContainer.containerItems.Count >= swapItemLimit)
+                return true;
+            else
+                return false;
         }
-    }
 
-    bool IsSwapNeeded()
-    {
-        if (itemContainer.containerItems.Count >= swapItemLimit)
-            return true;
-        else
-            return false;
-    }
 
+    }
 
 }

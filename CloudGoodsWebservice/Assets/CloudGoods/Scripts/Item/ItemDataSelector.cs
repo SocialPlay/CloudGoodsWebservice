@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using CallHandler.Models;
+using CloudGoods.Models;
 
 [System.Serializable]
 public abstract class ItemDataSelector 

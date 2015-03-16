@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using CloudGoods.Emuns;
+using CloudGoods;
 
 public class ItemTextureCache : MonoBehaviour {
 

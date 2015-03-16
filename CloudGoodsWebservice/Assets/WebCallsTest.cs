@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using LitJson;
-using CloudGoodsClasses;
+using CloudGoods;
+using CloudGoods.Models;
+using CloudGoods.Emuns;
 
 namespace WebCallTests
 {
@@ -28,17 +30,17 @@ namespace WebCallTests
 
         void OnEnable()
         {
-            CloudGoods.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
+            CallHandler.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
         }
 
         void Start()
         {
-            CloudGoods.Initialize();
+            CallHandler.Initialize();
         }
 
         void Instance_CloudGoodsInitilized()
         {
-            CloudGoods.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
+            CallHandler.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
 
         }
 
@@ -62,14 +64,14 @@ namespace WebCallTests
             }
         };
 
-            CloudGoods.UpdateItemsByIds(infos, DisplayUpdatedItems);
+            CallHandler.UpdateItemsByIds(infos, DisplayUpdatedItems);
 
 
         }
 
         private void CreateItemVoucher()
         {
-            CloudGoods.CreateItemVouchers(1, 700, DisaplayItemVouchers);
+            CallHandler.CreateItemVouchers(1, 700, DisaplayItemVouchers);
 
         }
 
@@ -80,13 +82,13 @@ namespace WebCallTests
 
             List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Item.Amount, ItemId = voucher.Item.Id, Location = 0, VoucherId = voucher.Id } };
 
-            CloudGoods.RedeemItemVouchers(selectedVouchers, DisplayUpdatedItems);
+            CallHandler.RedeemItemVouchers(selectedVouchers, DisplayUpdatedItems);
 
         }
 
         void LoadUserItems()
         {
-            CloudGoods.GetUserItems(0, delegate(List<ItemData> items)
+            CallHandler.GetUserItems(0, delegate(List<ItemData> items)
             {
                 string debugString = "Recived Items";
                 UsersItems.Clear();
@@ -153,11 +155,11 @@ namespace WebCallTests
             switch (CurrentAction)
             {
                 case ItemAction.move:
-                    CloudGoods.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
+                    CallHandler.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
                     UsersItems.Remove(item);
                     break;
                 case ItemAction.UpdateStackByFive:
-                    CloudGoods.UpdateItemByStackIds(item.StackLocationId, 5, item.Location, DisplayUpdatedItems);
+                    CallHandler.UpdateItemByStackIds(item.StackLocationId, 5, item.Location, DisplayUpdatedItems);
                     if (item.Amount < 5)
                         UsersItems.Remove(item);
                     else
@@ -166,11 +168,11 @@ namespace WebCallTests
                     }
                     break;
                 case ItemAction.UpdateStackToOne:
-                    CloudGoods.UpdateItemByStackIds(item.StackLocationId, -(item.Amount - 1), item.Location, DisplayUpdatedItems);
+                    CallHandler.UpdateItemByStackIds(item.StackLocationId, -(item.Amount - 1), item.Location, DisplayUpdatedItems);
                     item.Amount = 1;
                     break;
                 case ItemAction.RemoveStack:
-                    CloudGoods.UpdateItemByStackIds(item.StackLocationId, -item.Amount, item.Location, DisplayUpdatedItems);
+                    CallHandler.UpdateItemByStackIds(item.StackLocationId, -item.Amount, item.Location, DisplayUpdatedItems);
                     UsersItems.Remove(item);
                     break;
                 default:
@@ -193,9 +195,9 @@ namespace WebCallTests
         void drawLeft()
         {
             GUILayout.BeginArea(new Rect(25, 25, Screen.width / 2 - 50, Screen.height - 50));
-            if (CloudGoods.User != null)
+            if (CallHandler.User != null)
             {
-                GUILayout.Label("Welcome " + CloudGoods.User.UserName + ".");
+                GUILayout.Label("Welcome " + CallHandler.User.UserName + ".");
             }
             else
             {
@@ -263,7 +265,7 @@ namespace WebCallTests
                 }
                 if (GUILayout.Button("Get", GUILayout.MaxWidth(100)))
                 {
-                    CloudGoods.GetItemVoucher(CurrentVouchers[i].Id, DisaplayItemVouchers);
+                    CallHandler.GetItemVoucher(CurrentVouchers[i].Id, DisaplayItemVouchers);
                 }
                 GUILayout.EndHorizontal();
             }

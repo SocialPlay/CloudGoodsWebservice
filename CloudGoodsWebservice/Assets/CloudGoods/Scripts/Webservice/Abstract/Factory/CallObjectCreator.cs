@@ -2,34 +2,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using CallHandler.Models;
+using CloudGoods.Models;
 
-public interface CallObjectCreator
+namespace CloudGoods.Webservice
 {
 
-    WWW CreateLoginCallObject(string appID, string userEmail, string password);
+    public interface CallObjectCreator
+    {
 
-    WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
+        WWW CreateLoginCallObject(string appID, string userEmail, string password);
 
-    WWW CreateMoveItemsCallObject(MoveItemsRequest request);
+        WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 
-    WWW CreateGetServerTimeObject();
+        WWW CreateMoveItemsCallObject(MoveItemsRequest request);
 
-    WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
+        WWW CreateGetServerTimeObject();
 
-    WWW CreateItemVoucherCall(int voucherId);
+        WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
 
-    WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
+        WWW CreateItemVoucherCall(int voucherId);
 
-    WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request);
+        WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
 
-    WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request);
+        WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request);
 
-    Dictionary<string, string> CreateHeaders(string urlString);
+        WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request);
 
-    Dictionary<string, string> CreatePostHeaders(RequestClass requestObject);
+        Dictionary<string, string> CreateHeaders(string urlString);
 
-    int GetTimestamp();
+        Dictionary<string, string> CreatePostHeaders(RequestClass requestObject);
 
-    string GenerateNonce();
+        int GetTimestamp();
+
+        string GenerateNonce();
+    }
 }

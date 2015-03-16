@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using CloudGoods.Emuns;
+using CloudGoods.Container;
 
 public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {

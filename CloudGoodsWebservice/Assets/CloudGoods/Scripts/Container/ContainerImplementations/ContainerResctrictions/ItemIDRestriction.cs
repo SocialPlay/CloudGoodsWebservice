@@ -1,40 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using CallHandler.Models;
+using CloudGoods.Models;
+using CloudGoods.Container.Restrcitions;
 
-public class ItemIDRestriction : MonoBehaviour, IContainerRestriction {
+namespace CloudGoods.Container.Restrcitions
+{
 
-    public List<int> ItemIDList = new List<int>();
-    public bool IsExcluded = false;
-
-    ItemContainer restrictedContainer;
-
-    void Awake()
+    public class ItemIDRestriction : MonoBehaviour, IContainerRestriction
     {
-        restrictedContainer = GetComponent<ItemContainer>();
-        restrictedContainer.ContainerAddRestrictions.Add(this);
-    }
 
-    public bool IsRestricted(ContainerAction action, ItemData itemData)
-    {
-        if (IsExcluded)
+        public List<int> ItemIDList = new List<int>();
+        public bool IsExcluded = false;
+
+        ItemContainer restrictedContainer;
+
+        void Awake()
         {
-            if (ItemIDList.Exists(x => x == itemData.Id))
+            restrictedContainer = GetComponent<ItemContainer>();
+            restrictedContainer.ContainerAddRestrictions.Add(this);
+        }
+
+        public bool IsRestricted(ContainerAction action, ItemData itemData)
+        {
+            if (IsExcluded)
             {
+                if (ItemIDList.Exists(x => x == itemData.Id))
+                {
+                    Debug.LogWarning("Item Resticted for being added to container because it has a Item ID Restriction");
+                    return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                if (ItemIDList.Exists(x => x == itemData.Id))
+                    return false;
+
                 Debug.LogWarning("Item Resticted for being added to container because it has a Item ID Restriction");
                 return true;
             }
-
-            return false;
-        }
-        else
-        {
-            if (ItemIDList.Exists(x => x == itemData.Id))
-                return false;
-           
-            Debug.LogWarning("Item Resticted for being added to container because it has a Item ID Restriction");
-            return true;
         }
     }
 }

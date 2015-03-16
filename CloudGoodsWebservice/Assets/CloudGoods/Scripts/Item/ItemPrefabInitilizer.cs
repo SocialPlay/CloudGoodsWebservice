@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using CallHandler.Models;
+using CloudGoods.Models;
+using CloudGoods;
 
 
 public class ItemPrefabInitilizer

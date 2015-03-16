@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 using System.Text;
 using System.Security.Cryptography;
+using CloudGoods;
+using CloudGoods.Webservice;
 
 public class StandardHashCreator : HashCreator {
 
