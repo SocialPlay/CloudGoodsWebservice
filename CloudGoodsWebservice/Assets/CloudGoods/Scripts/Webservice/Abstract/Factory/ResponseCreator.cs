@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
-using CloudGoodsClasses;
+using CloudGoods.Models;
 
 public interface ResponseCreator {
 

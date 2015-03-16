@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using LitJson;
-using CloudGoodsClasses;
+using CallHandler.Models;
 
 public class PersistentItemContainer : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class PersistentItemContainer : MonoBehaviour
 
     public void LoadItems()
     {
-        CloudGoods.GetUserItems(Location, RecivedItems);
+        CallHandler.GetUserItems(Location, RecivedItems);
     }
 
     void Start()
@@ -33,9 +33,9 @@ public class PersistentItemContainer : MonoBehaviour
             //case ItemOwnerTypes.Instance:
             //    return ItemSystemGameData.InstanceID.ToString();
             case ItemOwnerTypes.Session:
-                return CloudGoods.User.SessionID.ToString();
+                return CallHandler.User.SessionID.ToString();
             case ItemOwnerTypes.User:
-                return CloudGoods.User.UserID.ToString();
+                return CallHandler.User.UserID.ToString();
         }
         return "";
 
@@ -83,7 +83,7 @@ public class PersistentItemContainer : MonoBehaviour
         if (isSave == true)
         {
             Debug.Log("Mod Item");
-            CloudGoods.MoveItem(data, Location, data.Amount, x =>
+            CallHandler.MoveItem(data, Location, data.Amount, x =>
             {
                 data.StackLocationId = x.UpdatedStackIds[0];
                 data.IsLocked = false;
@@ -98,7 +98,7 @@ public class PersistentItemContainer : MonoBehaviour
             Debug.Log("Add Item");
             data.IsLocked = true;
 
-            CloudGoods.MoveItem(data, Location, data.Amount, x =>
+            CallHandler.MoveItem(data, Location, data.Amount, x =>
             {
                 data.StackLocationId = x.UpdatedStackIds[0];
                 data.IsLocked = false;

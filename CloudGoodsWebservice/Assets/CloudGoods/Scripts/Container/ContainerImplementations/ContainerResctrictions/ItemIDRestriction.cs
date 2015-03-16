@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using CloudGoodsClasses;
+using CallHandler.Models;
 
 public class ItemIDRestriction : MonoBehaviour, IContainerRestriction {
 

@@ -3,10 +3,10 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using LitJson;
-using CloudGoodsClasses;
+using CloudGoods.Models;
 using CloudGoodsUtilities;
 
-public class CloudGoods : MonoBehaviour
+public class CallHandler : MonoBehaviour
 {
 
     public static string SessionId = "";
@@ -20,9 +20,9 @@ public class CloudGoods : MonoBehaviour
 
     #region Initialize
 
-    private static CloudGoods _instance;
+    private static CallHandler _instance;
 
-    private static CloudGoods Instance
+    private static CallHandler Instance
     {
         get
         {
@@ -32,13 +32,13 @@ public class CloudGoods : MonoBehaviour
         }
     }
 
-    private static CloudGoods GetInstance()
+    private static CallHandler GetInstance()
     {
         if (_instance == null)
         {
             GameObject cloudGoodsObject = new GameObject("_CloudGoods");
-            cloudGoodsObject.AddComponent<CloudGoods>();
-            _instance = cloudGoodsObject.GetComponent<CloudGoods>();
+            cloudGoodsObject.AddComponent<CallHandler>();
+            _instance = cloudGoodsObject.GetComponent<CallHandler>();
         }
         return _instance;
     }
@@ -136,7 +136,7 @@ public class CloudGoods : MonoBehaviour
 
     private void _RedeemItemVoucher(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<RedeemItemVouchersResponse> callback, OtherOwner otherOwner = null)
     {
-        CloudGoodsClasses.RedeemItemVouchersRequest request = new CloudGoodsClasses.RedeemItemVouchersRequest()
+        CallHandler.Models.RedeemItemVouchersRequest request = new CallHandler.Models.RedeemItemVouchersRequest()
             {
                 SelectedVouchers = selections,
                 OtherOwner = otherOwner
@@ -155,7 +155,7 @@ public class CloudGoods : MonoBehaviour
 
     private void _CreateItemVouchers(int minEnergy, int total, Action<CreateItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
     {
-        CloudGoodsClasses.CreateItemVouchersRequest request = new CreateItemVouchersRequest()
+        CallHandler.Models.CreateItemVouchersRequest request = new CreateItemVouchersRequest()
         {
             MinimumEnergy = minEnergy,
             TotalEnergy = total,
@@ -201,7 +201,7 @@ public class CloudGoods : MonoBehaviour
         if (responseCreator.IsWebserviceError(responseData)) { };
     }
 
-    static void GetServerTime(CloudGoods cg)
+    static void GetServerTime(CallHandler cg)
     {
         cg.StartCoroutine(cg.ServiceGetString(cg.callObjectCreator.CreateGetServerTimeObject(), x =>
         {

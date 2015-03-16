@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CloudGoodsClasses;
+using CloudGoods.Models;
 
-namespace CloudGoodsClasses
+namespace CloudGoods.Models
 {
     public abstract class RequestClass
     {
@@ -202,8 +202,6 @@ namespace CloudGoodsClasses
                 return stackId + amount + location;
             }
         }
-
-
     }
 
     public class UpdateItemByIdRequest : RequestClass
@@ -234,7 +232,6 @@ namespace CloudGoodsClasses
 
     public class UpdateItemsByStackIdRequest : RequestClass
     {
-
         public List<UpdateOrderByStackId> Orders = new List<UpdateOrderByStackId>();
         public OtherOwner OtherOwner;
 

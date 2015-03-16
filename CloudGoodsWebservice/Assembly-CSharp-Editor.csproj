@@ -49,11 +49,12 @@
      <Compile Include="Assets\CloudGoods\Scripts\Editor\AboutCloudGoodsWindow.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Editor\CloudGoodsSettingsInspector.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Editor\ItemComponentSetupInspector.cs" />
-     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerAddTests.cs" />
-     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerRestrictionsTests.cs" />
-     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTestUtilities.cs" />
-     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ItemContainerManagerTests.cs" />
-     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ItemContainerTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTests\ContainerAddTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTests\ContainerRestrictionsTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTests\ContainerTestUtilities.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTests\ItemContainerManagerTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\ContainerTests\ItemContainerTests.cs" />
+     <Compile Include="Assets\CloudGoodsUnitTests\Editor\StoreTests\StoreLoaderTests.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionComponentEditor.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionExplorerWindow.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionListRenderer.cs" />
@@ -128,20 +129,8 @@
  <Reference Include="LitJson">
  <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
  </Reference>
- <Reference Include="Newtonsoft.Json">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/Newtonsoft.Json.dll</HintPath>
- </Reference>
  <Reference Include="protobuf-net">
  <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
- </Reference>
- <Reference Include="SocialPlay.Data">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/SocialPlay.Data.dll</HintPath>
- </Reference>
- <Reference Include="SocialPlay.Generic">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/SocialPlay.Generic.dll</HintPath>
- </Reference>
- <Reference Include="SocialPlay.Service">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/SocialPlay.Service.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>

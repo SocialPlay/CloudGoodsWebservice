@@ -2,5 +2,5 @@
 using System.Collections;
 
 public interface IContainerAddAction {
-    void AddItem(CloudGoodsClasses.ItemData addItem, int amount, bool isSave);
+    void AddItem(CallHandler.Models.ItemData addItem, int amount, bool isSave);
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Text;
-using CloudGoodsClasses;
+using CallHandler.Models;
 using CloudGoodsUtilities;
 
 public class WebAPICallObjectCreator : CallObjectCreator
@@ -90,10 +90,10 @@ public class WebAPICallObjectCreator : CallObjectCreator
         List<string> values = new List<string>();
         headers.Add("Timestamp", timeStamp);
         values.Add(timeStamp);
-        if (!string.IsNullOrEmpty(CloudGoods.SessionId))
+        if (!string.IsNullOrEmpty(CallHandler.SessionId))
         {
-            headers.Add("SessionID", CloudGoods.SessionId);
-            values.Add(CloudGoods.SessionId);
+            headers.Add("SessionID", CallHandler.SessionId);
+            values.Add(CallHandler.SessionId);
             string nonce = GenerateNonce();
             headers.Add("Nonce", nonce);
             values.Add(nonce);
@@ -110,7 +110,7 @@ public class WebAPICallObjectCreator : CallObjectCreator
 
     public int GetTimestamp()
     {
-        int timeStamp = DateTime.UtcNow.ConvertToUnixTimestamp() + CloudGoods.ServerTimeDifference;
+        int timeStamp = DateTime.UtcNow.ConvertToUnixTimestamp() + CallHandler.ServerTimeDifference;
             return timeStamp;
     }
 
