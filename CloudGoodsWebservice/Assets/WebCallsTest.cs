@@ -13,7 +13,7 @@ namespace WebCallTests
 
         public enum ItemAction
         {
-            moveToVault,
+            move,
             UpdateStackByFive,
             UpdateStackToOne,
             RemoveStack,
@@ -21,9 +21,10 @@ namespace WebCallTests
         }
 
         public ItemAction CurrentAction;
+        public static int destinationLocation = 0;
 
         private List<ItemData> UsersItems = new List<ItemData>();
-        private List<CreateItemVouchersResponse.ItemVoucher> CurrentVouchers = new List<CreateItemVouchersResponse.ItemVoucher>();
+        private List<ItemVouchersResponse.ItemVoucher> CurrentVouchers = new List<ItemVouchersResponse.ItemVoucher>();
 
         void OnEnable()
         {
@@ -51,7 +52,6 @@ namespace WebCallTests
             NewDisplayLine(debugString);
         }
 
-
         private void UpdateItemById()
         {
             List<UpdateItemByIdRequest.UpdateOrderByID> infos = new List<UpdateItemByIdRequest.UpdateOrderByID>(){
@@ -67,36 +67,20 @@ namespace WebCallTests
 
         }
 
-
         private void CreateItemVoucher()
         {
-            CloudGoods.CreateItemVouchers(1, 700, delegate(CreateItemVouchersResponse response)
-            {
-                string debugString = "Created Vouchers Items";
-                foreach (var voucher in response.Vouchers)
-                {
-                    CurrentVouchers.Add(voucher);
-                    debugString += "\n(" + voucher.Id + ")" + voucher.Item.Name;
-                }
-                NewDisplayLine(debugString);
-            });
+            CloudGoods.CreateItemVouchers(1, 700, DisaplayItemVouchers);
+
         }
 
-        private void ConsumeItemVoucher(CreateItemVouchersResponse.ItemVoucher voucher)
+
+
+        private void RedeemItemVoucher(ItemVouchersResponse.ItemVoucher voucher)
         {
 
             List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Item.Amount, ItemId = voucher.Item.Id, Location = 0, VoucherId = voucher.Id } };
 
-            CloudGoods.RedeemItemVouchers(selectedVouchers, delegate(RedeemItemVouchersResponse response)
-            {
-                string debugString = "Consume Item Voucher";
-                foreach (var result in response.results)
-                {
-                    debugString += "\n" + result.StackLocationId + ":" + result.ItemId + "{" + result.Amount + "}";
-                }
-
-                NewDisplayLine(debugString);
-            });
+            CloudGoods.RedeemItemVouchers(selectedVouchers, DisplayUpdatedItems);
 
         }
 
@@ -120,7 +104,6 @@ namespace WebCallTests
             });
         }
 
-
         private void DisplayUpdatedItems(UpdatedStacksResponse response)
         {
             string debugString = "Update Items";
@@ -130,12 +113,37 @@ namespace WebCallTests
                 debugString += "\n  Amount: " + item.Amount;
                 debugString += "\n  Location: " + item.Location;
 
+            }
+            NewDisplayLine(debugString);
+            foreach (var item in response.UpdatedStackIds)
+            {
                 ItemData data = UsersItems.Find(x => x.StackLocationId == item.StackId);
                 if (data != null)
                 {
                     data.Amount = item.Amount;
                     data.Location = item.Location;
                 }
+                else
+                {
+                    UsersItems.Add(new ItemData()
+                      {
+                          Name = "---- Needs refresh -----",
+                          StackLocationId = item.StackId,
+                          Location = item.Location,
+                          Amount = item.Amount
+                      });
+                }
+            }
+
+        }
+
+        public void DisaplayItemVouchers(ItemVouchersResponse response)
+        {
+            string debugString = "Vouchers Items";
+            foreach (var voucher in response.Vouchers)
+            {
+                CurrentVouchers.Add(voucher);
+                debugString += "\n(" + voucher.Id + ")" + voucher.Item.Name;
             }
             NewDisplayLine(debugString);
         }
@@ -144,15 +152,26 @@ namespace WebCallTests
         {
             switch (CurrentAction)
             {
-                case ItemAction.moveToVault:
-                    CloudGoods.MoveItem(item, 0, item.Amount, DisplayUpdatedItems);
+                case ItemAction.move:
+                    CloudGoods.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
+                    UsersItems.Remove(item);
                     break;
                 case ItemAction.UpdateStackByFive:
-              
+                    CloudGoods.UpdateItemByStackIds(item.StackLocationId, 5, item.Location, DisplayUpdatedItems);
+                    if (item.Amount < 5)
+                        UsersItems.Remove(item);
+                    else
+                    {
+                        item.Amount -= 5;
+                    }
                     break;
                 case ItemAction.UpdateStackToOne:
+                    CloudGoods.UpdateItemByStackIds(item.StackLocationId, -(item.Amount - 1), item.Location, DisplayUpdatedItems);
+                    item.Amount = 1;
                     break;
                 case ItemAction.RemoveStack:
+                    CloudGoods.UpdateItemByStackIds(item.StackLocationId, -item.Amount, item.Location, DisplayUpdatedItems);
+                    UsersItems.Remove(item);
                     break;
                 default:
                     break;
@@ -199,28 +218,56 @@ namespace WebCallTests
             }
             GUILayout.FlexibleSpace();
             GUILayout.Label("Users Items");
+            GUILayout.BeginHorizontal();
             if (GUILayout.Button(CurrentAction.ToReadable()))
             {
                 CurrentAction = CurrentAction.Next();
             }
-            foreach (ItemData item in UsersItems)
+
+            if (CurrentAction == ItemAction.move)
             {
-                if (GUILayout.Button(string.Format("{0}:{1} - {2}", item.Name, item.Amount, item.Location)))
+                if (GUILayout.Button((destinationLocation == 0 ? "(Vault)" : destinationLocation.ToString()), GUILayout.MaxWidth(140)))
                 {
+                    destinationLocation++;
+                    if (destinationLocation > 10)
+                    {
+                        destinationLocation = 0;
+                    }
                 }
             }
 
+            GUILayout.EndHorizontal();
+            foreach (ItemData item in UsersItems)
+            {
+
+                if (GUILayout.Button(string.Format("{0}\nSLID:{3}\n  Amount:{1}\n  Location:{2}", item.Name, item.Amount, item.Location, item.StackLocationId)))
+                {
+                    PerformCurrentAction(item);
+                    return;
+                }
+
+
+            }
+
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Item Vouchers");
+         
+            GUILayout.Label(string.Format("Item Vouchers ({0})", CurrentVouchers.Count));
             for (int i = CurrentVouchers.Count < 3 ? 0 : CurrentVouchers.Count - 3; i < CurrentVouchers.Count; i++)
             {
+                GUILayout.BeginHorizontal();
                 if (GUILayout.Button(string.Format("({0}) {1} : {2}", CurrentVouchers[i].Id, CurrentVouchers[i].Item.Id, CurrentVouchers[i].Item.Amount)))
                 {
-                    ConsumeItemVoucher(CurrentVouchers[i]);
+                    RedeemItemVoucher(CurrentVouchers[i]);
                     CurrentVouchers.Remove(CurrentVouchers[i]);
                     return;
                 }
+                if (GUILayout.Button("Get", GUILayout.MaxWidth(100)))
+                {
+                    CloudGoods.GetItemVoucher(CurrentVouchers[i].Id, DisaplayItemVouchers);
+                }
+                GUILayout.EndHorizontal();
             }
+         
             GUILayout.EndArea();
         }
 
@@ -241,8 +288,8 @@ namespace WebCallTests
         {
             switch (action)
             {
-                case WebCallsTest.ItemAction.moveToVault:
-                    return "Move to vault(0)";
+                case WebCallsTest.ItemAction.move:
+                    return "Move to";
                 case WebCallsTest.ItemAction.UpdateStackByFive:
                     return "Add 5 to amount";
                 case WebCallsTest.ItemAction.UpdateStackToOne:
@@ -256,11 +303,12 @@ namespace WebCallTests
         public static WebCallsTest.ItemAction Next(this WebCallsTest.ItemAction action)
         {
             action += 1;
+            WebCallsTest.destinationLocation = 0;
             if (action == WebCallsTest.ItemAction.None)
             {
                 return 0;
             }
-            return action + 1;
+            return action;
         }
 
     }

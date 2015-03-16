@@ -51,9 +51,14 @@ public class WebAPICallObjectCreator : CallObjectCreator
         return GenerateWWWPost("CreateItemVouchers", request);
     }
 
+    public WWW CreateItemVoucherCall(int voucherId)
+    {
+        return GenerateWWWCall("ItemVouchers", new KeyValuePair<string, string>("voucherId", voucherId.ToString()));
+    }
+
     public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
     {
-        return GenerateWWWPost("ConsumeItemVouchers", request);
+        return GenerateWWWPost("RedeemItemVouchers", request);
     }
 
     public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
@@ -148,13 +153,5 @@ public class WebAPICallObjectCreator : CallObjectCreator
     #endregion
 
 
-
-
-
-
-
-
-
- 
 }
 

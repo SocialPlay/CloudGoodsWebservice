@@ -34,15 +34,11 @@ public class LitJsonResponseCreator : ResponseCreator
         return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
     }
 
-    public CreateItemVouchersResponse CreateCreateItemVoucherResponse(string responseData)
+    public ItemVouchersResponse CreateItemVoucherResponse(string responseData)
     {
-        return JsonMapper.ToObject<CreateItemVouchersResponse>(responseData);
+        return JsonMapper.ToObject<ItemVouchersResponse>(responseData);
     }
 
-    public RedeemItemVouchersResponse CreteRedeemItemVoucherResponse(string responseData)
-    {
-        return JsonMapper.ToObject<RedeemItemVouchersResponse>(responseData);
-    }
 
 
     #endregion

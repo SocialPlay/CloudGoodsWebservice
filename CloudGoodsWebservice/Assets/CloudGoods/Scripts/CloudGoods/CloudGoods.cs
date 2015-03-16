@@ -81,9 +81,9 @@ public class CloudGoods : MonoBehaviour
     {
         List<MoveItemsRequest.MoveOrder> orders = new List<MoveItemsRequest.MoveOrder>(){
              new MoveItemsRequest.MoveOrder(){
-                     stackId = item.StackLocationId,
-         amount = amountToMove,
-           location =location
+                     StackId = item.StackLocationId,
+         Amount = amountToMove,
+           Location =location
              }
         };
         Instance._MoveItems(orders, callback);
@@ -127,7 +127,7 @@ public class CloudGoods : MonoBehaviour
         }));
     }
 
-    public static void UpdateItemById(string stackId, int amount, int location, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+    public static void UpdateItemByStackIds(string stackId, int amount, int location, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
     {
         List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders = new List<UpdateItemsByStackIdRequest.UpdateOrderByStackId>(){
             new UpdateItemsByStackIdRequest.UpdateOrderByStackId(){
@@ -139,6 +139,7 @@ public class CloudGoods : MonoBehaviour
         Instance._UpdateItemByStackIds(orders, callback, otherOwner);
     }
 
+
     public static void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
     {
         Instance._UpdateItemByStackIds(orders, callback, destinationOwner);
@@ -146,20 +147,20 @@ public class CloudGoods : MonoBehaviour
 
     private void _UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
     {
-        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByStackIdRequestCallObject(new UpdateItemsByStackIdRequest() { orders = orders, otherOwner = destinationOwner }), x =>
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByStackIdRequestCallObject(new UpdateItemsByStackIdRequest() { Orders = orders, DestinationOwner = destinationOwner }), x =>
         {
             callback(responseCreator.CreateUpdatedStacksResponse(x));
         }));
     }
 
 
-    public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<RedeemItemVouchersResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
+    public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
     {
         Instance._RedeemItemVoucher(selections, callback, otherOwner);
     }
 
 
-    private void _RedeemItemVoucher(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<RedeemItemVouchersResponse> callback, OtherOwner otherOwner = null)
+    private void _RedeemItemVoucher(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
     {
         CloudGoodsClasses.RedeemItemVouchersRequest request = new CloudGoodsClasses.RedeemItemVouchersRequest()
             {
@@ -169,16 +170,16 @@ public class CloudGoods : MonoBehaviour
 
         Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateRedeemItemVouchersCall(request), x =>
         {
-            callback(responseCreator.CreteRedeemItemVoucherResponse(x));
+            callback(responseCreator.CreateUpdatedStacksResponse(x));
         }));
     }
 
-    public static void CreateItemVouchers(int minEnergy, int total, Action<CreateItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
+    public static void CreateItemVouchers(int minEnergy, int total, Action<ItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
     {
         Instance._CreateItemVouchers(minEnergy, total, callback, andTags, orTags);
     }
 
-    private void _CreateItemVouchers(int minEnergy, int total, Action<CreateItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
+    private void _CreateItemVouchers(int minEnergy, int total, Action<ItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
     {
         CloudGoodsClasses.CreateItemVouchersRequest request = new CreateItemVouchersRequest()
         {
@@ -190,11 +191,21 @@ public class CloudGoods : MonoBehaviour
 
         Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateCreateItemVouchersCall(request), x =>
         {
-            callback(responseCreator.CreateCreateItemVoucherResponse(x));
+            callback(responseCreator.CreateItemVoucherResponse(x));
         }));
     }
 
+    public static void  GetItemVoucher (int voucherId, Action<ItemVouchersResponse> callback){
+        Instance._GetItemVoucher(voucherId,callback);
+    }
 
+    private void _GetItemVoucher(int voucherId, Action<ItemVouchersResponse> callback)
+    {
+        Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateItemVoucherCall(voucherId), x =>
+        {
+            callback(responseCreator.CreateItemVoucherResponse(x));
+        }));
+    }
 
 
     #region Coroutines

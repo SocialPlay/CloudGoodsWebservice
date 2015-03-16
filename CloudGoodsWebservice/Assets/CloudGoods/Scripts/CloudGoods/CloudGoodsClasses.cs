@@ -125,7 +125,7 @@ namespace CloudGoodsClasses
         }
     }
 
-    public class CreateItemVouchersResponse
+    public class ItemVouchersResponse
     {
         public List<ItemVoucher> Vouchers;
 
@@ -159,19 +159,6 @@ namespace CloudGoodsClasses
         }
     }
 
-    public class RedeemItemVouchersResponse
-    {
-        public List<ConsumeItemVoucherResult> results { get; set; }
-
-        public class ConsumeItemVoucherResult
-        {
-            public int ItemId { get; set; }
-            public string StackLocationId { get; set; }
-            public int Amount { get; set; }
-        }
-
-    }
-
     #endregion
 
     #region Move Items
@@ -193,13 +180,13 @@ namespace CloudGoodsClasses
 
         public class MoveOrder
         {
-            public string stackId;
-            public int amount;
-            public int location;
+            public string StackId;
+            public int Amount;
+            public int Location;
 
             public string ToHashable()
             {
-                return stackId + amount + location;
+                return StackId + Amount + Location;
             }
         }
 
@@ -236,13 +223,13 @@ namespace CloudGoodsClasses
     {
 
         public List<UpdateOrderByStackId> Orders = new List<UpdateOrderByStackId>();
-        public OtherOwner OtherOwner;
+        public OtherOwner DestinationOwner;
 
         public override string ToHashable()
         {
             string resluts = "";
             Orders.ForEach(x => resluts += x.ToHashable());
-            resluts += OtherOwner.ToHashable(OtherOwner);
+            resluts += OtherOwner.ToHashable(DestinationOwner);
             return resluts;
         }
 
@@ -259,9 +246,16 @@ namespace CloudGoodsClasses
         }
     }
 
+    public class SimpleItemInfo
+    {
+        public string StackId;
+        public int Amount;
+        public int Location;
+    }
+
     public class UpdatedStacksResponse
     {
-        public List<string> UpdatedStackIds;
+        public List<SimpleItemInfo> UpdatedStackIds;
     }
 
     #endregion
