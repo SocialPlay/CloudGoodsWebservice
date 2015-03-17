@@ -12,7 +12,6 @@ namespace CloudGoods
 {
     public class CallHandler : MonoBehaviour
     {
-
         public static string SessionId = "";
         public static int ServerTimeDifference = 0;
         public static event Action CloudGoodsInitilized;
@@ -68,6 +67,8 @@ namespace CloudGoods
                 callback(User);
             }));
         }
+
+        #region Items
 
         public static void GetUserItems(int location, Action<List<ItemData>> callback)
         {
@@ -210,6 +211,49 @@ namespace CloudGoods
             }));
         }
 
+        #endregion
+
+        #region Store
+
+        public static void GetCurrencyInfo(Action<CurrencyInfoResponse> callback)
+        {
+            Instance._GetCurrencyInfo(callback);
+        }
+
+        private void _GetCurrencyInfo(Action<CurrencyInfoResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateCurrencyInfoCall(), x =>
+                {
+                    callback(responseCreator.CreateCurrencyInfoResponse(x));
+                }));
+        }
+
+        public static void GetPremiumCurrencyBalance(Action<CurrencyBalanceResponse> callback)
+        {
+            Instance._GetPremiumCurrencyBalance(callback);
+        }
+
+        private void _GetPremiumCurrencyBalance(Action<CurrencyBalanceResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBalanceCall(), x =>
+                {
+                    callback(responseCreator.CreateCurrencyBalanceResponse(x));
+                }));
+        }
+
+        public static void GetStandardCurrencyBalance(int accessLocation, Action<CurrencyBalanceResponse> callback)
+        {
+            Instance._GetStandardCurrencyBalance(accessLocation, callback);
+        }
+
+        private void _GetStandardCurrencyBalance(int accessLocation, Action<CurrencyBalanceResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStandardCurrencyBalanceCall(accessLocation), x =>
+            {
+                callback(responseCreator.CreateCurrencyBalanceResponse(x));
+            }));
+        }
+
         public static void GetItemBundles(string andTags, string orTags, Action<ItemBundlesResponse> callback)
         {
             Instance._GetItemBundles(andTags, orTags, callback);
@@ -222,6 +266,8 @@ namespace CloudGoods
                 callback(responseCreator.CreateItemBundlesResponse(x));
             }));
         }
+
+        #endregion
 
         #region Coroutines
 

@@ -611,6 +611,23 @@ namespace CloudGoods.Models
     }
     #endregion
 
+    #region Store
+
+    public class CurrencyInfoResponse
+    {
+        public string PremiumCurrencyName;
+        public string StandardCurrencyName;
+        public string PremiumCurrencyImage;
+        public string StandardCurrencyImage;
+    }
+
+    public class CurrencyBalanceResponse
+    {
+        public int Amount;
+    }
+
+    #endregion
+
     #region Item Bundles
     public class ItemBundlesResponse
     {

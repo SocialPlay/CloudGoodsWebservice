@@ -30,6 +30,12 @@ namespace CloudGoods.Webservice
 
         WWW CreateItemBundlesCall(string andTags, string orTags);
 
+        WWW CreateCurrencyInfoCall();
+
+        WWW CreatePremiumCurrencyBalanceCall();
+
+        WWW CreateStandardCurrencyBalanceCall(int accessLocation);
+
         Dictionary<string, string> CreateHeaders(string urlString);
 
         Dictionary<string, string> CreatePostHeaders(RequestClass requestObject);

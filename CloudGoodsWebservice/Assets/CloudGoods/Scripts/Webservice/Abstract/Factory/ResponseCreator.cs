@@ -20,6 +20,12 @@ namespace CloudGoods.Webservice
 
         ItemBundlesResponse CreateItemBundlesResponse(string responseData);
 
+        CurrencyInfoResponse CreateCurrencyInfoResponse(string responseData);
+
+        CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData);
+
+
+
         bool IsValidData(string data);
 
         bool IsWebserviceError(string data);

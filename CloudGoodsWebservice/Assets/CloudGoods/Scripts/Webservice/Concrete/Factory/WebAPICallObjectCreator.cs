@@ -156,14 +156,24 @@ namespace CloudGoods.Webservice
             return GenerateWWWPost("UpdateItemsByStackId", request);
         }
 
-
-
-
-
-
         public WWW CreateItemBundlesCall(string andTags, string orTags)
         {
             return GenerateWWWCall("ItemBundles", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
+        }
+
+        public WWW CreateCurrencyInfoCall()
+        {
+            return GenerateWWWCall("CurrencyInfo");
+        }
+
+        public WWW CreatePremiumCurrencyBalanceCall()
+        {
+            return GenerateWWWCall("PremiumCurrency");
+        }
+
+        public WWW CreateStandardCurrencyBalanceCall(int accessLocation)
+        {
+            return GenerateWWWCall("StandardCurrency", new KeyValuePair<string, string> ("accessLocation", accessLocation.ToString()));
         }
     }
 }
