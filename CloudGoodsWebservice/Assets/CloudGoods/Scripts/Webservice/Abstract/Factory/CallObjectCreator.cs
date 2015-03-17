@@ -38,7 +38,7 @@ namespace CloudGoods.Webservice
 
         Dictionary<string, string> CreateHeaders(string urlString);
 
-        Dictionary<string, string> CreatePostHeaders(RequestClass requestObject);
+        Dictionary<string, string> CreatePostHeaders(IRequestClass requestObject);
 
         int GetTimestamp();
 

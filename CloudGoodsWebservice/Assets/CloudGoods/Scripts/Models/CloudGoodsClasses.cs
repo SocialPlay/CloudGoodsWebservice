@@ -5,9 +5,9 @@ using CloudGoods.Container;
 
 namespace CloudGoods.Models
 {
-    public abstract class RequestClass
+    public interface IRequestClass
     {
-        public abstract string ToHashable();
+        string ToHashable();
     }
 
     #region User
@@ -113,14 +113,14 @@ namespace CloudGoods.Models
 
     #region Item voucher
 
-    public class CreateItemVouchersRequest : RequestClass
+    public class CreateItemVouchersRequest : IRequestClass
     {
         public int MinimumEnergy { get; set; }
         public int TotalEnergy { get; set; }
         public string AndTags = "";
         public string OrTags = "";
 
-        public override string ToHashable()
+        public string ToHashable()
         {
             return MinimumEnergy + TotalEnergy + AndTags + OrTags;
         }
@@ -139,12 +139,12 @@ namespace CloudGoods.Models
 
 
 
-    public class RedeemItemVouchersRequest : RequestClass
+    public class RedeemItemVouchersRequest : IRequestClass
     {
         public List<ItemVoucherSelection> SelectedVouchers;
         public OtherOwner OtherOwner { get; set; }
 
-        public override string ToHashable()
+        public string ToHashable()
         {
             string HashValue = OtherOwner.ToHashable(OtherOwner);
             SelectedVouchers.ForEach(v => HashValue += v.ItemId + v.Amount + v.VoucherId);
@@ -163,12 +163,12 @@ namespace CloudGoods.Models
     #endregion
 
     #region Move Items
-    public class MoveItemsRequest : RequestClass
+    public class MoveItemsRequest : IRequestClass
     {
         public List<MoveOrder> MoveOrders = new List<MoveOrder>();
         public OtherOwner OtherOwner = null;
 
-        public override string ToHashable()
+        public string ToHashable()
         {
             string results = "";
             foreach (MoveOrder order in MoveOrders)
@@ -192,12 +192,12 @@ namespace CloudGoods.Models
         }
     }
 
-    public class UpdateItemByIdRequest : RequestClass
+    public class UpdateItemByIdRequest : IRequestClass
     {
         public List<UpdateOrderByID> Orders = new List<UpdateOrderByID>();
         public OtherOwner OtherOwner;
 
-        public override string ToHashable()
+        public string ToHashable()
         {
             string resluts = "";
             Orders.ForEach(x => resluts += x.ToHashable());
@@ -205,25 +205,25 @@ namespace CloudGoods.Models
             return resluts;
         }
 
-        public class UpdateOrderByID : RequestClass
+        public class UpdateOrderByID : IRequestClass
         {
             public int itemId;
             public int amount;
             public int location;
 
-            public override string ToHashable()
+            public string ToHashable()
             {
                 return itemId.ToString() + amount.ToString() + location.ToString();
             }
         }
     }
 
-    public class UpdateItemsByStackIdRequest : RequestClass
+    public class UpdateItemsByStackIdRequest : IRequestClass
     {
         public List<UpdateOrderByStackId> Orders = new List<UpdateOrderByStackId>();
         public OtherOwner DestinationOwner;
 
-        public override string ToHashable()
+        public string ToHashable()
         {
             string resluts = "";
             Orders.ForEach(x => resluts += x.ToHashable());
@@ -231,13 +231,13 @@ namespace CloudGoods.Models
             return resluts;
         }
 
-        public class UpdateOrderByStackId : RequestClass
+        public class UpdateOrderByStackId : IRequestClass
         {
             public string stackId;
             public int amount;
             public int location;
 
-            public override string ToHashable()
+            public string ToHashable()
             {
                 return stackId + amount + location;
             }
