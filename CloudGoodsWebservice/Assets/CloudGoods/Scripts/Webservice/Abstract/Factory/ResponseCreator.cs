@@ -18,6 +18,7 @@ namespace CloudGoods.Webservice
 
         ItemVouchersResponse CreateItemVoucherResponse(string responseData);
 
+        ItemBundlesResponse CreateItemBundlesResponse(string responseData);
 
         bool IsValidData(string data);
 

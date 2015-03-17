@@ -29,50 +29,6 @@ public class WebAPICallObjectCreator : CallObjectCreator
         }
     }
 
-    public WWW CreateLoginCallObject(string appID, string userEmail, string password)
-    {
-        string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
-
-        Dictionary<string, string> headers = CreateHeaders(loginUrl);
-        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
-        return new WWW(urlString, null, headers);
-    }
-
-    public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
-    {
-        return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
-    }
-
-    public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
-    {
-        return GenerateWWWPost("MoveItems", request);
-   }
-
-    public WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request)
-    {
-        return GenerateWWWPost("CreateItemVouchers", request);
-    }
-
-    public WWW CreateItemVoucherCall(int voucherId)
-    {
-        return GenerateWWWCall("ItemVouchers", new KeyValuePair<string, string>("voucherId", voucherId.ToString()));
-    }
-
-    public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
-    {
-        return GenerateWWWPost("RedeemItemVouchers", request);
-    }
-
-    public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
-    {
-        return GenerateWWWPost("UpdateItemsById", request);
-    }
-
-    public WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request)
-    {
-        return GenerateWWWPost("UpdateItemsByStackId", request);
-    }
-
 
     #region Server Utilities
 
@@ -118,7 +74,7 @@ public class WebAPICallObjectCreator : CallObjectCreator
     public int GetTimestamp()
     {
         int timeStamp = DateTime.UtcNow.ConvertToUnixTimestamp() + CallHandler.ServerTimeDifference;
-            return timeStamp;
+        return timeStamp;
     }
 
     public string GenerateNonce()
@@ -154,6 +110,58 @@ public class WebAPICallObjectCreator : CallObjectCreator
 
     #endregion
 
+    public WWW CreateLoginCallObject(string appID, string userEmail, string password)
+    {
+        string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
 
+        Dictionary<string, string> headers = CreateHeaders(loginUrl);
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
+        return new WWW(urlString, null, headers);
+    }
+
+    public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
+    {
+        return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
+    }
+
+    public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
+    {
+        return GenerateWWWPost("MoveItems", request);
+    }
+
+    public WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request)
+    {
+        return GenerateWWWPost("CreateItemVouchers", request);
+    }
+
+    public WWW CreateItemVoucherCall(int voucherId)
+    {
+        return GenerateWWWCall("ItemVoucher", new KeyValuePair<string, string>("voucherId", voucherId.ToString()));
+    }
+
+    public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
+    {
+        return GenerateWWWPost("RedeemItemVouchers", request);
+    }
+
+    public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
+    {
+        return GenerateWWWPost("UpdateItemsById", request);
+    }
+
+    public WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request)
+    {
+        return GenerateWWWPost("UpdateItemsByStackId", request);
+    }
+
+
+
+
+
+
+    public WWW CreateItemBundlesCall(string andTags, string orTags)
+    {
+        return GenerateWWWCall("ItemBundles", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
+    }
 }
 

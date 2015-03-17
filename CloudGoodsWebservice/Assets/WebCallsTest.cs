@@ -5,6 +5,7 @@ using LitJson;
 using CloudGoods;
 using CloudGoods.Models;
 using CloudGoods.Emuns;
+using System.Linq;
 
 namespace WebCallTests
 {
@@ -24,6 +25,7 @@ namespace WebCallTests
 
         public ItemAction CurrentAction;
         public static int destinationLocation = 0;
+        private int voucherModifyamount = 0;
 
         private List<ItemData> UsersItems = new List<ItemData>();
         private List<ItemVouchersResponse.ItemVoucher> CurrentVouchers = new List<ItemVouchersResponse.ItemVoucher>();
@@ -144,8 +146,16 @@ namespace WebCallTests
             string debugString = "Vouchers Items";
             foreach (var voucher in response.Vouchers)
             {
-                CurrentVouchers.Add(voucher);
-                debugString += "\n(" + voucher.Id + ")" + voucher.Item.Name;
+                var existing = CurrentVouchers.FirstOrDefault(v => v.Id == voucher.Id);
+                if (existing != null)
+                {
+                    existing.Item.Amount = voucher.Item.Amount;
+                }
+                else
+                {
+                    CurrentVouchers.Add(voucher);
+                }
+                debugString += string.Format("{0}\nId: {1}", voucher.Item.Name, voucher.Id);
             }
             NewDisplayLine(debugString);
         }
@@ -241,23 +251,42 @@ namespace WebCallTests
             GUILayout.EndHorizontal();
             foreach (ItemData item in UsersItems)
             {
-
                 if (GUILayout.Button(string.Format("{0}\nSLID:{3}\n  Amount:{1}\n  Location:{2}", item.Name, item.Amount, item.Location, item.StackLocationId)))
                 {
                     PerformCurrentAction(item);
                     return;
                 }
-
-
             }
 
             GUILayout.FlexibleSpace();
-         
+
+            GUILayout.BeginHorizontal();
             GUILayout.Label(string.Format("Item Vouchers ({0})", CurrentVouchers.Count));
+            if (GUILayout.Button("+"))
+            {
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                {
+                    voucherModifyamount += 10;
+                }
+                else
+                    voucherModifyamount++;
+            }
+            GUILayout.Label("Consume: " + (voucherModifyamount == 0? "all" : voucherModifyamount.ToString()));
+            if (GUILayout.Button("-"))
+            {
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                {
+                    voucherModifyamount -= 10;
+                }
+                else
+                    voucherModifyamount--;
+                if (voucherModifyamount < 0) voucherModifyamount = 0;
+            }
+            GUILayout.EndHorizontal();
             for (int i = CurrentVouchers.Count < 3 ? 0 : CurrentVouchers.Count - 3; i < CurrentVouchers.Count; i++)
             {
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button(string.Format("({0}) {1} : {2}", CurrentVouchers[i].Id, CurrentVouchers[i].Item.Id, CurrentVouchers[i].Item.Amount)))
+                if (GUILayout.Button(string.Format("({0}) {1} : {2}", CurrentVouchers[i].Id, CurrentVouchers[i].Item.Id,  CurrentVouchers[i].Item.Amount)))
                 {
                     RedeemItemVoucher(CurrentVouchers[i]);
                     CurrentVouchers.Remove(CurrentVouchers[i]);
@@ -269,7 +298,7 @@ namespace WebCallTests
                 }
                 GUILayout.EndHorizontal();
             }
-         
+
             GUILayout.EndArea();
         }
 
@@ -278,10 +307,6 @@ namespace WebCallTests
             DebugDisplay = Last + "\n" + DebugDisplay;
             Last = line;
         }
-
-
-
-
     }
 
     public static class Utils

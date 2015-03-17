@@ -97,6 +97,12 @@ public class LitJsonResponseCreator : ResponseCreator
 
 
 
+
+
+    public ItemBundlesResponse CreateItemBundlesResponse(string responseData)
+    {
+        return JsonMapper.ToObject<ItemBundlesResponse>(responseData);
+    }
 }
 
 public class WebserviceException : Exception

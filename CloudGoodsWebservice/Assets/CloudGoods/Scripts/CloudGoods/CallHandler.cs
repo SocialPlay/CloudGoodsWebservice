@@ -73,6 +73,7 @@ namespace CloudGoods
         {
             Instance._GetUserItems(location, callback);
         }
+
         private void _GetUserItems(int location, Action<List<ItemData>> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetUserItemsCallObject(location), x =>
@@ -143,7 +144,6 @@ namespace CloudGoods
             Instance._UpdateItemByStackIds(orders, callback, otherOwner);
         }
 
-
         public static void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
         {
             Instance._UpdateItemByStackIds(orders, callback, destinationOwner);
@@ -157,12 +157,10 @@ namespace CloudGoods
             }));
         }
 
-
         public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
         {
             Instance._RedeemItemVoucher(selections, callback, otherOwner);
         }
-
 
         private void _RedeemItemVoucher(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
         {
@@ -212,6 +210,18 @@ namespace CloudGoods
             }));
         }
 
+        public static void GetItemBundles(string andTags, string orTags, Action<ItemBundlesResponse> callback)
+        {
+            Instance._GetItemBundles(andTags, orTags, callback);
+        }
+
+        private void _GetItemBundles(string andTags, string orTags, Action<ItemBundlesResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateItemBundlesCall(andTags, orTags), x =>
+            {
+                callback(responseCreator.CreateItemBundlesResponse(x));
+            }));
+        }
 
         #region Coroutines
 
