@@ -68,7 +68,7 @@ namespace CloudGoods.Webservice
             return headers;
         }
 
-        public Dictionary<string, string> CreatePostHeaders(RequestClass requestObject)
+        public Dictionary<string, string> CreatePostHeaders(IRequestClass requestObject)
         {
             return CreateHeaders(requestObject.ToHashable());
         }
@@ -100,7 +100,7 @@ namespace CloudGoods.Webservice
             return new WWW(urlString, null, headers);
         }
 
-        public WWW GenerateWWWPost(string controller, RequestClass dataObject)
+        public WWW GenerateWWWPost(string controller, IRequestClass dataObject)
         {
             string objectString = LitJson.JsonMapper.ToJson(dataObject);
             Dictionary<string, string> headers = CreateHeaders(dataObject.ToHashable());
@@ -123,7 +123,9 @@ namespace CloudGoods.Webservice
 
         public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
         {
-            return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
+            return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()),
+                new KeyValuePair<string, string>("location", ownerType),
+                    new KeyValuePair<string, string>("location", ownerId));
         }
 
         public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
