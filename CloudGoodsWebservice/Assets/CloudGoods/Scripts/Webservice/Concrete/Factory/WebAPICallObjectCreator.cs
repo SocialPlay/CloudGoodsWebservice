@@ -6,157 +6,162 @@ using System.Text;
 using CloudGoods;
 using CloudGoods.Models;
 using CloudGoodsUtilities;
+using CloudGoods.Webservice;
 
-namespace CloudGoods.Webservice
+public class WebAPICallObjectCreator : CallObjectCreator
 {
+    public HashCreator hashCreator = new StandardHashCreator();
 
-    public class WebAPICallObjectCreator : CallObjectCreator
+    public class URLValue
     {
-        public HashCreator hashCreator = new StandardHashCreator();
+        public string Key;
+        public string Value;
 
-        public class URLValue
+        public URLValue(string key, string value)
         {
-            public string Key;
-            public string Value;
-
-            public URLValue(string key, string value)
-            {
-                Key = key;
-                Value = value;
-            }
-            public URLValue(string key, int value)
-            {
-                Key = key;
-                Value = value.ToString();
-            }
+            Key = key;
+            Value = value;
         }
-
-        public WWW CreateLoginCallObject(string appID, string userEmail, string password)
+        public URLValue(string key, int value)
         {
-            string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
-
-            Dictionary<string, string> headers = CreateHeaders(loginUrl);
-            string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
-            return new WWW(urlString, null, headers);
+            Key = key;
+            Value = value.ToString();
         }
+    }
 
-        public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
+
+    #region Server Utilities
+
+    public WWW CreateGetServerTimeObject()
+    {
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Time");
+        return new WWW(urlString);
+    }
+
+    #endregion
+
+    #region Utilities
+
+
+
+    public Dictionary<string, string> CreateHeaders(string dataString)
+    {
+        string timeStamp = GetTimestamp().ToString();
+
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+
+        List<string> values = new List<string>();
+        headers.Add("Timestamp", timeStamp);
+        values.Add(timeStamp);
+        if (!string.IsNullOrEmpty(CallHandler.SessionId))
         {
-            return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
+            headers.Add("SessionID", CallHandler.SessionId);
+            values.Add(CallHandler.SessionId);
+            string nonce = GenerateNonce();
+            headers.Add("Nonce", nonce);
+            values.Add(nonce);
         }
+        values.Add(dataString);
+        headers.Add("Hash", hashCreator.CreateHash(values.ToArray()));
+        return headers;
+    }
 
-        public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
+    public Dictionary<string, string> CreatePostHeaders(RequestClass requestObject)
+    {
+        return CreateHeaders(requestObject.ToHashable());
+    }
+
+    public int GetTimestamp()
+    {
+        int timeStamp = DateTime.UtcNow.ConvertToUnixTimestamp() + CallHandler.ServerTimeDifference;
+        return timeStamp;
+    }
+
+    public string GenerateNonce()
+    {
+        return Guid.NewGuid().ToString();
+    }
+
+    public WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
+    {
+        string createdURL = "";
+        foreach (KeyValuePair<string, string> urlA in urlPrams)
         {
-            return GenerateWWWPost("MoveItems", request);
+            if (createdURL == "")
+                createdURL += "?";
+            else
+                createdURL += "&";
+            createdURL += urlA.Key + "=" + urlA.Value;
         }
+        Dictionary<string, string> headers = CreateHeaders(createdURL);
+        string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
+        return new WWW(urlString, null, headers);
+    }
 
-        public WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request)
-        {
-            return GenerateWWWPost("CreateItemVouchers", request);
-        }
+    public WWW GenerateWWWPost(string controller, RequestClass dataObject)
+    {
+        string objectString = LitJson.JsonMapper.ToJson(dataObject);
+        Dictionary<string, string> headers = CreateHeaders(dataObject.ToHashable());
+        headers.Add("Content-Type", "application/json");
+        string urlString = string.Format("{0}api/CloudGoods/{1}", CloudGoodsSettings.Url, controller);
+        byte[] body = Encoding.UTF8.GetBytes(objectString);
+        return new WWW(urlString, body, headers);
+    }
 
-        public WWW CreateItemVoucherCall(int voucherId)
-        {
-            return GenerateWWWCall("ItemVouchers", new KeyValuePair<string, string>("voucherId", voucherId.ToString()));
-        }
+    #endregion
 
-        public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
-        {
-            return GenerateWWWPost("RedeemItemVouchers", request);
-        }
+    public WWW CreateLoginCallObject(string appID, string userEmail, string password)
+    {
+        string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
 
-        public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
-        {
-            return GenerateWWWPost("UpdateItemsById", request);
-        }
+        Dictionary<string, string> headers = CreateHeaders(loginUrl);
+        string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
+        return new WWW(urlString, null, headers);
+    }
 
-        public WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request)
-        {
-            return GenerateWWWPost("UpdateItemsByStackId", request);
-        }
+    public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
+    {
+        return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()));
+    }
 
+    public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
+    {
+        return GenerateWWWPost("MoveItems", request);
+    }
 
-        #region Server Utilities
+    public WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request)
+    {
+        return GenerateWWWPost("CreateItemVouchers", request);
+    }
 
-        public WWW CreateGetServerTimeObject()
-        {
-            string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Time");
-            return new WWW(urlString);
-        }
+    public WWW CreateItemVoucherCall(int voucherId)
+    {
+        return GenerateWWWCall("ItemVoucher", new KeyValuePair<string, string>("voucherId", voucherId.ToString()));
+    }
 
-        #endregion
+    public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
+    {
+        return GenerateWWWPost("RedeemItemVouchers", request);
+    }
 
-        #region Utilities
+    public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
+    {
+        return GenerateWWWPost("UpdateItemsById", request);
+    }
 
-
-
-        public Dictionary<string, string> CreateHeaders(string dataString)
-        {
-            string timeStamp = GetTimestamp().ToString();
-
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-
-            List<string> values = new List<string>();
-            headers.Add("Timestamp", timeStamp);
-            values.Add(timeStamp);
-            if (!string.IsNullOrEmpty(CallHandler.SessionId))
-            {
-                headers.Add("SessionID", CallHandler.SessionId);
-                values.Add(CallHandler.SessionId);
-                string nonce = GenerateNonce();
-                headers.Add("Nonce", nonce);
-                values.Add(nonce);
-            }
-            values.Add(dataString);
-            headers.Add("Hash", hashCreator.CreateHash(values.ToArray()));
-            return headers;
-        }
-
-        public Dictionary<string, string> CreatePostHeaders(RequestClass requestObject)
-        {
-            return CreateHeaders(requestObject.ToHashable());
-        }
-
-        public int GetTimestamp()
-        {
-            int timeStamp = DateTime.UtcNow.ConvertToUnixTimestamp() + CallHandler.ServerTimeDifference;
-            return timeStamp;
-        }
-
-        public string GenerateNonce()
-        {
-            return Guid.NewGuid().ToString();
-        }
-
-        public WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
-        {
-            string createdURL = "";
-            foreach (KeyValuePair<string, string> urlA in urlPrams)
-            {
-                if (createdURL == "")
-                    createdURL += "?";
-                else
-                    createdURL += "&";
-                createdURL += urlA.Key + "=" + urlA.Value;
-            }
-            Dictionary<string, string> headers = CreateHeaders(createdURL);
-            string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
-            return new WWW(urlString, null, headers);
-        }
-
-        public WWW GenerateWWWPost(string controller, RequestClass dataObject)
-        {
-            string objectString = LitJson.JsonMapper.ToJson(dataObject);
-            Dictionary<string, string> headers = CreateHeaders(dataObject.ToHashable());
-            headers.Add("Content-Type", "application/json");
-            string urlString = string.Format("{0}api/CloudGoods/{1}", CloudGoodsSettings.Url, controller);
-            byte[] body = Encoding.UTF8.GetBytes(objectString);
-            return new WWW(urlString, body, headers);
-        }
-
-        #endregion
+    public WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request)
+    {
+        return GenerateWWWPost("UpdateItemsByStackId", request);
+    }
 
 
+
+
+
+
+    public WWW CreateItemBundlesCall(string andTags, string orTags)
+    {
+        return GenerateWWWCall("ItemBundles", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
     }
 }
 

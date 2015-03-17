@@ -7,109 +7,108 @@ using CloudGoods.Models;
 using CloudGoods;
 using CloudGoods.Webservice;
 
-namespace CloudGoods.Webservice
+public class LitJsonResponseCreator : ResponseCreator
 {
 
-    public class LitJsonResponseCreator : ResponseCreator
+    #region UserManagement
+
+    public CloudGoodsUser CreateLoginResponse(string responseData)
     {
+        return JsonMapper.ToObject<CloudGoodsUser>(responseData);
+    }
 
-        #region UserManagement
+    #endregion
 
-        public CloudGoodsUser CreateLoginResponse(string responseData)
-        {
-            return JsonMapper.ToObject<CloudGoodsUser>(responseData);
-        }
+    #region Item Management
 
-        #endregion
+    public List<ItemData> CreateItemDataListResponse(string responseData)
+    {
+        return JsonMapper.ToObject<List<ItemData>>(responseData);
+    }
 
-        #region Item Management
+    public UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData)
+    {
+        return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
+    }
 
-        public List<ItemData> CreateItemDataListResponse(string responseData)
-        {
-            return JsonMapper.ToObject<List<ItemData>>(responseData);
-        }
+    public UpdatedStacksResponse CreateGiveOwnerItemResponse(string responseData)
+    {
+        return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
+    }
 
-        public UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData)
-        {
-            return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
-        }
-
-        public UpdatedStacksResponse CreateGiveOwnerItemResponse(string responseData)
-        {
-            return JsonMapper.ToObject<UpdatedStacksResponse>(responseData);
-        }
-
-        public ItemVouchersResponse CreateItemVoucherResponse(string responseData)
-        {
-            return JsonMapper.ToObject<ItemVouchersResponse>(responseData);
-        }
+    public ItemVouchersResponse CreateItemVoucherResponse(string responseData)
+    {
+        return JsonMapper.ToObject<ItemVouchersResponse>(responseData);
+    }
 
 
 
-        #endregion
+    #endregion
 
-        #region Utilities
+    #region Utilities
 
-        public bool IsValidData(string data)
-        {
-            try
-            {
-                JsonData jsonData = JsonMapper.ToObject(data);
-            }
-            catch
-            {
-                throw new Exception("Invalid Data received from webservice");
-            }
-
-            return true;
-        }
-
-        public bool IsWebserviceError(string data)
+    public bool IsValidData(string data)
+    {
+        try
         {
             JsonData jsonData = JsonMapper.ToObject(data);
-
-            if (JsonDataContainsKey(jsonData, "errorCode"))
-            {
-                throw new WebserviceException(jsonData["errorCode"].ToString(), jsonData["message"].ToString());
-            }
-
-            return false;
+        }
+        catch
+        {
+            throw new Exception("Invalid Data received from webservice");
         }
 
-        public bool JsonDataContainsKey(JsonData data, string key)
+        return true;
+    }
+
+    public bool IsWebserviceError(string data)
+    {
+        JsonData jsonData = JsonMapper.ToObject(data);
+
+        if (JsonDataContainsKey(jsonData, "errorCode"))
         {
-            bool result = false;
-            if (data == null)
-                return result;
-            if (!data.IsObject)
-            {
-                return result;
-            }
-            IDictionary tdictionary = data as IDictionary;
-            if (tdictionary == null)
-                return result;
-            if (tdictionary.Contains(key))
-            {
-                result = true;
-            }
+            throw new WebserviceException(jsonData["errorCode"].ToString(), jsonData["message"].ToString());
+        }
+
+        return false;
+    }
+
+    public bool JsonDataContainsKey(JsonData data, string key)
+    {
+        bool result = false;
+        if (data == null)
+            return result;
+        if (!data.IsObject)
+        {
             return result;
         }
+        IDictionary tdictionary = data as IDictionary;
+        if (tdictionary == null)
+            return result;
+        if (tdictionary.Contains(key))
+        {
+            result = true;
+        }
+        return result;
+    }
 
-        #endregion
+    #endregion
 
 
 
 
+
+
+    public ItemBundlesResponse CreateItemBundlesResponse(string responseData)
+    {
+        return JsonMapper.ToObject<ItemBundlesResponse>(responseData);
     }
 }
 
-namespace CloudGoods.Webservice
+public class WebserviceException : Exception
 {
-    public class WebserviceException : Exception
+    public WebserviceException(string errorCode, string message)
+        : base("Error " + errorCode + ": " + message)
     {
-        public WebserviceException(string errorCode, string message)
-            : base("Error " + errorCode + ": " + message)
-        {
-        }
     }
 }

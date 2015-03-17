@@ -611,4 +611,22 @@ namespace CloudGoods.Models
     }
     #endregion
 
+    #region Item Bundles
+    public class ItemBundlesResponse
+    {
+        public List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();
+
+        public class ItemBundleInfo
+        {
+            public int Id;
+            public string Name;
+            public string Description;
+            public string Image;
+            public int CreditPrice;
+            public int CoinPrice;
+            public List<ItemData> items = new List<ItemData>();
+            public int State;
+        }
+    }
+    #endregion
 }

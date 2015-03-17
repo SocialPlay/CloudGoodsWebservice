@@ -28,6 +28,8 @@ namespace CloudGoods.Webservice
 
         WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request);
 
+        WWW CreateItemBundlesCall(string andTags, string orTags);
+
         Dictionary<string, string> CreateHeaders(string urlString);
 
         Dictionary<string, string> CreatePostHeaders(RequestClass requestObject);
