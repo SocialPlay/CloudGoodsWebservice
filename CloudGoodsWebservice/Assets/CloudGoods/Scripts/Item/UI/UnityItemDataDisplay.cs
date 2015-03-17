@@ -1,29 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using CloudGoods.Item.UI;
 
-public class UnityItemDataDisplay : ItemDataDisplay
+namespace CloudGoods.Item.UI
 {
-
-    public Text amountText;
-    public RawImage itemImage;
-    public Image itemFrame;
-
-    public override void UpdateTexture(Texture2D newTexture)
+    public class UnityItemDataDisplay : ItemDataDisplay
     {
-        if (itemImage != null)
+
+        public Text amountText;
+        public RawImage itemImage;
+        public Image itemFrame;
+
+        public override void UpdateTexture(Texture2D newTexture)
         {
-            itemImage.texture = newTexture;
+            if (itemImage != null)
+            {
+                itemImage.texture = newTexture;
+            }
         }
-    }
 
-    public override void SetFrameColor(Color newColor)
-    {
-        if (itemFrame != null) itemFrame.color = newColor;
-    }
+        public override void SetFrameColor(Color newColor)
+        {
+            if (itemFrame != null) itemFrame.color = newColor;
+        }
 
-    public override void SetAmountText(string newAmount)
-    {
-        if (amountText != null) amountText.text = newAmount;
+        public override void SetAmountText(string newAmount)
+        {
+            if (amountText != null) amountText.text = newAmount;
+        }
     }
 }

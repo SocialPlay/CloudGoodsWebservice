@@ -4,59 +4,63 @@ using System.Collections.Generic;
 using System;
 using CloudGoods.Models;
 
-public class ItemDataComponent : MonoBehaviour
+
+namespace CloudGoods.Item
 {
-    public Action<ItemData> onPickup;
-    public bool addOnPickup = true;
-    public bool pickupOnClick = true;
-    public bool destroyOnPickup = true;
-    [HideInInspector]
-    public bool isValid = true;
-
-    public ItemData itemData
+    public class ItemDataComponent : MonoBehaviour
     {
-        get
+        public Action<ItemData> onPickup;
+        public bool addOnPickup = true;
+        public bool pickupOnClick = true;
+        public bool destroyOnPickup = true;
+        [HideInInspector]
+        public bool isValid = true;
+
+        public ItemData itemData
         {
-            if (mData == null)
+            get
             {
-                mData = new ItemData();
-                //mData.uiReference = this;
+                if (mData == null)
+                {
+                    mData = new ItemData();
+                    //mData.uiReference = this;
+                }
+                return mData;
             }
-            return mData;
+            set
+            {
+                mData = value;
+                //mData.uiReference = this;
+                SetData(mData);
+            }
         }
-        set
+
+        protected ItemData mData;
+
+        /// <summary>
+        /// if pickupOnClick is true the item can be picked up on Click event.
+        /// </summary>
+
+        void OnClick()
         {
-            mData = value;
-            //mData.uiReference = this;
-            SetData(mData);
+            Debug.Log("ON CLICK");
+
+            if (pickupOnClick) Pickup(addOnPickup);
         }
-    }
 
-   protected ItemData mData;
+        public virtual void SetData(ItemData itemData) { }
 
-    /// <summary>
-    /// if pickupOnClick is true the item can be picked up on Click event.
-    /// </summary>
+        /// <summary>
+        /// Convenient method to use it to pickup items.
+        /// </summary>
 
-   void OnClick()
-    {
-        Debug.Log("ON CLICK");
+        public void Pickup(bool addToContainer)
+        {
+            if (onPickup != null) onPickup(itemData);
 
-        if (pickupOnClick) Pickup(addOnPickup);
-    } 
+            //if (addToContainer) GetItemsContainerInserter.instance.GetGameItem(new List<ItemData>(new ItemData[1] { itemData }));
 
-    public virtual void SetData(ItemData itemData) { }
-
-    /// <summary>
-    /// Convenient method to use it to pickup items.
-    /// </summary>
-
-    public void Pickup(bool addToContainer)
-    {
-        if (onPickup != null) onPickup(itemData);
-
-        //if (addToContainer) GetItemsContainerInserter.instance.GetGameItem(new List<ItemData>(new ItemData[1] { itemData }));
-
-        if (destroyOnPickup) GameObject.Destroy(gameObject);
+            if (destroyOnPickup) GameObject.Destroy(gameObject);
+        }
     }
 }

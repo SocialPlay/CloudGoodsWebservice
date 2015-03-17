@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using CloudGoods.Models;
 
-namespace SocialPlay.Generic
+namespace SocialPlay.Utilities
 {
 	public interface IGridLoader
 	{

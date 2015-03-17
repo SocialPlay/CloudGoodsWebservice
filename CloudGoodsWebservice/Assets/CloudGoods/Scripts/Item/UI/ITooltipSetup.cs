@@ -1,7 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public interface ITooltipSetup {
+namespace CloudGoods.Item.UI
+{
 
-    string Setup();
+    public interface ITooltipSetup
+    {
+
+        string Setup();
+    }
 }

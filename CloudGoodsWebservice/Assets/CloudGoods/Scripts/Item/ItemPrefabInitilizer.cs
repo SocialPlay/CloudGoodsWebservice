@@ -4,35 +4,36 @@ using System.Collections.Generic;
 using CloudGoods.Models;
 using CloudGoods;
 
-
-public class ItemPrefabInitilizer
+namespace CloudGoods.Item
 {
-
-    public static GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
+    public class ItemPrefabInitilizer
     {
-        var prefab = (defaultPrefab != null ? defaultPrefab : CloudGoodsSettings.DefaultItemDrop);
-        foreach (var dropPrefab in CloudGoodsSettings.ExtraItemPrefabs)
 
+        public static GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
         {
-            if (IsPrefabForItem(itemData, dropPrefab))
+            var prefab = (defaultPrefab != null ? defaultPrefab : CloudGoodsSettings.DefaultItemDrop);
+            foreach (var dropPrefab in CloudGoodsSettings.ExtraItemPrefabs)
             {
-                prefab = dropPrefab.prefab;
+                if (IsPrefabForItem(itemData, dropPrefab))
+                {
+                    prefab = dropPrefab.prefab;
+                }
             }
+            return prefab;
         }
-        return prefab;
-    }
 
-    static bool IsPrefabForItem(ItemData itemData, DropPrefab dropPrefab)
-    {
-        return false;
-    }
+        static bool IsPrefabForItem(ItemData itemData, DropPrefab dropPrefab)
+        {
+            return false;
+        }
 
-    [System.Serializable]
-    public class DropPrefab
-    {
-        public GameObject prefab;
-    }
+        [System.Serializable]
+        public class DropPrefab
+        {
+            public GameObject prefab;
+        }
 
+    }
 }
 
 

@@ -69,14 +69,13 @@
      <Compile Include="Assets\CloudGoods\Scripts\Item\ItemDataSelector.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\ItemPrefabInitilizer.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ITooltipSetup.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\IgnoreRaycast.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ItemDataDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityItemDataDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDragComponent.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDropComponent.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\IGridLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\UIGridLoader.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Utilities\IgnoreRaycast.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\InputValueChange.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\ItemTextureCache.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\CallObjectCreator.cs" />

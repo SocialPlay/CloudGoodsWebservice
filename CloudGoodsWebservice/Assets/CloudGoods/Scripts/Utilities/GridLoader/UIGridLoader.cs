@@ -2,27 +2,28 @@
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using SocialPlay.Generic;
+using SocialPlay.Utilities;
 using CloudGoods.Models;
 
-
-
-class UIGridLoader : MonoBehaviour, IGridLoader
+namespace CloudGoods.Utilities
 {
-    public Transform grid = null;
-    public GameObject itemPrefab = null;
-
-
-    public event Action<PaidCurrencyBundleItem, GameObject> ItemAdded;
-
-    public void LoadGrid(List<PaidCurrencyBundleItem> PaidCurrenyBundles)
+    class UIGridLoader : MonoBehaviour, IGridLoader
     {
-        foreach (PaidCurrencyBundleItem PaidCurrencyBundle in PaidCurrenyBundles)
+        public Transform grid = null;
+        public GameObject itemPrefab = null;
+
+
+        public event Action<PaidCurrencyBundleItem, GameObject> ItemAdded;
+
+        public void LoadGrid(List<PaidCurrencyBundleItem> PaidCurrenyBundles)
         {
-            GameObject gItem = Instantiate(itemPrefab) as GameObject;
-            gItem.transform.SetParent(grid, false);
-            if (ItemAdded != null)
-                ItemAdded(PaidCurrencyBundle, gItem);
+            foreach (PaidCurrencyBundleItem PaidCurrencyBundle in PaidCurrenyBundles)
+            {
+                GameObject gItem = Instantiate(itemPrefab) as GameObject;
+                gItem.transform.SetParent(grid, false);
+                if (ItemAdded != null)
+                    ItemAdded(PaidCurrencyBundle, gItem);
+            }
         }
     }
 }

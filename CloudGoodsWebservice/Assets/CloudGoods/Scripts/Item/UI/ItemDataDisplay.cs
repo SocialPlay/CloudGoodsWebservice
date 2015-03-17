@@ -3,92 +3,98 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using CloudGoods.Emuns;
 using CloudGoods.Container;
+using CloudGoods.Item;
+using CloudGoods.Utilities;
 
-public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+namespace CloudGoods.Item.UI
 {
-    internal ItemDataComponent itemObject;
-    internal ItemContainerDisplay holdingContainer;
 
-
-
-    //MouseClicks
-    private bool isOver = false;
-    private bool first_click = false;
-    private float running_timer = 0;
-    private float delay = 0.3f;
-
-  
-
-
-    public virtual void OnPointerEnter(PointerEventData eventData)
+    public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        isOver = true;
-        first_click = false;
-        running_timer = 0;
-    }
+        internal ItemDataComponent itemObject;
+        internal ItemContainerDisplay holdingContainer;
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isOver = false;
-        first_click = false;
-        running_timer = 0;
-    }
 
-    protected void Update()
-    {
-        SetAmountText(itemObject.itemData.Amount.ToString());
 
-        if (first_click)
+        //MouseClicks
+        private bool isOver = false;
+        private bool first_click = false;
+        private float running_timer = 0;
+        private float delay = 0.3f;
+
+
+
+
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            running_timer += Time.deltaTime;
+            isOver = true;
+            first_click = false;
+            running_timer = 0;
         }
-        if (!isOver) return;
-        if (Input.GetMouseButtonUp(0))
+
+        public void OnPointerExit(PointerEventData eventData)
         {
-            holdingContainer.PerformSingleClick(itemObject);
-            if (!first_click)
+            isOver = false;
+            first_click = false;
+            running_timer = 0;
+        }
+
+        protected void Update()
+        {
+            SetAmountText(itemObject.itemData.Amount.ToString());
+
+            if (first_click)
             {
-                first_click = false;
-                if (running_timer <= delay)
+                running_timer += Time.deltaTime;
+            }
+            if (!isOver) return;
+            if (Input.GetMouseButtonUp(0))
+            {
+                holdingContainer.PerformSingleClick(itemObject);
+                if (!first_click)
                 {
-                    holdingContainer.PerformDoubleClick(itemObject);
+                    first_click = false;
+                    if (running_timer <= delay)
+                    {
+                        holdingContainer.PerformDoubleClick(itemObject);
+                    }
+                }
+                else
+                {
+                    first_click = true;
                 }
             }
-            else
+            else if (Input.GetMouseButtonUp(1))
             {
-                first_click = true;
+                holdingContainer.PerformRightClick(itemObject);
             }
         }
-        else if (Input.GetMouseButtonUp(1))
+
+
+        public void Start()
         {
-            holdingContainer.PerformRightClick(itemObject);
+            holdingContainer = this.transform.GetComponentInParent<ItemContainerDisplay>();
+            itemObject = this.GetComponent<ItemDataComponent>();
+
+
+            SetAmountText(itemObject.itemData.Amount.ToString());
+            ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.ImageName, OnReceivedItemTexture);
+            //SetFrameColor(ItemQuailityColorSelector.GetColorForItem(itemObject.itemData));
         }
-    }
 
-
-    public void Start()
-    {
-        holdingContainer = this.transform.GetComponentInParent<ItemContainerDisplay>();
-        itemObject = this.GetComponent<ItemDataComponent>();
-
-
-        SetAmountText(itemObject.itemData.Amount.ToString());
-        ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.ImageName, OnReceivedItemTexture);
-        //SetFrameColor(ItemQuailityColorSelector.GetColorForItem(itemObject.itemData));
-    }
-
-    void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)
-    {
-        if (statusMsg != ImageStatus.Error)
+        void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)
         {
-            UpdateTexture(texture);
+            if (statusMsg != ImageStatus.Error)
+            {
+                UpdateTexture(texture);
+            }
         }
+
+        public abstract void UpdateTexture(Texture2D newTexture);
+
+        public abstract void SetFrameColor(Color newColor);
+
+        public abstract void SetAmountText(string newAmount);
+
     }
-
-    public abstract void UpdateTexture(Texture2D newTexture);
-
-    public abstract void SetFrameColor(Color newColor);
-
-    public abstract void SetAmountText(string newAmount);
-
 }

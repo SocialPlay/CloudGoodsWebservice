@@ -6,25 +6,30 @@ using System.Security.Cryptography;
 using CloudGoods;
 using CloudGoods.Webservice;
 
-public class StandardHashCreator : HashCreator {
+namespace CloudGoods.Webservice
+{
 
-    public string CreateHash(params string[] values)
+    public class StandardHashCreator : HashCreator
     {
-        string signatureRawData = "";
 
-        foreach (string value in values)
+        public string CreateHash(params string[] values)
         {
-            signatureRawData += value;
-        }
+            string signatureRawData = "";
 
-        byte[] signature = Encoding.UTF8.GetBytes(signatureRawData);
+            foreach (string value in values)
+            {
+                signatureRawData += value;
+            }
 
-        using (HMACSHA256 hmac = new HMACSHA256(Encoding.ASCII.GetBytes(CloudGoodsSettings.AppSecret)))
-        {
-            byte[] signatureBytes = hmac.ComputeHash(signature);
-            string requestSignatureBase64String = Convert.ToBase64String(signatureBytes);
+            byte[] signature = Encoding.UTF8.GetBytes(signatureRawData);
 
-            return requestSignatureBase64String;
+            using (HMACSHA256 hmac = new HMACSHA256(Encoding.ASCII.GetBytes(CloudGoodsSettings.AppSecret)))
+            {
+                byte[] signatureBytes = hmac.ComputeHash(signature);
+                string requestSignatureBase64String = Convert.ToBase64String(signatureBytes);
+
+                return requestSignatureBase64String;
+            }
         }
     }
 }

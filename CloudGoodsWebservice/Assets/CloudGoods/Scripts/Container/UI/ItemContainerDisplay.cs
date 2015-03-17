@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using CloudGoods.Models;
 using CloudGoods;
+using CloudGoods.Item.UI;
+using CloudGoods.Item;
 
 namespace CloudGoods.Container
 {
