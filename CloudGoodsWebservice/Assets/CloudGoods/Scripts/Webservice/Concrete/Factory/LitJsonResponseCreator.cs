@@ -115,7 +115,7 @@ namespace CloudGoods.Webservice
         }
 
         #endregion
-        }
+        
 
 
         public ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string responseData)

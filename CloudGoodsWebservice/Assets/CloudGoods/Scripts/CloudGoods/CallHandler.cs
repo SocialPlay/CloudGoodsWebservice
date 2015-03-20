@@ -68,6 +68,7 @@ namespace CloudGoods
             }));
         }
 
+        #region Items
         public static void GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
         {
             Instance._GetUserItems(location, callback);
@@ -155,6 +156,9 @@ namespace CloudGoods
                 callback(responseCreator.CreateUpdatedStacksResponse(x));
             }));
         }
+        #endregion
+
+        #region Item Voucher
 
         public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
         {
@@ -277,7 +281,7 @@ namespace CloudGoods
             }));
         }
 
-
+        #endregion
         #region Coroutines
 
         IEnumerator ServiceGetString(WWW www, Action<string> callback)
