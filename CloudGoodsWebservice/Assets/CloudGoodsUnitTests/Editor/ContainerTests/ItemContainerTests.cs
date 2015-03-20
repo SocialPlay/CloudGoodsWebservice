@@ -23,7 +23,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void GetContainerAddState_ValidAddItem_ReturnsAdd()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(true, false, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 11, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 11, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(ContainerMoveState.ActionState.Add, container.GetContainerAddState(itemData).ContainerActionState);
     }
@@ -32,7 +32,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void GetContainerAddState_RestrictedItem_ReturnsNo()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(true, false, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(ContainerMoveState.ActionState.No, container.GetContainerAddState(itemData).ContainerActionState);
     }
@@ -41,7 +41,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void GetContainerAddState_NoRestriction_ReturnsAdd()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(ContainerMoveState.ActionState.Add, container.GetContainerAddState(itemData).ContainerActionState);
     }
@@ -50,7 +50,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void GetContainerRemoveState_ValidRemoveItem_ReturnsRemove()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, true, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 11, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 11, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(ContainerMoveState.ActionState.Remove, container.GetContainerRemoveState(itemData).ContainerActionState);
     }
@@ -59,7 +59,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void GetContainerRemoveState_RestrictedItem_ReturnsNo()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, true, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(ContainerMoveState.ActionState.No, container.GetContainerRemoveState(itemData).ContainerActionState);
     }
@@ -68,7 +68,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void GetContainerRemoveState_NoRestriction_ReturnsRemove()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(ContainerMoveState.ActionState.Remove, container.GetContainerRemoveState(itemData).ContainerActionState);
     }
@@ -77,7 +77,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void Contains_ItemDataExists_Returns10()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
         container.Add(itemData);
 
@@ -88,7 +88,7 @@ public class ItemContainerTests : MonoBehaviour {
     public void Contains_ItemDataDoesntExist_Returns0()
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, ItemContainers);
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 10, 10, 0, "Test Item", "123456", false);
 
         Assert.AreEqual(0, container.Contains(itemData));
     }

@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CloudGoods.Models;
 
 namespace CloudGoods.Container
 {
 
     public interface IContainerAddAction
     {
-        void AddItem(CloudGoods.Models.ItemData addItem, int amount, bool isSave);
+        void AddItem(OwnedItemInformation addItem, int amount, bool isSave);
     }
 }

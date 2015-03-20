@@ -78,7 +78,7 @@ namespace CloudGoods.Item.UI
 
 
             SetAmountText(itemObject.itemData.Amount.ToString());
-            ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.ImageName, OnReceivedItemTexture);
+            ItemTextureCache.Instance.GetItemTexture(itemObject.itemData.Information.ImageName, OnReceivedItemTexture);
             //SetFrameColor(ItemQuailityColorSelector.GetColorForItem(itemObject.itemData));
         }
 

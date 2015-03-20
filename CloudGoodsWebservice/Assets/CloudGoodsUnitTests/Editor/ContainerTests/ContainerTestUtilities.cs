@@ -5,7 +5,8 @@ using CloudGoods.Models;
 using CloudGoods.Container;
 using CloudGoods.Container.Restrcitions;
 
-public class ContainerTestUtilities  {
+public class ContainerTestUtilities
+{
 
     public ItemContainer SetUpContainer(bool isRestrictedAdd, bool isRestrictedRemove, List<ItemContainer> listContainer = null)
     {
@@ -33,30 +34,33 @@ public class ContainerTestUtilities  {
         return container;
     }
 
-    public CloudGoods.Models.ItemData CreateItemData(int amount, int classId, int collectionId, int energy, int id, int location, string name, string stackLocationId, bool isLocked)
+    public OwnedItemInformation CreateItemData(int amount, int classId, int collectionId, int energy, int id, int location, string name, string stackLocationId, bool isLocked)
     {
-        ItemData tmpData = new ItemData()
+        OwnedItemInformation tmpData = new OwnedItemInformation()
         {
             Amount = amount,
-            ClassId = classId,
-            CollectionId = collectionId,
-            Detail = "Some Details Here",
-            Energy = energy,
-            Id = id,
             Location = location,
-            Name = name,
             StackLocationId = stackLocationId,
-            IsLocked = isLocked
+            IsLocked = isLocked,
+            Information = new ItemInformation
+            {
+                ClassId = classId,
+                CollectionId = collectionId,
+                Detail = "Some Details Here",
+                Energy = energy,
+                Id = id,
+                Name = name
+            }
         };
 
         for (int i = 0; i < 3; i++)
         {
-            tmpData.Behaviours.Add(new ItemData.Behaviour() { Name = i.ToString(), Id = i });
+            tmpData.Information.Behaviours.Add(new ItemInformation.Behaviour() { Name = i.ToString(), Id = i });
         }
 
         for (int i = 0; i < 3; i++)
         {
-            tmpData.Tags.Add(new ItemData.Tag() { Name = i.ToString(), Id = i });
+            tmpData.Information.Tags.Add(new ItemInformation.Tag() { Name = i.ToString(), Id = i });
         }
 
         return tmpData;

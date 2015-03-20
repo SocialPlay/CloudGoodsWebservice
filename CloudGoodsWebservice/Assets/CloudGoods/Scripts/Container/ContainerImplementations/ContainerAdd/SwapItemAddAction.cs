@@ -21,12 +21,12 @@ namespace CloudGoods.Container
             itemContainer = GetComponent<ItemContainer>();
         }
 
-        public void AddItem(ItemData addItem, int amount, bool isSave)
+        public void AddItem(OwnedItemInformation addItem, int amount, bool isSave)
         {
             if (IsSwapNeeded())
             {
                 //Should only swap single item in container (first item in container items list)
-                ItemData swapItem = itemContainer.containerItems[swapIndex];
+                OwnedItemInformation swapItem = itemContainer.containerItems[swapIndex];
 
                 ItemContainerManager.MoveItem(swapItem, addItem.OwnerContainer);
                 AddItemToContainer(addItem, amount, isSave);
@@ -37,7 +37,7 @@ namespace CloudGoods.Container
             }
         }
 
-        void AddItemToContainer(ItemData addItem, int amount, bool isSave)
+        void AddItemToContainer(OwnedItemInformation addItem, int amount, bool isSave)
         {
             if (amount == -1)
             {

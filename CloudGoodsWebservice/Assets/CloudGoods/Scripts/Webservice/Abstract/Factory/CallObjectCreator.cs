@@ -45,5 +45,7 @@ namespace CloudGoods.Webservice
         int GetTimestamp();
 
         string GenerateNonce();
+
+        WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request);
     }
 }

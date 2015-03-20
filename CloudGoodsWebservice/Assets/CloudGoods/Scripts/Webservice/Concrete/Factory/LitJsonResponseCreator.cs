@@ -23,9 +23,9 @@ namespace CloudGoods.Webservice
 
         #region Item Management
 
-        public List<ItemData> CreateItemDataListResponse(string responseData)
+        public List<InstancedItemInformation> CreateItemDataListResponse(string responseData)
         {
-            return JsonMapper.ToObject<List<ItemData>>(responseData);
+            return JsonMapper.ToObject<List<InstancedItemInformation>>(responseData);
         }
 
         public UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData)
@@ -124,6 +124,13 @@ namespace CloudGoods.Webservice
         }
 
         #endregion
+        
+
+
+        public ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string responseData)
+        {
+            return JsonMapper.ToObject<ItemBundlePurchaseResponse>(responseData);
+        }
     }
 
     public class WebserviceException : Exception

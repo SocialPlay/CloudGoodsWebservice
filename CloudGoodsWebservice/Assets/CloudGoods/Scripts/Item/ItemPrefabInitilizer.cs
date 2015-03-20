@@ -9,7 +9,7 @@ namespace CloudGoods.Item
     public class ItemPrefabInitilizer
     {
 
-        public static GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
+        public static GameObject GetPrefabToInstantiate(ItemInformation itemData, GameObject defaultPrefab = null)
         {
             var prefab = (defaultPrefab != null ? defaultPrefab : CloudGoodsSettings.DefaultItemDrop);
             foreach (var dropPrefab in CloudGoodsSettings.ExtraItemPrefabs)
@@ -22,7 +22,7 @@ namespace CloudGoods.Item
             return prefab;
         }
 
-        static bool IsPrefabForItem(ItemData itemData, DropPrefab dropPrefab)
+        static bool IsPrefabForItem(ItemInformation itemData, DropPrefab dropPrefab)
         {
             return false;
         }

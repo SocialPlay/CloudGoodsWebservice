@@ -12,7 +12,7 @@ namespace CloudGoods.Container
     public class ItemContainerManager
     {
 
-        public static ContainerMoveState.ActionState AddItem(ItemData addItem, ItemContainer targetContainer)
+        public static ContainerMoveState.ActionState AddItem(OwnedItemInformation addItem, ItemContainer targetContainer)
         {
             if (addItem.IsLocked)
                 return ContainerMoveState.ActionState.No;
@@ -35,7 +35,7 @@ namespace CloudGoods.Container
             return targetAddState.ContainerActionState;
         }
 
-        public static ContainerMoveState.ActionState MoveItem(ItemData movingItemData, ItemContainer targetContainer)
+        public static ContainerMoveState.ActionState MoveItem(OwnedItemInformation movingItemData, ItemContainer targetContainer)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace CloudGoods.Container
                 {
                     case ContainerMoveState.ActionState.Add:
 
-                        ItemData newItemData = movingItemData;
+                        OwnedItemInformation newItemData = movingItemData;
 
                         if (movingItemData.OwnerContainer != null)
                         {
@@ -82,7 +82,7 @@ namespace CloudGoods.Container
         }
 
 
-        public static ContainerMoveState.ActionState RemoveItem(ItemData RemoveItemData, ItemContainer TargetContainer)
+        public static ContainerMoveState.ActionState RemoveItem(OwnedItemInformation RemoveItemData, ItemContainer TargetContainer)
         {
 
             if (RemoveItemData.IsLocked)

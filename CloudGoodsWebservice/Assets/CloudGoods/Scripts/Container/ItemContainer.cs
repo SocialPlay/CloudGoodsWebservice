@@ -17,16 +17,16 @@ namespace CloudGoods.Container
 
         public PersistentItemContainer ItemLoader;
 
-        public List<ItemData> containerItems = new List<ItemData>();
+        public List<OwnedItemInformation> containerItems = new List<OwnedItemInformation>();
 
         public List<IContainerRestriction> ContainerAddRestrictions = new List<IContainerRestriction>();
         public List<IContainerRestriction> ContainerRemoveRestrictions = new List<IContainerRestriction>();
 
         public IContainerAddAction ContainerAddAction;
 
-        public event Action<ItemData, bool> AddedItem;
-        public event Action<ItemData, bool> ModifiedItem;
-        public event Action<ItemData, int, bool> RemovedItem;
+        public event Action<OwnedItemInformation, bool> AddedItem;
+        public event Action<OwnedItemInformation, bool> ModifiedItem;
+        public event Action<OwnedItemInformation, int, bool> RemovedItem;
         public event Action ClearItems;
 
         private ItemContainerRestrictor restriction = null;
@@ -53,7 +53,7 @@ namespace CloudGoods.Container
             RefreshContainer();
         }
 
-        public void ModifiedItemEvent(ItemData item, bool isSave)
+        public void ModifiedItemEvent(OwnedItemInformation item, bool isSave)
         {
             if (ModifiedItem != null)
             {
@@ -69,7 +69,7 @@ namespace CloudGoods.Container
             }
         }
 
-        public void AddItemEvent(ItemData item, bool isSave)
+        public void AddItemEvent(OwnedItemInformation item, bool isSave)
         {
             if (AddedItem != null)
             {
@@ -77,7 +77,7 @@ namespace CloudGoods.Container
             }
         }
 
-        public void RemoveItemEvent(ItemData item, int amount, bool isMoving)
+        public void RemoveItemEvent(OwnedItemInformation item, int amount, bool isMoving)
         {
             if (RemovedItem != null)
             {
@@ -85,7 +85,7 @@ namespace CloudGoods.Container
             }
         }
 
-        public ContainerMoveState GetContainerAddState(ItemData itemData)
+        public ContainerMoveState GetContainerAddState(OwnedItemInformation itemData)
         {
             if (ContainerAddRestrictions.Count > 0)
             {
@@ -99,7 +99,7 @@ namespace CloudGoods.Container
             return MyContainerAddState(itemData);
         }
 
-        public ContainerMoveState GetContainerRemoveState(ItemData itemData)
+        public ContainerMoveState GetContainerRemoveState(OwnedItemInformation itemData)
         {
             if (ContainerRemoveRestrictions.Count > 0)
             {
@@ -113,13 +113,13 @@ namespace CloudGoods.Container
             return new ContainerMoveState(ContainerMoveState.ActionState.Remove);
         }
 
-        protected ContainerMoveState MyContainerAddState(ItemData modified)
+        protected ContainerMoveState MyContainerAddState(OwnedItemInformation modified)
         {
             int addAbleAmount = modified.Amount;
 
             if (IsItemQuantityLimited == true)
             {
-                foreach (ItemData item in containerItems)
+                foreach (OwnedItemInformation item in containerItems)
                 {
                     if (item.IsSameItemAs(modified))
                     {
@@ -134,13 +134,13 @@ namespace CloudGoods.Container
             return new ContainerMoveState(ContainerMoveState.ActionState.Add, addAbleAmount);
         }
 
-        public void Add(ItemData itemData, int amount = -1, bool isSave = true)
+        public void Add(OwnedItemInformation itemData, int amount = -1, bool isSave = true)
         {
             ContainerAddAction.AddItem(itemData, amount, isSave);
         }
 
 
-        public void Remove(ItemData itemData, bool isMoving, int amount = -1)
+        public void Remove(OwnedItemInformation itemData, bool isMoving, int amount = -1)
         {
             if (ItemContainerStackRestrictor.Restrictor != null)
             {
@@ -153,9 +153,9 @@ namespace CloudGoods.Container
             RemoveItem(itemData, isMoving, amount);
         }
 
-        protected void RemoveItem(ItemData modified, bool isMoving, int amount = -1)
+        protected void RemoveItem(OwnedItemInformation modified, bool isMoving, int amount = -1)
         {
-            foreach (ItemData item in containerItems)
+            foreach (OwnedItemInformation item in containerItems)
             {
                 if (item.IsSameItemAs(modified))
                 {
@@ -171,9 +171,9 @@ namespace CloudGoods.Container
             return;
         }
 
-        public int Contains(ItemData modified)
+        public int Contains(OwnedItemInformation modified)
         {
-            foreach (ItemData item in containerItems)
+            foreach (OwnedItemInformation item in containerItems)
             {
                 if (item.IsSameItemAs(modified))
                 {
@@ -206,7 +206,7 @@ namespace CloudGoods.Container
             {
                 IsItemInContainer = false;
 
-                ItemData givenItemData;
+                OwnedItemInformation givenItemData;
 
                 if (!string.IsNullOrEmpty(givenUserItem.StackLocationId))
                 {
@@ -220,7 +220,7 @@ namespace CloudGoods.Container
                 }
                 else
                 {
-                    givenItemData = containerItems.FirstOrDefault(x => x.Id == givenUserItem.ItemId);
+                    givenItemData = containerItems.FirstOrDefault(x => x.Information.Id == givenUserItem.ItemId);
 
                     if (givenItemData != null)
                     {

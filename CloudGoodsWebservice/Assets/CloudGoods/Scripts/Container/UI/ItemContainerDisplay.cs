@@ -56,13 +56,13 @@ namespace CloudGoods.Container
             MyContainer.ClearItems -= ClearItems;
         }
 
-        public virtual void AddedItem(ItemData itemData, bool isSaving)
+        public virtual void AddedItem(OwnedItemInformation itemData, bool isSaving)
         {
             GameObject newItem = GameObject.Instantiate(CloudGoodsSettings.DefaultUIItem) as GameObject;
             ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
             newDisplay.itemObject = newItem.GetComponent<ItemDataComponent>();
             newItem.GetComponent<ItemDataComponent>().itemData = itemData;
-            newItem.name = itemData.Name;
+            newItem.name = itemData.Information.Name;
             newItem.transform.SetParent(ChildTarget);
             newItem.transform.localPosition = Vector3.zero;
             newItem.transform.localScale = Vector3.one;
@@ -70,7 +70,7 @@ namespace CloudGoods.Container
         }
 
 
-        public virtual void ModifiedItem(ItemData itemData, bool isSaving)
+        public virtual void ModifiedItem(OwnedItemInformation itemData, bool isSaving)
         {
             foreach (ItemDataDisplay display in currentDisplayObjects)
             {
@@ -84,7 +84,7 @@ namespace CloudGoods.Container
         }
 
 
-        public virtual void RemovedItem(ItemData itemData, int amount, bool arg3)
+        public virtual void RemovedItem(OwnedItemInformation itemData, int amount, bool arg3)
         {
             ItemDataDisplay selected = FindDisplayMatch(itemData);
             if (selected != null)
@@ -116,7 +116,7 @@ namespace CloudGoods.Container
             }
         }
 
-        public ItemDataDisplay FindDisplayMatch(ItemData item)
+        public ItemDataDisplay FindDisplayMatch(OwnedItemInformation item)
         {
             foreach (ItemDataDisplay itemDisplay in currentDisplayObjects)
             {

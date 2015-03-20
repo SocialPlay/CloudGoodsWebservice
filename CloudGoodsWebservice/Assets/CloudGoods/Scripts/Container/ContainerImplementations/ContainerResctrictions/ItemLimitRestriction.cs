@@ -18,7 +18,7 @@ namespace CloudGoods.Container.Restrcitions
             RestrictedContainer.ContainerAddRestrictions.Add(this);
         }
 
-        public bool IsRestricted(ContainerAction containerAction, ItemData itemData)
+        public bool IsRestricted(ContainerAction containerAction, InstancedItemInformation itemData)
         {
             if (containerAction == ContainerAction.add)
             {
