@@ -177,6 +177,11 @@ namespace CloudGoods.Webservice
         {
             return GenerateWWWCall("StandardCurrency", new KeyValuePair<string, string> ("accessLocation", accessLocation.ToString()));
         }
+
+        public WWW CreateGetStoreItemsCall(string andTags, string orTags)
+        {
+            return GenerateWWWCall("StoreItems", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
+        }
     }
 }
 

@@ -5,7 +5,7 @@ using System;
 using LitJson;
 using CloudGoods;
 using CloudGoods.Models;
-using CloudGoods.Emuns;
+using CloudGoods.Enums;
 
 namespace CloudGoods.Container
 {

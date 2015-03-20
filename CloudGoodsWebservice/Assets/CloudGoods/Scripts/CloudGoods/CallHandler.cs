@@ -4,17 +4,145 @@ using System;
 using System.Collections.Generic;
 using LitJson;
 using CloudGoods.Models;
-using CloudGoods.Emuns;
+using CloudGoods.Enums;
 using CloudGoodsUtilities;
 using CloudGoods.Webservice;
+using CloudGoods.Utilities;
 
 namespace CloudGoods
 {
     public class CallHandler : MonoBehaviour
     {
+        static public event Action CloudGoodsInitilized;
+        static public event Action<string> onErrorEvent;
+        static public event Action onLogout;
+        static public event Action<UserResponse> OnUserRegister;
+        static public event Action<UserResponse> OnForgotPassword;
+        static public event Action<UserResponse> OnVerificationSent;
+        static public event Action<string> OnRegisteredUserToSession;
+        static public event Action<CloudGoodsUser> OnUserAuthorized;
+        static public event Action<List<StoreItem>> OnStoreListLoaded;
+        static public event Action<List<ItemBundle>> OnStoreItemBundleListLoaded;
+        static public event Action<List<ItemData>> OnItemsLoaded;
+        static public event Action<int> OnStandardCurrency;
+        static public event Action<int> OnPremiumCurrency;
+        static public event Action<string> OnStandardCurrencyName;
+        static public event Action<string> OnPremiumCurrencyName;
+        static public event Action<Texture2D> OnStandardCurrencyTexture;
+        static public event Action<Texture2D> OnPremiumCurrencyTexture;
+
+        static public int standardCurrency
+        {
+            get { return mFree; }
+            private set
+            {
+                if (mFree != value)
+                {
+                    mFree = value;
+                    if (OnStandardCurrency != null) OnStandardCurrency(mFree);
+                }
+            }
+        }
+        static public int premiumCurrency
+        {
+            get { return mPaid; }
+            private set
+            {
+                if (mPaid != value)
+                {
+                    mPaid = value;
+                    if (OnPremiumCurrency != null) OnPremiumCurrency(mPaid);
+                }
+            }
+        }
+        static public Texture2D standardCurrencyTexture
+        {
+            get
+            {
+                if (tFree != null)
+                    return tFree;
+                else
+                {
+                    if (isGettingWorldInfo == false)
+                    {
+                        GetCurrencyInfo(null);
+                        isGettingWorldInfo = true;
+                    }
+
+                    return null;
+                }
+            }
+        }
+        static public Texture2D premiumCurrencyTexture
+        {
+            get
+            {
+                if (tPaid != null)
+                    return tPaid;
+                else
+                {
+                    if (isGettingWorldInfo == false)
+                    {
+                        GetCurrencyInfo(null);
+                        isGettingWorldInfo = true;
+                    }
+
+                    return null;
+                }
+            }
+        }
+        static public string StandardCurrencyName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(sfree))
+                {
+                    return sfree;
+                }
+                else
+                {
+                    if (isGettingWorldInfo == false)
+                    {
+                        GetCurrencyInfo(null);
+                        isGettingWorldInfo = true;
+                    }
+
+                    return null;
+                }
+            }
+
+        }
+        static public string PremiumCurrencyName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(sPaid))
+                {
+                    return sPaid;
+                }
+                else
+                {
+                    if (isGettingWorldInfo == false)
+                    {
+                        GetCurrencyInfo(null);
+                        isGettingWorldInfo = true;
+                    }
+
+                    return null;
+                }
+            }
+        }
+
+        static bool isGettingWorldInfo = false;
+        static int mFree = 0;
+        static int mPaid = 0;
+        static Texture2D tFree;
+        static Texture2D tPaid;
+        static string sfree;
+        static string sPaid;
+
         public static string SessionId = "";
         public static int ServerTimeDifference = 0;
-        public static event Action CloudGoodsInitilized;
         public static CloudGoodsUser User;
 
         CallObjectCreator callObjectCreator = new WebAPICallObjectCreator();
@@ -224,7 +352,40 @@ namespace CloudGoods
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateCurrencyInfoCall(), x =>
                 {
-                    callback(responseCreator.CreateCurrencyInfoResponse(x));
+                    CurrencyInfoResponse response = responseCreator.CreateCurrencyInfoResponse(x);
+
+                    if (!string.IsNullOrEmpty(response.StandardCurrencyName))
+                    {
+                        sfree = response.StandardCurrencyName;
+                        if (OnStandardCurrencyName != null) OnStandardCurrencyName(sPaid);
+                    }
+
+                    if (!string.IsNullOrEmpty(response.PremiumCurrencyName))
+                    {
+                        sPaid = response.PremiumCurrencyName;
+                        if (OnPremiumCurrencyName != null) OnPremiumCurrencyName(sPaid);
+                    }
+
+                    if (!string.IsNullOrEmpty(response.PremiumCurrencyImage))
+                    {
+                        ItemTextureCache.Instance.GetItemTexture(response.PremiumCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                        {
+                            tPaid = texture;
+                            if (OnPremiumCurrencyTexture != null) OnPremiumCurrencyTexture(texture);
+                        });
+                    }
+
+                    if (!string.IsNullOrEmpty(response.StandardCurrencyImage))
+                    {
+                        ItemTextureCache.Instance.GetItemTexture(response.StandardCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                        {
+                            tFree = texture;
+                            if (OnStandardCurrencyTexture != null) OnStandardCurrencyTexture(texture);
+                        });
+                    }
+
+                    if (callback != null)
+                        callback(responseCreator.CreateCurrencyInfoResponse(x));
                 }));
         }
 
@@ -237,20 +398,46 @@ namespace CloudGoods
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBalanceCall(), x =>
                 {
-                    callback(responseCreator.CreateCurrencyBalanceResponse(x));
+                    CurrencyBalanceResponse balanceResponse = responseCreator.CreateCurrencyBalanceResponse(x);
+
+                    if(OnPremiumCurrency != null)
+                        CallHandler.OnPremiumCurrency(balanceResponse.Amount);
+
+                    if (callback != null)
+                        callback(balanceResponse);
+                        
                 }));
         }
 
-        public static void GetStandardCurrencyBalance(int accessLocation, Action<CurrencyBalanceResponse> callback)
+        public static void GetStandardCurrencyBalance(int accessLocation, Action<SimpleItemInfo> callback)
         {
             Instance._GetStandardCurrencyBalance(accessLocation, callback);
         }
 
-        private void _GetStandardCurrencyBalance(int accessLocation, Action<CurrencyBalanceResponse> callback)
+        private void _GetStandardCurrencyBalance(int accessLocation, Action<SimpleItemInfo> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStandardCurrencyBalanceCall(accessLocation), x =>
             {
-                callback(responseCreator.CreateCurrencyBalanceResponse(x));
+                SimpleItemInfo itemInfo = responseCreator.CreateSimpleItemInfoResponse(x);
+
+                if(OnStandardCurrency != null)
+                    CallHandler.OnStandardCurrency(itemInfo.Amount);
+
+                if (callback != null)
+                    callback(itemInfo);
+            }));
+        }
+
+        public static void GetStoreItems(Action<List<StoreItem>> callback, string andTags = null, string orTags = null)
+        {
+            Instance._GetStoreItems(andTags, orTags, callback);
+        }
+
+        private void _GetStoreItems(string andTags, string orTags, Action<List<StoreItem>> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetStoreItemsCall(andTags, orTags), x =>
+            {
+                callback(responseCreator.CreateGetStoreItemResponse(x));
             }));
         }
 

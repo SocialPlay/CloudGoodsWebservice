@@ -9,7 +9,6 @@ namespace CloudGoods.Webservice
 
     public interface ResponseCreator
     {
-
         CloudGoodsUser CreateLoginResponse(string responseData);
 
         List<ItemData> CreateItemDataListResponse(string responseData);
@@ -24,7 +23,9 @@ namespace CloudGoods.Webservice
 
         CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData);
 
+        SimpleItemInfo CreateSimpleItemInfoResponse(string responseData);
 
+        List<StoreItem> CreateGetStoreItemResponse(string responseData);
 
         bool IsValidData(string data);
 
