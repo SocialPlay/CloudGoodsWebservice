@@ -69,12 +69,12 @@ namespace CloudGoods
             }));
         }
 
-        public static void GetUserItems(int location, Action<List<ItemData>> callback)
+        public static void GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
         {
             Instance._GetUserItems(location, callback);
         }
 
-        private void _GetUserItems(int location, Action<List<ItemData>> callback)
+        private void _GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetUserItemsCallObject(location), x =>
             {
@@ -82,7 +82,7 @@ namespace CloudGoods
             }));
         }
 
-        public static void MoveItem(ItemData item, int location, int amountToMove, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public static void MoveItem(OwnedItemInformation item, int location, int amountToMove, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
         {
             List<MoveItemsRequest.MoveOrder> orders = new List<MoveItemsRequest.MoveOrder>(){
              new MoveItemsRequest.MoveOrder(){
@@ -222,6 +222,19 @@ namespace CloudGoods
                 callback(responseCreator.CreateItemBundlesResponse(x));
             }));
         }
+        public static void PurchaseItemBundle(int bundleId, int paymentType, int location, Action<ItemBundlePurchaseResponse> callback)
+        {
+            Instance._PurchaseItemBundle(bundleId, paymentType, location, callback);
+        }
+
+        private void _PurchaseItemBundle(int bundleId, int paymentType, int location, Action<ItemBundlePurchaseResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.ItemBundlePurchaseCall(new ItemBundlePurchaseRequest() { BundleID = bundleId, PaymentType = paymentType, Location = location }), x =>
+            {
+                callback(responseCreator.CreateItemBundlePurchaseResponse(x));
+            }));
+        }
+
 
         #region Coroutines
 

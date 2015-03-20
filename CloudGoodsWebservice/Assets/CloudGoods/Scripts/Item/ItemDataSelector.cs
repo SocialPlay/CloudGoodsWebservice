@@ -8,6 +8,6 @@ namespace CloudGoods.Item
     [System.Serializable]
     public abstract class ItemDataSelector
     {
-        public abstract bool isItemSelected(ItemData item, IEnumerable tagList, bool isInverted = false);
+        public abstract bool isItemSelected(ItemInformation item, IEnumerable tagList, bool isInverted = false);
     }
 }

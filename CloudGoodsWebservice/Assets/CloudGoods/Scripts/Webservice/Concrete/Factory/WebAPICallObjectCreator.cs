@@ -167,6 +167,13 @@ namespace CloudGoods.Webservice
         {
             return GenerateWWWCall("ItemBundles", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
         }
+
+
+        public WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request)
+        {
+            return GenerateWWWPost("ItemBundlePurchase", request);
+           
+        }
     }
 }
 

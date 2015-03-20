@@ -20,11 +20,11 @@ namespace CloudGoods.Container.Restrcitions
             restrictedContainer.ContainerAddRestrictions.Add(this);
         }
 
-        public bool IsRestricted(ContainerAction action, ItemData itemData)
+        public bool IsRestricted(ContainerAction action, InstancedItemInformation itemData)
         {
             if (IsExcluded)
             {
-                if (ClassIDList.Exists(x => x == itemData.ClassId))
+                if (ClassIDList.Exists(x => x == itemData.Information.ClassId))
                 {
                     Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");
                     return true;
@@ -34,7 +34,7 @@ namespace CloudGoods.Container.Restrcitions
             }
             else
             {
-                if (ClassIDList.Exists(x => x == itemData.ClassId))
+                if (ClassIDList.Exists(x => x == itemData.Information.ClassId))
                     return false;
 
                 Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");

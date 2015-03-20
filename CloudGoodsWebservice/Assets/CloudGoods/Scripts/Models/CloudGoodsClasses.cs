@@ -128,13 +128,7 @@ namespace CloudGoods.Models
 
     public class ItemVouchersResponse
     {
-        public List<ItemVoucher> Vouchers;
-
-        public class ItemVoucher
-        {
-            public ItemData Item;
-            public int Id;
-        }
+        public List<VoucherItemInformation> Vouchers;     
     }
 
 
@@ -272,53 +266,7 @@ namespace CloudGoods.Models
 
         public Dictionary<string, string> CreditPlatformIDs = new Dictionary<string, string>();
     }
-
-
-    public class ItemBundle
-    {
-        public int ID;
-        public int CreditPrice;
-        public int CoinPrice;
-
-        //State 1 = Credit and Coin Purchaseable
-        //State 2 = Credit purchase only
-        //State 3 = Coin Purchase only
-        //State 4 = Free
-        //public CloudGoodsBundle State;
-
-        public string Name;
-        public string Description;
-        public string Image;
-
-        public List<BundleItem> bundleItems = new List<BundleItem>();
-    }
-
-    public class BundleItem
-    {
-        public int Quantity;
-        public int Quality;
-
-        public string Name;
-        public string Image;
-        public string Description;
-
-        public List<BundleItemDetails> bundleItemDetails = new List<BundleItemDetails>();
-    }
-
-    public class BundleItemDetails
-    {
-        public float Value;
-        public string BundleDetailName;
-    }
-
-    public class BundlePurchaseRequest
-    {
-        public int BundleID;
-        public string UserID;
-        public string ReceiptToken;
-        public int PaymentPlatform;
-    }
-
+    
     public class WorldCurrencyInfo
     {
         public string FreeCurrencyName;
@@ -366,7 +314,7 @@ namespace CloudGoods.Models
 
     public class GeneratedItems
     {
-        public List<ItemData> Items;
+        public List<ItemInformation> Items;
         public int GenerationID;
     }
 
@@ -393,16 +341,12 @@ namespace CloudGoods.Models
     }
 
 
-    [System.Serializable]
-    public class ItemData
+    public class ItemInformation
     {
-        public string StackLocationId;
         public int Id;
         public int CollectionId;
         public int ClassId;
         public string Name;
-        public int Amount;
-        public int Location;
         public string Detail;
         public int Energy;
         public int Quality;
@@ -412,8 +356,7 @@ namespace CloudGoods.Models
         public List<Behaviour> Behaviours = new List<Behaviour>();
         public List<Tag> Tags = new List<Tag>();
 
-        public ItemContainer OwnerContainer;
-        public bool IsLocked = false;
+
 
         public class Tag
         {
@@ -427,15 +370,70 @@ namespace CloudGoods.Models
             public int Id;
         }
 
-        public bool IsSameItemAs(ItemData other)
+    }
+
+
+    public class BundleItemInformation
+    {
+        public int Amount;
+        public ItemInformation Information;
+
+        public BundleItemInformation()
+        {
+            Information = new ItemInformation();
+        }
+    }
+
+    public class VoucherItemInformation
+    {
+        public int VoucherId;
+        public int Amount;
+        public ItemInformation Information;
+
+        public VoucherItemInformation()
+        {
+            Information = new ItemInformation();
+        }
+    }
+
+    public class InstancedItemInformation
+    {
+        public string StackLocationId;
+        public int Amount;
+        public int Location;
+        public ItemInformation Information;
+
+        public InstancedItemInformation()
+        {
+            Information = new ItemInformation();
+        }
+    }
+
+    public class OwnedItemInformation : InstancedItemInformation
+    {
+        public ItemContainer OwnerContainer;
+        public bool IsLocked = false;
+
+        public bool IsSameItemAs(InstancedItemInformation other)
         {
             if (this == null || other == null)
             {
                 return false;
             }
-            if (Id == other.Id)
+            if (Information. Id ==  other.Information.Id)
                 return true;
             else return false;
+        }   
+    }
+
+    public class PickedItemInformation
+    {
+        public int Amount;
+        public ItemInformation Information;
+
+        public PickedItemInformation()
+        {
+            Information = new ItemInformation();
         }
     }
 
@@ -449,10 +447,10 @@ namespace CloudGoods.Models
         public enum ActionState { Add, Swap, No, Remove }
         public ActionState ContainerActionState;
         public int PossibleAddAmount;
-        public ItemData PossibleSwapItem;
+        public ItemInformation PossibleSwapItem;
 
 
-        public ContainerMoveState(ActionState newState = ActionState.No, int possibleAddAmount = 0, ItemData possibleSwapItem = null)
+        public ContainerMoveState(ActionState newState = ActionState.No, int possibleAddAmount = 0, ItemInformation possibleSwapItem = null)
         {
             this.ContainerActionState = newState;
             this.PossibleAddAmount = possibleAddAmount;
@@ -489,7 +487,7 @@ namespace CloudGoods.Models
         protected List<ItemContainerStackRestrictions> restrictions = new List<ItemContainerStackRestrictions>();
 
 
-        public virtual int GetRestrictedAmount(ItemData data, ItemContainer target)
+        public virtual int GetRestrictedAmount(ItemInformation data, ItemContainer target)
         {
             restrictions = GetRestrictionsFor(target);
             foreach (ItemContainerStackRestrictions restriction in restrictions)
@@ -614,19 +612,48 @@ namespace CloudGoods.Models
     #region Item Bundles
     public class ItemBundlesResponse
     {
-        public List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();
+        public List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();   
+    }
 
-        public class ItemBundleInfo
+    public class ItemBundleInfo
+    {
+        public int Id;
+        public string Name;
+        public string Description;
+        public string Image;
+        public int PremiumPrice;
+        public int StandardPrice;
+        public List<ItemBundleItemInfo> Items = new List<ItemBundleItemInfo>();
+        public int State;
+
+        public class ItemBundleItemInfo
         {
-            public int Id;
-            public string Name;
-            public string Description;
-            public string Image;
-            public int CreditPrice;
-            public int CoinPrice;
-            public List<ItemData> items = new List<ItemData>();
-            public int State;
+            public int Amount;
+            public ItemInformation Information;
         }
     }
+
+    public class ItemBundlePurchaseResponse
+    {
+        public int StatusCode;
+        public SimpleItemInfo StandardCurrency;
+        public int PremiumBalance;
+
+
+        public List<SimpleItemInfo> purchasedItems = new List<SimpleItemInfo>();
+    }
+
+    public class ItemBundlePurchaseRequest : IRequestClass
+    {
+        public int BundleID;
+        public int PaymentType;
+        public int Location;
+
+        public string ToHashable()
+        {
+            return BundleID.ToString() + PaymentType.ToString() + Location;
+        }
+    }
+
     #endregion
 }

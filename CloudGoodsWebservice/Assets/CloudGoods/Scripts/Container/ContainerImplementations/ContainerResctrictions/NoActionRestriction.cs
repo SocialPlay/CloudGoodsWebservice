@@ -17,7 +17,7 @@ namespace CloudGoods.Container.Restrcitions
             restrictedContainer.ContainerAddRestrictions.Add(this);
         }
 
-        public bool IsRestricted(ContainerAction containerAction, ItemData itemData)
+        public bool IsRestricted(ContainerAction containerAction, InstancedItemInformation itemData)
         {
             Debug.LogWarning("Item Resticted for being added to or removed from container because it has a No Action Restriction");
             return true;

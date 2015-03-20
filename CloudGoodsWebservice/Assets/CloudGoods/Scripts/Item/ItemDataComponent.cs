@@ -9,20 +9,20 @@ namespace CloudGoods.Item
 {
     public class ItemDataComponent : MonoBehaviour
     {
-        public Action<ItemData> onPickup;
+        public Action<OwnedItemInformation> onPickup;
         public bool addOnPickup = true;
         public bool pickupOnClick = true;
         public bool destroyOnPickup = true;
         [HideInInspector]
         public bool isValid = true;
 
-        public ItemData itemData
+        public OwnedItemInformation itemData
         {
             get
             {
                 if (mData == null)
                 {
-                    mData = new ItemData();
+                    mData = new OwnedItemInformation();
                     //mData.uiReference = this;
                 }
                 return mData;
@@ -35,7 +35,7 @@ namespace CloudGoods.Item
             }
         }
 
-        protected ItemData mData;
+        protected OwnedItemInformation mData;
 
         /// <summary>
         /// if pickupOnClick is true the item can be picked up on Click event.
@@ -48,7 +48,7 @@ namespace CloudGoods.Item
             if (pickupOnClick) Pickup(addOnPickup);
         }
 
-        public virtual void SetData(ItemData itemData) { }
+        public virtual void SetData(OwnedItemInformation itemData) { }
 
         /// <summary>
         /// Convenient method to use it to pickup items.

@@ -22,20 +22,12 @@ namespace WebCallTests
             ItemBundles
         }
 
-        public enum ItemAction
-        {
-            move,
-            UpdateStackByFive,
-            UpdateStackToOne,
-            RemoveStack,
-            None
-        }
         string title = "";
         private static SystemTabs activeTab = SystemTabs.BaseItems;
-        public int voucherModifyamount = 0;
 
 
-        public static ItemAction CurrentAction;
+
+
 
 
 
@@ -66,37 +58,10 @@ namespace WebCallTests
             DisplayHelper.NewDisplayLine(debugString);
         }
 
-        private void UpdateItemById()
-        {
-            List<UpdateItemByIdRequest.UpdateOrderByID> infos = new List<UpdateItemByIdRequest.UpdateOrderByID>(){
-                new UpdateItemByIdRequest.UpdateOrderByID(){location = 0, itemId = 111542, amount = 5},
-                new UpdateItemByIdRequest.UpdateOrderByID(){location = 6, itemId = 111542, amount = 2}
-            };
-
-            CallHandler.UpdateItemsByIds(infos, ItemManagerCalls.DisplayUpdatedItems);
-        }
 
 
-        private void PerformCurrentAction(ItemData item)
-        {
-            switch (CurrentAction)
-            {
-                case ItemAction.move:
-                    ItemManagerCalls.MoveItem(item);
-                    break;
-                case ItemAction.UpdateStackByFive:
-                    ItemManagerCalls.AddFiveToStack(item);
-                    break;
-                case ItemAction.UpdateStackToOne:
-                    ItemManagerCalls.MakeStackSizeOne(item);
-                    break;
-                case ItemAction.RemoveStack:
-                    ItemManagerCalls.RemoveStack(item);
-                    break;
-                default:
-                    break;
-            }
-        }
+
+
 
 
 
@@ -149,156 +114,35 @@ namespace WebCallTests
             switch (activeTab)
             {
                 case SystemTabs.BaseItems:
-                    DisplayBaseItemCalls();
+                    ItemManagerCalls.Draw();
                     break;
                 case SystemTabs.ItemVouchers:
-                    DisplayItemVouchersCalls();
+                    ItemVouchersCalls.Draw();
                     break;
                 case SystemTabs.Store:
-                    DisplayStoreCalls();
+
                     break;
                 case SystemTabs.ItemBundles:
-                    DisplayItemBundlesCalls();
+                    ItemBundlesCalls.DrawGUI();
                     break;
             }
+            ItemManagerCalls.DrawItemDetails();
             GUILayout.EndVertical();
             GUILayout.EndArea();
         }
 
-        private void DisplayItemBundlesCalls()
-        {
-            if (GUILayout.Button("Get Item Bundles"))
-            {
-                ItemBundlesCalls.GetItemBundles();
-            }
-            DrawItemBundlesDetails();
-            GUILayout.FlexibleSpace();
-            DrawItemDetails();
-        }
 
 
 
-        private void DisplayStoreCalls()
-        {
-
-        }
-
-        private void DisplayItemVouchersCalls()
-        {
-            if (GUILayout.Button("Create Item Voucher"))
-            {
-                ItemVouchersCalls.CreateItemVoucher();
-            }
-            GUILayout.FlexibleSpace();
-            DrawItemVouchersDetails();
-            GUILayout.FlexibleSpace();
-            DrawItemDetails();
-
-        }
 
 
 
-        private void DisplayBaseItemCalls()
-        {
-            if (GUILayout.Button("Load users Items"))
-            {
-                ItemManagerCalls.LoadUserItems();
-            }
-            if (GUILayout.Button("Give User Item"))
-            {
-                UpdateItemById();
-            }
-            DrawItemDetails();
-        }
 
-        private void DrawItemDetails()
-        {
-            GUILayout.FlexibleSpace();
 
-            GUILayout.Label("Users Items");
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button(CurrentAction.ToReadable()))
-            {
-                CurrentAction = CurrentAction.Next();
-            }
-            if (CurrentAction == ItemAction.move)
-            {
-                if (GUILayout.Button((ItemManagerCalls.destinationLocation == 0 ? "(Vault)" : ItemManagerCalls.destinationLocation.ToString()), GUILayout.MaxWidth(140)))
-                {
-                    ItemManagerCalls.destinationLocation++;
-                    if (ItemManagerCalls.destinationLocation > 10)
-                    {
-                        ItemManagerCalls.destinationLocation = 0;
-                    }
-                }
-            }
 
-            GUILayout.EndHorizontal();
-            foreach (ItemData item in ItemManagerCalls.UsersItems)
-            {
-                if (GUILayout.Button(string.Format("{0}\nSLID:{3}\n  Amount:{1}\n  Location:{2}", item.Name, item.Amount, item.Location, item.StackLocationId)))
-                {
-                    PerformCurrentAction(item);
-                    return;
-                }
-            }
-        }
 
-        private void DrawItemVouchersDetails()
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(string.Format("Item Vouchers ({0})", ItemVouchersCalls.CurrentVouchers.Count));
-            if (GUILayout.Button("+"))
-            {
-                if (Input.GetKeyDown(KeyCode.LeftShift))
-                {
-                    voucherModifyamount += 10;
-                }
-                else
-                    voucherModifyamount++;
-            }
-            GUILayout.Label("Consume: " + (voucherModifyamount == 0 ? "all" : voucherModifyamount.ToString()));
-            if (GUILayout.Button("-"))
-            {
-                if (Input.GetKeyDown(KeyCode.LeftShift))
-                {
-                    voucherModifyamount -= 10;
-                }
-                else
-                    voucherModifyamount--;
-                if (voucherModifyamount < 0) voucherModifyamount = 0;
-            }
-            GUILayout.EndHorizontal();
-            int count = ItemVouchersCalls.CurrentVouchers.Count;
-            for (int i = count < 3 ? 0 : count - 3; i < count; i++)
-            {
-                GUILayout.BeginHorizontal();
-                ItemVouchersResponse.ItemVoucher voucher = ItemVouchersCalls.CurrentVouchers[i];
-                if (GUILayout.Button(string.Format("({0}) {1} : {2}", voucher.Id, voucher.Item.Id, voucher.Item.Amount)))
-                {
-                    ItemVouchersCalls.RedeemItemVoucher(voucher);
 
-                    return;
-                }
-                if (GUILayout.Button("Get", GUILayout.MaxWidth(100)))
-                {
-                    ItemVouchersCalls.GetItemVoucher(voucher.Id);
-                }
-                GUILayout.EndHorizontal();
-            }
-        }
 
-        private void DrawItemBundlesDetails()
-        {
-            GUILayout.Label(string.Format("Current Item Bundles ({0})",ItemBundlesCalls.bundles.Count));
-            foreach (ItemBundlesResponse.ItemBundleInfo info in ItemBundlesCalls.bundles)
-            {
-                if (GUILayout.Button(string.Format("Buy: {0}\nItems {1}", info.Name,info.items.Count)))
-                {
-                    ItemBundlesCalls.PurchaseItemBundle(info.Id);
-                }
-            }
-        }
     }
 
 
@@ -327,61 +171,154 @@ namespace WebCallTests
     }
 
 
-    internal class ItemManagerCalls
+    internal static class ItemManagerCalls
     {
-        public static List<ItemData> UsersItems = new List<ItemData>();
+
+        public enum ItemAction
+        {
+            move,
+            UpdateStackByFive,
+            UpdateStackToOne,
+            RemoveStack,
+            None
+        }
+
+        public static ItemAction CurrentAction;
+        public static List<OwnedItemInformation> UsersItems = new List<OwnedItemInformation>();
         public static int destinationLocation = 0;
 
-        public static void LoadUserItems()
+        public static void Draw()
         {
-            CallHandler.GetUserItems(0, delegate(List<ItemData> items)
+            if (GUILayout.Button("Load users Items"))
+            {
+                ItemManagerCalls.LoadUserItems();
+            }
+            if (GUILayout.Button("Give User Item"))
+            {
+                UpdateItemById();
+            }
+        }
+
+        public static void DrawItemDetails()
+        {
+            GUILayout.FlexibleSpace();
+
+            GUILayout.Label("Users Items");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button(CurrentAction.ToReadable()))
+            {
+                CurrentAction = CurrentAction.Next();
+            }
+            if (CurrentAction == ItemAction.move)
+            {
+                if (GUILayout.Button((ItemManagerCalls.destinationLocation == 0 ? "(Vault)" : ItemManagerCalls.destinationLocation.ToString()), GUILayout.MaxWidth(140)))
+                {
+                    ItemManagerCalls.destinationLocation++;
+                    if (ItemManagerCalls.destinationLocation > 10)
+                    {
+                        ItemManagerCalls.destinationLocation = 0;
+                    }
+                }
+            }
+
+            GUILayout.EndHorizontal();
+            foreach (OwnedItemInformation item in ItemManagerCalls.UsersItems)
+            {
+                if (GUILayout.Button(string.Format("{0}\nSLID:{3}\n  Amount:{1}\n  Location:{2}", item.Information.Name, item.Amount, item.Location, item.StackLocationId)))
+                {
+                    PerformCurrentAction(item);
+                    return;
+                }
+            }
+        }
+
+        static void PerformCurrentAction(OwnedItemInformation item)
+        {
+            switch (CurrentAction)
+            {
+                case ItemAction.move:
+                    ItemManagerCalls.MoveItem(item);
+                    break;
+                case ItemAction.UpdateStackByFive:
+                    ItemManagerCalls.AddFiveToStack(item);
+                    break;
+                case ItemAction.UpdateStackToOne:
+                    ItemManagerCalls.MakeStackSizeOne(item);
+                    break;
+                case ItemAction.RemoveStack:
+                    ItemManagerCalls.RemoveStack(item);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        static void UpdateItemById()
+        {
+            List<UpdateItemByIdRequest.UpdateOrderByID> infos = new List<UpdateItemByIdRequest.UpdateOrderByID>(){
+                new UpdateItemByIdRequest.UpdateOrderByID(){location = 0, itemId = 111542, amount = 50000},
+                new UpdateItemByIdRequest.UpdateOrderByID(){location = 6, itemId = 111542, amount = 2}
+            };
+
+            CallHandler.UpdateItemsByIds(infos, ItemManagerCalls.DisplayUpdatedItems);
+        }
+
+        static void LoadUserItems()
+        {
+            CallHandler.GetUserItems(0, delegate(List<InstancedItemInformation> items)
             {
                 DisplayItems(items);
             });
         }
 
-        public static void MoveItem(ItemData item)
+        static void MoveItem(OwnedItemInformation item)
         {
             CallHandler.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
             UsersItems.Remove(item);
         }
 
-        public static void RemoveStack(ItemData item)
+        static void RemoveStack(OwnedItemInformation item)
         {
             CallHandler.UpdateItemByStackIds(item.StackLocationId, -item.Amount, item.Location, DisplayUpdatedItems);
             UsersItems.Remove(item);
         }
 
-        public static void MakeStackSizeOne(ItemData item)
+        static void MakeStackSizeOne(OwnedItemInformation item)
         {
             CallHandler.UpdateItemByStackIds(item.StackLocationId, -(item.Amount - 1), item.Location, DisplayUpdatedItems);
             item.Amount = 1;
         }
 
-        public static void AddFiveToStack(ItemData item)
+        public static void AddFiveToStack(OwnedItemInformation item)
         {
             CallHandler.UpdateItemByStackIds(item.StackLocationId, 5, item.Location, DisplayUpdatedItems);
-            if (item.Amount < 5)
-                UsersItems.Remove(item);
-            else
-            {
-                item.Amount -= 5;
-            }
+
+            item.Amount += 5;
+
         }
 
-        public static void DisplayItems(List<ItemData> items)
+        static void DisplayItems(List<InstancedItemInformation> items)
         {
             string debugString = "Recived Items";
             UsersItems.Clear();
-            foreach (ItemData item in items)
+            foreach (InstancedItemInformation item in items)
             {
-                debugString += "\nName: " + item.Name;
+                if (item.Amount == 0) { items.Remove(item); continue; }
+                debugString += "\nName: " + item.Information.Name;
                 debugString += "\n    Amount:" + item.Amount;
-                debugString += "\n    Id: " + item.Id;
+                debugString += "\n    Id: " + item.Information.Id;
                 debugString += "\n    Location: " + item.Location.ToString();
-                debugString += "\n    Detail:" + item.Detail;
+                debugString += "\n    Detail:" + item.Information.Detail;
                 debugString += "\n    SLID:" + item.StackLocationId + "\n";
-                UsersItems.Add(item);
+                UsersItems.Add(new OwnedItemInformation()
+                {
+                    Location = item.Location,
+                    Amount = item.Amount,
+                    Information = item.Information,
+                    IsLocked = false,
+                    OwnerContainer = null,
+                    StackLocationId = item.StackLocationId
+                });
             }
             DisplayHelper.NewDisplayLine(debugString);
         }
@@ -400,41 +337,125 @@ namespace WebCallTests
             DisplayHelper.NewDisplayLine(debugString);
             foreach (var item in response.UpdatedStackIds)
             {
-                ItemData data = UsersItems.Find(x => x.StackLocationId == item.StackId);
+                InstancedItemInformation data = UsersItems.Find(x => x.StackLocationId == item.StackId);
                 if (data != null)
                 {
                     data.Amount = item.Amount;
                     data.Location = item.Location;
                 }
-                else
+                else if (item.Amount != 0)
                 {
-                    UsersItems.Add(new ItemData()
+                    UsersItems.Add(new OwnedItemInformation()
                     {
-                        Name = "---- Needs refresh -----",
-                        StackLocationId = item.StackId,
+                        Information = new ItemInformation()
+                        {
+                            Name = "---- Needs refresh -----"
+                        },
                         Location = item.Location,
-                        Amount = item.Amount
+                        StackLocationId = item.StackId,
+                        Amount = item.Amount,
+                        IsLocked = false,
+                        OwnerContainer = null
                     });
+
                 }
             }
 
+        }
+
+        public static string ToReadable(this ItemManagerCalls.ItemAction action)
+        {
+            switch (action)
+            {
+                case ItemManagerCalls.ItemAction.move:
+                    return "Move to";
+                case ItemManagerCalls.ItemAction.UpdateStackByFive:
+                    return "Add 5 to amount";
+                case ItemManagerCalls.ItemAction.UpdateStackToOne:
+                    return "Chnage amount to One";
+                case ItemManagerCalls.ItemAction.RemoveStack:
+                    return "Remove Stack";
+                default:
+                    return "Unknow Action";
+            }
+        }
+        public static ItemManagerCalls.ItemAction Next(this ItemManagerCalls.ItemAction action)
+        {
+            action += 1;
+            ItemManagerCalls.destinationLocation = 0;
+            if (action == ItemManagerCalls.ItemAction.None)
+            {
+                return 0;
+            }
+            return action;
         }
     }
 
     internal class ItemVouchersCalls
     {
-        public static List<ItemVouchersResponse.ItemVoucher> CurrentVouchers = new List<ItemVouchersResponse.ItemVoucher>();
+        static List<VoucherItemInformation> CurrentVouchers = new List<VoucherItemInformation>();
+        static int voucherModifyamount = 0;
 
-        public static void CreateItemVoucher()
+        public static void Draw()
+        {
+            if (GUILayout.Button("Create Item Vouchers"))
+            {
+                CreateItemVoucher();
+            }
+            GUILayout.Label(string.Format("Item Vouchers ({0})", CurrentVouchers.Count));
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("+"))
+            {
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                {
+                    voucherModifyamount += 10;
+                }
+                else
+                    voucherModifyamount++;
+            }
+            GUILayout.Label("Consume: " + (voucherModifyamount == 0 ? "all" : voucherModifyamount.ToString()));
+            if (GUILayout.Button("-"))
+            {
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                {
+                    voucherModifyamount -= 10;
+                }
+                else
+                    voucherModifyamount--;
+                if (voucherModifyamount < 0) voucherModifyamount = 0;
+            }
+            GUILayout.EndHorizontal();
+            int count = CurrentVouchers.Count;
+            int shown = 5;
+            for (int i = count < shown ? 0 : count - shown; i < count; i++)
+            {
+                GUILayout.BeginHorizontal();
+                VoucherItemInformation voucher = CurrentVouchers[i];
+                if (GUILayout.Button(string.Format("({0}) {1} : {2}", voucher.VoucherId, voucher.Information.Id, voucher.Information.Name)))
+                {
+                    RedeemItemVoucher(voucher);
+
+                    return;
+                }
+                if (GUILayout.Button("Get", GUILayout.MaxWidth(100)))
+                {
+                    GetItemVoucher(voucher.VoucherId);
+                }
+                GUILayout.EndHorizontal();
+            }
+        }
+
+
+        static void CreateItemVoucher()
         {
             CallHandler.CreateItemVouchers(1, 700, DisaplayItemVouchers);
 
         }
 
-        public static void RedeemItemVoucher(ItemVouchersResponse.ItemVoucher voucher)
+        static void RedeemItemVoucher(VoucherItemInformation voucher)
         {
 
-            List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Item.Amount, ItemId = voucher.Item.Id, Location = 0, VoucherId = voucher.Id } };
+            List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Amount, ItemId = voucher.Information.Id, Location = 0, VoucherId = voucher.VoucherId } };
 
             CallHandler.RedeemItemVouchers(selectedVouchers, delegate(UpdatedStacksResponse response)
             {
@@ -445,7 +466,7 @@ namespace WebCallTests
 
         }
 
-        public static void GetItemVoucher(int Id)
+        static void GetItemVoucher(int Id)
         {
             CallHandler.GetItemVoucher(Id, DisaplayItemVouchers);
         }
@@ -454,18 +475,18 @@ namespace WebCallTests
         static void DisaplayItemVouchers(ItemVouchersResponse response)
         {
             string debugString = "Vouchers Items";
-            foreach (var voucher in response.Vouchers)
+            foreach (VoucherItemInformation voucher in response.Vouchers)
             {
-                var existing = CurrentVouchers.FirstOrDefault(v => v.Id == voucher.Id);
+                var existing = CurrentVouchers.FirstOrDefault(v => v.VoucherId == voucher.VoucherId);
                 if (existing != null)
                 {
-                    existing.Item.Amount = voucher.Item.Amount;
+                    existing.Amount = voucher.Amount;
                 }
                 else
                 {
                     CurrentVouchers.Add(voucher);
                 }
-                debugString += string.Format("{0}\nId: {1}", voucher.Item.Name, voucher.Id);
+                debugString += string.Format("\n{0}\nId: {1}", voucher.Information.Name, voucher.VoucherId);
             }
             DisplayHelper.NewDisplayLine(debugString);
         }
@@ -473,8 +494,32 @@ namespace WebCallTests
 
     internal class ItemBundlesCalls
     {
-        public static List<ItemBundlesResponse.ItemBundleInfo> bundles = new List<ItemBundlesResponse.ItemBundleInfo>();
-        public static void GetItemBundles()
+        static List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();
+        static bool IsStandard = true;
+
+        public static void DrawGUI()
+        {
+            if (GUILayout.Button("Get Item Bundles"))
+            {
+                GetItemBundles();
+            }
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(string.Format("Current Item Bundles ({0})", ItemBundlesCalls.bundles.Count));
+            if (GUILayout.Button(IsStandard ? "Standard" : "Premium"))
+            {
+                IsStandard = !IsStandard;
+            }
+            GUILayout.EndHorizontal();
+            foreach (ItemBundleInfo info in ItemBundlesCalls.bundles)
+            {
+                if (GUILayout.Button(string.Format("Buy: {0}\nItems {1}\nCost:\nStandard:{2},Premium :{3}", info.Name, info.Items.Count, info.StandardPrice, info.PremiumPrice)))
+                {
+                    ItemBundlesCalls.PurchaseItemBundle(info.Id);
+                }
+            }
+        }
+
+        static void GetItemBundles()
         {
             CallHandler.GetItemBundles("", "", delegate(ItemBundlesResponse response)
             {
@@ -482,14 +527,14 @@ namespace WebCallTests
             });
         }
 
-        private static void ItemBundleResponseHandler(ItemBundlesResponse response)
+        static void ItemBundleResponseHandler(ItemBundlesResponse response)
         {
             string debugstring = "Got item bundles";
-            foreach (var bundle in response.bundles)
+            foreach (ItemBundleInfo bundle in response.bundles)
             {
                 string items = "";
-                bundle.items.ForEach(i => items = string.Format("{0}\n     {2} {1}", items, i.Name, i.Amount));
-                debugstring = string.Format("{0}\n{1}\n   Item count:{2}{3}", debugstring, bundle.Name, bundle.items.Count, items);
+                bundle.Items.ForEach(i => items = string.Format("{0}\n     {2} {1}", items, i.Information.Name, i.Amount));
+                debugstring = string.Format("{0}\n{1}\n   Item count:{2}{3}", debugstring, bundle.Name, bundle.Items.Count, items);
                 var existingBundle = bundles.FirstOrDefault(b => b.Id == bundle.Id);
                 if (existingBundle != null)
                 {
@@ -503,41 +548,25 @@ namespace WebCallTests
             DisplayHelper.NewDisplayLine(debugstring);
         }
 
-        internal static void PurchaseItemBundle(int bundleId)
+        static void PurchaseItemBundle(int bundleId)
         {
-           
+            CallHandler.PurchaseItemBundle(bundleId, IsStandard ? 1 : 2, 0, PurchaseItemBundleHandler);
+        }
+
+        static void PurchaseItemBundleHandler(ItemBundlePurchaseResponse response)
+        {
+            string debug = string.Format("{0}\nStandard Balance: {1}\nPremium Balance: {2}", "Purchased Bundle success", response.StandardCurrency.Amount, response.PremiumBalance);
+
+            foreach (var item in ItemManagerCalls.UsersItems)
+            {
+                if (item.StackLocationId == response.StandardCurrency.StackId)
+                    item.Amount = response.StandardCurrency.Amount;
+            }
+
+            DisplayHelper.NewDisplayLine(debug);
         }
     }
 
-    public static class Utils
-    {
-        public static string ToReadable(this WebCallsTest.ItemAction action)
-        {
-            switch (action)
-            {
-                case WebCallsTest.ItemAction.move:
-                    return "Move to";
-                case WebCallsTest.ItemAction.UpdateStackByFive:
-                    return "Add 5 to amount";
-                case WebCallsTest.ItemAction.UpdateStackToOne:
-                    return "Chnage amount to One";
-                case WebCallsTest.ItemAction.RemoveStack:
-                    return "Remove Stack";
-                default:
-                    return "Unknow Action";
-            }
-        }
-        public static WebCallsTest.ItemAction Next(this WebCallsTest.ItemAction action)
-        {
-            action += 1;
-            ItemManagerCalls.destinationLocation = 0;
-            if (action == WebCallsTest.ItemAction.None)
-            {
-                return 0;
-            }
-            return action;
-        }
 
-    }
 
 }

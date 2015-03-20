@@ -7,7 +7,8 @@ using CloudGoods.Models;
 using CloudGoods.Container;
 
 [TestFixture]
-public class ContainerAddTests : MonoBehaviour {
+public class ContainerAddTests : MonoBehaviour
+{
 
     List<ItemContainer> itemContainers;
     ContainerTestUtilities containerTestUtilities;
@@ -24,13 +25,13 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, itemData.Amount, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
         Assert.AreEqual(10, container.containerItems[0].Amount);
-        Assert.AreEqual("Test Item", container.containerItems[0].Name);
+        Assert.AreEqual("Test Item", container.containerItems[0].Information.Name);
     }
 
     [Test]
@@ -38,13 +39,13 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, 5, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
         Assert.AreEqual(5, container.containerItems[0].Amount);
-        Assert.AreEqual("Test Item", container.containerItems[0].Name);
+        Assert.AreEqual("Test Item", container.containerItems[0].Information.Name);
     }
 
     [Test]
@@ -52,19 +53,19 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, itemData.Amount, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
 
-        ItemData itemDataTwo = containerTestUtilities.CreateItemData(20, 1, 1, 100, 1, 0, "Test Item Two", "654321", false);
+        OwnedItemInformation itemDataTwo = containerTestUtilities.CreateItemData(20, 1, 1, 100, 1, 0, "Test Item Two", "654321", false);
 
         basicAdd.AddItem(itemDataTwo, itemDataTwo.Amount, false);
 
         Assert.AreEqual(2, container.containerItems.Count);
         Assert.AreEqual(20, container.containerItems[1].Amount);
-        Assert.AreEqual("Test Item Two", container.containerItems[1].Name);
+        Assert.AreEqual("Test Item Two", container.containerItems[1].Information.Name);
     }
 
     [Test]
@@ -72,19 +73,19 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, itemData.Amount, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
 
-        ItemData itemDataTwo = containerTestUtilities.CreateItemData(20, 1, 1, 100, 1, 0, "Test Item Two", "654321", false);
+        OwnedItemInformation itemDataTwo = containerTestUtilities.CreateItemData(20, 1, 1, 100, 1, 0, "Test Item Two", "654321", false);
 
         basicAdd.AddItem(itemDataTwo, 5, false);
 
         Assert.AreEqual(2, container.containerItems.Count);
         Assert.AreEqual(5, container.containerItems[1].Amount);
-        Assert.AreEqual("Test Item Two", container.containerItems[1].Name);
+        Assert.AreEqual("Test Item Two", container.containerItems[1].Information.Name);
     }
 
     [Test]
@@ -92,19 +93,19 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, itemData.Amount, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
 
-        ItemData itemDataTwo = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemDataTwo = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemDataTwo, itemDataTwo.Amount, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
         Assert.AreEqual(20, container.containerItems[0].Amount);
-        Assert.AreEqual("Test Item", container.containerItems[0].Name);
+        Assert.AreEqual("Test Item", container.containerItems[0].Information.Name);
     }
 
     [Test]
@@ -112,19 +113,19 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, itemData.Amount, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
 
-        ItemData itemDataTwo = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemDataTwo = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemDataTwo, 5, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
         Assert.AreEqual(15, container.containerItems[0].Amount);
-        Assert.AreEqual("Test Item", container.containerItems[0].Name);
+        Assert.AreEqual("Test Item", container.containerItems[0].Information.Name);
     }
 
     [Test]
@@ -132,13 +133,13 @@ public class ContainerAddTests : MonoBehaviour {
     {
         ItemContainer container = containerTestUtilities.SetUpContainer(false, false, itemContainers);
         BasicAddContainer basicAdd = container.GetComponent<BasicAddContainer>();
-        ItemData itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
+        OwnedItemInformation itemData = containerTestUtilities.CreateItemData(10, 10, 10, 100, 10, 0, "Test Item", "123456", false);
 
         basicAdd.AddItem(itemData, 100, false);
 
         Assert.AreEqual(1, container.containerItems.Count);
         Assert.AreEqual(10, container.containerItems[0].Amount);
-        Assert.AreEqual("Test Item", container.containerItems[0].Name);
+        Assert.AreEqual("Test Item", container.containerItems[0].Information.Name);
     }
 
     [TearDown]

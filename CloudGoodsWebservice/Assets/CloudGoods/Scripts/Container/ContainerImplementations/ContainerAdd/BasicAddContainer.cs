@@ -16,7 +16,7 @@ namespace CloudGoods.Container
             ItemContainer = GetComponent<ItemContainer>();
         }
 
-        public void AddItem(ItemData addItem, int amount, bool isSave)
+        public void AddItem(OwnedItemInformation addItem, int amount, bool isSave)
         {
             if (amount == -1 || amount > addItem.Amount)
             {
@@ -40,13 +40,13 @@ namespace CloudGoods.Container
             }
         }
 
-        private bool AddToExistingStack(ItemData data, int amount, bool isSave)
+        private bool AddToExistingStack(OwnedItemInformation data, int amount, bool isSave)
         {
-            foreach (ItemData item in ItemContainer.containerItems)
+            foreach (OwnedItemInformation item in ItemContainer.containerItems)
             {
-                Debug.Log("Checking Id: " + item.Id + "  with ID: " + data.Id);
+                Debug.Log("Checking Id: " + item.Information.Id + "  with ID: " + data.Information.Id);
 
-                if (item.Id.Equals(data.Id))
+                if (item.Information.Id.Equals(data.Information.Id))
                 {
                     Debug.Log("add to existing stack");
 

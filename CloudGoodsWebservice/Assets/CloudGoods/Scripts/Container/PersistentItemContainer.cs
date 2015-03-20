@@ -12,7 +12,7 @@ namespace CloudGoods.Container
 
     public class PersistentItemContainer : MonoBehaviour
     {
-        public Action<List<ItemData>, ItemContainer> LoadedItemsForContainerEvent;
+        public Action<List<InstancedItemInformation>, ItemContainer> LoadedItemsForContainerEvent;
 
         public ItemContainer Container;
         public ItemOwnerTypes OwnerType;
@@ -47,11 +47,20 @@ namespace CloudGoods.Container
         }
 
         #region Loading Items
-        protected void RecivedItems(List<ItemData> receivedItems)
+        protected void RecivedItems(List<InstancedItemInformation> receivedItems)
         {
-            foreach (ItemData item in receivedItems)
+            foreach (InstancedItemInformation item in receivedItems)
             {
-                Container.Add(item, -1, false);
+                Container.Add(new OwnedItemInformation()
+                {
+                    Location = item.Location,
+                    Amount = item.Amount,
+                    Information = item.Information,
+                    IsLocked = false,
+                    OwnerContainer = Container,
+                    StackLocationId = item.StackLocationId
+
+                }, -1, false);
             }
 
             if (LoadedItemsForContainerEvent != null)
@@ -83,7 +92,7 @@ namespace CloudGoods.Container
             }
         }
 
-        void ModifiedItem(ItemData data, bool isSave)
+        void ModifiedItem(OwnedItemInformation data, bool isSave)
         {
             if (isSave == true)
             {
@@ -96,7 +105,7 @@ namespace CloudGoods.Container
             }
         }
 
-        void AddedItem(ItemData data, bool isSave)
+        void AddedItem(OwnedItemInformation data, bool isSave)
         {
             if (isSave == true)
             {
@@ -111,7 +120,7 @@ namespace CloudGoods.Container
             }
         }
 
-        void RemovedItem(ItemData data, int amount, bool isMoving)
+        void RemovedItem(InstancedItemInformation data, int amount, bool isMoving)
         {
             if (!isMoving)
             {
