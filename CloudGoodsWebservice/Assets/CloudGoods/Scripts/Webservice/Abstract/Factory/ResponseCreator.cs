@@ -11,7 +11,7 @@ namespace CloudGoods.Webservice
     {
         CloudGoodsUser CreateLoginResponse(string responseData);
 
-        List<ItemData> CreateItemDataListResponse(string responseData);
+        List<InstancedItemInformation> CreateItemDataListResponse(string responseData);
 
         UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData);
 

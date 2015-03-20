@@ -22,8 +22,8 @@ namespace CloudGoods
         static public event Action<string> OnRegisteredUserToSession;
         static public event Action<CloudGoodsUser> OnUserAuthorized;
         static public event Action<List<StoreItem>> OnStoreListLoaded;
-        static public event Action<List<ItemBundle>> OnStoreItemBundleListLoaded;
-        static public event Action<List<ItemData>> OnItemsLoaded;
+        //static public event Action<List<ItemBundle>> OnStoreItemBundleListLoaded;
+        //static public event Action<List<ItemData>> OnItemsLoaded;
         static public event Action<int> OnStandardCurrency;
         static public event Action<int> OnPremiumCurrency;
         static public event Action<string> OnStandardCurrencyName;
@@ -464,7 +464,7 @@ namespace CloudGoods
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.ItemBundlePurchaseCall(new ItemBundlePurchaseRequest() { BundleID = bundleId, PaymentType = paymentType, Location = location }), x =>
             {
-                callback(responseCreator.CreateItemBundlePurchaseResponse(x));
+                //callback(responseCreator.CreateItemBundlePurchaseResponse(x));
             }));
         }
 
