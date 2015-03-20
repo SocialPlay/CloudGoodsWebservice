@@ -25,6 +25,7 @@ namespace CloudGoods.Webservice
         ItemBundlesResponse CreateItemBundlesResponse(string responseData);
 
         ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string x);
+        CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData);
     }
 
 }

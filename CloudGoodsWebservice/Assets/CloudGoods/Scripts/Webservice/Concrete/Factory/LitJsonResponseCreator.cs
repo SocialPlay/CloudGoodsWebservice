@@ -47,6 +47,26 @@ namespace CloudGoods.Webservice
 
         #endregion
 
+        #region Store
+        public ItemBundlesResponse CreateItemBundlesResponse(string responseData)
+        {
+            return JsonMapper.ToObject<ItemBundlesResponse>(responseData);
+        }
+
+
+        public CurrencyInfoResponse CreateCurrencyInfoResponse(string responseData)
+        {
+            return JsonMapper.ToObject<CurrencyInfoResponse>(responseData);
+        }
+
+        public CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData)
+        {
+            return JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
+        }
+
+        #endregion
+
+
         #region Utilities
 
         public bool IsValidData(string data)
@@ -95,15 +115,6 @@ namespace CloudGoods.Webservice
         }
 
         #endregion
-
-
-
-
-
-
-        public ItemBundlesResponse CreateItemBundlesResponse(string responseData)
-        {
-            return JsonMapper.ToObject<ItemBundlesResponse>(responseData);
         }
 
 
