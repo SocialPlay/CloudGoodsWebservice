@@ -31,7 +31,7 @@ namespace CloudGoods
         static public event Action<Texture2D> OnStandardCurrencyTexture;
         static public event Action<Texture2D> OnPremiumCurrencyTexture;
 
-        static public int standardCurrency
+        static public int StandardCurrency
         {
             get { return mFree; }
             private set
@@ -43,7 +43,7 @@ namespace CloudGoods
                 }
             }
         }
-        static public int premiumCurrency
+        static public int PremiumCurrency
         {
             get { return mPaid; }
             private set

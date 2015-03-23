@@ -42,6 +42,8 @@ namespace CloudGoods.Store.UI
 
         public void SetState(int itemCost)
         {
+            Debug.Log("Item Cost: " + itemCost);
+
             CurrencyText.text = itemCost.ToString();
 
             if (itemCost < 0)
@@ -50,17 +52,17 @@ namespace CloudGoods.Store.UI
             }
             else if (currencyType == CurrencyType.Standard)
             {
-                //if (itemCost <= CloudGoods.)
-                //    SetActive();
-                //else
-                //    SetInactive();
+                if (itemCost <= CallHandler.StandardCurrency)
+                    SetActive();
+                else
+                    SetInactive();
             }
             else if (currencyType == CurrencyType.Premium)
             {
-                //if (itemCost <= CloudGoods.premiumCurrency)
-                //    SetActive();
-                //else
-                //    SetInactive();
+                if (itemCost <= CallHandler.PremiumCurrency)
+                    SetActive();
+                else
+                    SetInactive();
             }
         }
     }

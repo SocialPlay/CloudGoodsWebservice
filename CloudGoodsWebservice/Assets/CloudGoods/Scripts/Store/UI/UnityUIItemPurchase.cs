@@ -81,7 +81,7 @@ namespace CloudGoods.Store.UI
             PremiumCurrencyFullWindow.SetActive(false);
             PremiumCurrencyHalfWindow.SetActive(false);
 
-            if (itemCreditCost < 0 && itemCreditCost < 0)
+            if (itemCreditCost > 0 && itemCoinCost > 0)
             {
                 StandardCurrencyFullWindow.SetActive(true);
 
@@ -134,10 +134,10 @@ namespace CloudGoods.Store.UI
         {
             string statusText = "";
 
-            //foreach (StoreItemDetail detail in storeItem.storeItem.ItemDetail)
-            //{
-            //    statusText += detail.Name + " : " + detail.Value + "\n";
-            //}
+            foreach (StoreItemDetail detail in storeItem.storeItem.ItemDetails)
+            {
+                statusText += detail.Name + " : " + detail.Value + "\n";
+            }
 
             itemDetailsDisplay.text = statusText;
         }
