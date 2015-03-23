@@ -401,6 +401,7 @@ namespace CloudGoods
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBalanceCall(), x =>
                 {
                     CurrencyBalanceResponse balanceResponse = responseCreator.CreateCurrencyBalanceResponse(x);
+                    PremiumCurrency = balanceResponse.Amount;
 
                     if(OnPremiumCurrency != null)
                         CallHandler.OnPremiumCurrency(balanceResponse.Amount);
@@ -421,6 +422,7 @@ namespace CloudGoods
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStandardCurrencyBalanceCall(accessLocation), x =>
             {
                 SimpleItemInfo itemInfo = responseCreator.CreateSimpleItemInfoResponse(x);
+                StandardCurrency = itemInfo.Amount;
 
                 if(OnStandardCurrency != null)
                     CallHandler.OnStandardCurrency(itemInfo.Amount);

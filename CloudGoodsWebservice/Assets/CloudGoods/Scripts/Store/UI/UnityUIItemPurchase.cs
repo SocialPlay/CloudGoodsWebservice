@@ -36,42 +36,43 @@ namespace CloudGoods.Store.UI
         {
             int quantityAmount = int.Parse(itemQuantityAmount.text);
 
-            if (premiumCurrencyCost >= 0)
-                premiumCurrencyCost = premiumCurrencyCost / quantityAmount;
-
-            if (standardCurrencyCost >= 0)
-                standardCurrencyCost = standardCurrencyCost / quantityAmount;
-
             quantityAmount++;
 
-            ChangeAmountDisplay(quantityAmount, ref premiumCurrencyCost, ref standardCurrencyCost);
+            ChangeAmountDisplay(quantityAmount);
         }
 
         public void DecreaseQuantityAmount()
         {
             int quantityAmount = int.Parse(itemQuantityAmount.text);
 
+            Debug.Log("Quantity amount : " + quantityAmount);
+
             if (quantityAmount > 1)
                 quantityAmount--;
 
-            ChangeAmountDisplay(quantityAmount, ref premiumCurrencyCost, ref standardCurrencyCost);
+            Debug.Log("Quantity amount after: " + quantityAmount);
+
+            ChangeAmountDisplay(quantityAmount);
         }
 
-        private void ChangeAmountDisplay(int quantityAmount, ref int itemCreditCost, ref int itemCoinCost)
+        private void ChangeAmountDisplay(int quantityAmount)
         {
-            if (itemCreditCost >= 0)
-                itemCreditCost = itemCreditCost * quantityAmount;
-            else
-                itemCreditCost = -1;
+            int tmpPremiumCost = premiumCurrencyCost;
+            int tmpStandardCost = standardCurrencyCost;
 
-            if (itemCoinCost >= 0)
-                itemCoinCost = itemCoinCost * quantityAmount;
+            if (tmpPremiumCost >= 0)
+                tmpPremiumCost = tmpPremiumCost * quantityAmount;
             else
-                itemCoinCost = -1;
+                tmpPremiumCost = -1;
+
+            if (tmpStandardCost >= 0)
+                tmpStandardCost = tmpStandardCost * quantityAmount;
+            else
+                tmpStandardCost = -1;
 
             itemQuantityAmount.text = quantityAmount.ToString();
 
-            ChangePurchaseButtonDisplay(itemCreditCost, itemCoinCost);
+            ChangePurchaseButtonDisplay(tmpPremiumCost, tmpStandardCost);
         }
 
         private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
@@ -81,15 +82,24 @@ namespace CloudGoods.Store.UI
             PremiumCurrencyFullWindow.SetActive(false);
             PremiumCurrencyHalfWindow.SetActive(false);
 
+            Debug.Log("Item Prmeium Cost: " + itemCreditCost + "  Item Standard Cost: " + itemCoinCost);
+
             if (itemCreditCost > 0 && itemCoinCost > 0)
             {
-                StandardCurrencyFullWindow.SetActive(true);
+                Debug.Log("Display Half costs");
 
-                UnityUIPurchaseButtonDisplay freeButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                StandardCurrencyHalfWindow.SetActive(true);
+                PremiumCurrencyHalfWindow.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay freeButtonDisplay = StandardCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
                 freeButtonDisplay.SetState(itemCoinCost);
+                UnityUIPurchaseButtonDisplay premiumButtonDisplay = PremiumCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                premiumButtonDisplay.SetState(itemCreditCost);
             }
             else if (itemCreditCost < 0)
             {
+                Debug.Log("Display full standard costs");
+
                 StandardCurrencyFullWindow.SetActive(true);
 
                 UnityUIPurchaseButtonDisplay StandardOnlyButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
@@ -97,6 +107,8 @@ namespace CloudGoods.Store.UI
             }
             else if (itemCoinCost < 0)
             {
+                Debug.Log("Display Full Premium Costs");
+
                 PremiumCurrencyFullWindow.SetActive(true);
 
                 UnityUIPurchaseButtonDisplay PremiumOnlyButtonDisplay = PremiumCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();

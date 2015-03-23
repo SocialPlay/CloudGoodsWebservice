@@ -86,7 +86,7 @@ namespace CloudGoods.Webservice
             }
             catch
             {
-                throw new Exception("Invalid Data received from webservice");
+                throw new Exception("Invalid Data received from webservice :" + data);
             }
 
             return true;
