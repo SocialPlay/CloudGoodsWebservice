@@ -1,0 +1,197 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System;
+using CloudGoods.Container;
+using CloudGoods.Enums;
+using CloudGoods.Models;
+
+namespace CloudGoods.Store.UI
+{
+    public class UnityUIItemPurchase : MonoBehaviour
+    {
+        public static event Action<string> OnPurchasedItem;
+
+        UnityUIStoreItem itemInfo;
+
+        public Text itemNameDisplay;
+        public Text itemDetailsDisplay;
+
+        public Text itemQuantityAmount;
+
+        public GameObject increaseQuantityButton;
+        public GameObject decreaseQuantityButton;
+
+        public GameObject PremiumCurrencyHalfWindow;
+        public GameObject StandardCurrencyHalfWindow;
+        public GameObject PremiumCurrencyFullWindow;
+        public GameObject StandardCurrencyFullWindow;
+
+        public RawImage itemTexture;
+
+        int premiumCurrencyCost = 0;
+        int standardCurrencyCost = 0;
+
+        public void IncreaseQuantityAmount()
+        {
+            int quantityAmount = int.Parse(itemQuantityAmount.text);
+
+            quantityAmount++;
+
+            ChangeAmountDisplay(quantityAmount);
+        }
+
+        public void DecreaseQuantityAmount()
+        {
+            int quantityAmount = int.Parse(itemQuantityAmount.text);
+
+            Debug.Log("Quantity amount : " + quantityAmount);
+
+            if (quantityAmount > 1)
+                quantityAmount--;
+
+            Debug.Log("Quantity amount after: " + quantityAmount);
+
+            ChangeAmountDisplay(quantityAmount);
+        }
+
+        private void ChangeAmountDisplay(int quantityAmount)
+        {
+            int tmpPremiumCost = premiumCurrencyCost;
+            int tmpStandardCost = standardCurrencyCost;
+
+            if (tmpPremiumCost >= 0)
+                tmpPremiumCost = tmpPremiumCost * quantityAmount;
+            else
+                tmpPremiumCost = -1;
+
+            if (tmpStandardCost >= 0)
+                tmpStandardCost = tmpStandardCost * quantityAmount;
+            else
+                tmpStandardCost = -1;
+
+            itemQuantityAmount.text = quantityAmount.ToString();
+
+            ChangePurchaseButtonDisplay(tmpPremiumCost, tmpStandardCost);
+        }
+
+        private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
+        {
+            StandardCurrencyFullWindow.SetActive(false);
+            StandardCurrencyHalfWindow.SetActive(false);
+            PremiumCurrencyFullWindow.SetActive(false);
+            PremiumCurrencyHalfWindow.SetActive(false);
+
+            Debug.Log("Item Prmeium Cost: " + itemCreditCost + "  Item Standard Cost: " + itemCoinCost);
+
+            if (itemCreditCost > 0 && itemCoinCost > 0)
+            {
+                Debug.Log("Display Half costs");
+
+                StandardCurrencyHalfWindow.SetActive(true);
+                PremiumCurrencyHalfWindow.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay freeButtonDisplay = StandardCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                freeButtonDisplay.SetState(itemCoinCost);
+                UnityUIPurchaseButtonDisplay premiumButtonDisplay = PremiumCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                premiumButtonDisplay.SetState(itemCreditCost);
+            }
+            else if (itemCreditCost < 0)
+            {
+                Debug.Log("Display full standard costs");
+
+                StandardCurrencyFullWindow.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay StandardOnlyButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                StandardOnlyButtonDisplay.SetState(itemCoinCost);
+            }
+            else if (itemCoinCost < 0)
+            {
+                Debug.Log("Display Full Premium Costs");
+
+                PremiumCurrencyFullWindow.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay PremiumOnlyButtonDisplay = PremiumCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                PremiumOnlyButtonDisplay.SetState(itemCreditCost);
+            }
+            else
+            {
+                PremiumCurrencyHalfWindow.SetActive(true);
+                StandardCurrencyHalfWindow.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay PremiumButtonDisplay = PremiumCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                UnityUIPurchaseButtonDisplay StandardButtonDisplay = StandardCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                PremiumButtonDisplay.SetState(itemCreditCost);
+                StandardButtonDisplay.SetState(itemCoinCost);
+            }
+        }
+
+        public void DisplayItemPurchasePanel(UnityUIStoreItem item)
+        {
+            itemInfo = item;
+            itemNameDisplay.text = item.storeItem.Name;
+
+            premiumCurrencyCost = item.storeItem.CreditValue;
+            standardCurrencyCost = item.storeItem.CoinValue;
+
+            itemQuantityAmount.text = "1";
+            SetItemDetailDisplay(item);
+
+            itemTexture.texture = item.gameObject.GetComponentInChildren<RawImage>().texture;
+
+            ChangePurchaseButtonDisplay(item.storeItem.CreditValue, item.storeItem.CoinValue);
+        }
+
+        void SetItemDetailDisplay(UnityUIStoreItem storeItem)
+        {
+            string statusText = "";
+
+            foreach (StoreItemDetail detail in storeItem.storeItem.ItemDetails)
+            {
+                statusText += detail.Name + " : " + detail.Value + "\n";
+            }
+
+            itemDetailsDisplay.text = statusText;
+        }
+
+        public void PurchaseItemWithPremiumCurrency()
+        {
+            Debug.Log(int.Parse(itemQuantityAmount.text));
+            //CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
+            ClosePanel();
+        }
+
+        public void PurchaseItemWithStandardCurrency()
+        {
+            Debug.Log(int.Parse(itemQuantityAmount.text));
+            //CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+            ClosePanel();
+        }
+
+        void OnReceivedItemPurchaseConfirmation(string msg)
+        {
+            ReloadContainerItems();
+
+            if (OnPurchasedItem != null)
+                OnPurchasedItem(msg);
+        }
+
+        void ReloadContainerItems()
+        {
+            foreach (PersistentItemContainer loader in GameObject.FindObjectsOfType(typeof(PersistentItemContainer)))
+            {
+                if (loader.Location == 0)
+                {
+                    loader.transform.parent.GetComponent<ItemContainer>().Clear();
+                    loader.LoadItems();
+                }
+            }
+        }
+
+
+        public void ClosePanel()
+        {
+            gameObject.SetActive(false);
+        }
+    }
+}

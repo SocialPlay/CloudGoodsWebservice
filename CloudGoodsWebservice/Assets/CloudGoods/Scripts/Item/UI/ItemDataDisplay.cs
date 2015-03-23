@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
-using CloudGoods.Emuns;
+using CloudGoods.Enums;
 using CloudGoods.Container;
 using CloudGoods.Item;
 using CloudGoods.Utilities;

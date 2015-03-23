@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CloudGoods.Models;
 using CloudGoods.Container;
+using LitJson;
 
 namespace CloudGoods.Models
 {
@@ -33,6 +34,25 @@ namespace CloudGoods.Models
         public string UserName = "";
         public string UserEmail = "";
         public string SessionID;
+    }
+
+    public class UserResponse
+    {
+        public int code;
+        public string message;
+        public CloudGoodsUser userInfo;
+
+        public UserResponse(int caseCode, string msg, CloudGoodsUser newUserInfo)
+        {
+            code = caseCode;
+            message = msg;
+            userInfo = newUserInfo;
+        }
+
+        public override string ToString()
+        {
+            return "Code :" + code + "\nMessage :" + message;
+        }
     }
 
     public class UserLoginInfo
@@ -291,24 +311,10 @@ namespace CloudGoods.Models
         public string StackLocationId;
     }
 
-    public class StoreItem
-    {
-        public int ID = 0;
-        public string ItemName = "";
-        public List<StoreItemDetail> ItemDetail = new List<StoreItemDetail>();
-        public DateTime AddedDate;
-        public string Behaviours;
-        public List<string> Tags;
-        public int ItemID = 0;
-        public int PremiumCurrencyValue = 0;
-        public int StandardCurrencyValue = 0;
-        public string ImageURL = "";
-    }
-
     public class StoreItemDetail
     {
-        public string PropertyName;
-        public int PropertyValue;
+        public string Name;
+        public string Value;
         public bool InvertEnergy;
     }
 
@@ -614,6 +620,49 @@ namespace CloudGoods.Models
     {
         public int Amount;
     }
+
+    public class StoreItem
+    {
+        public int BaseItemId;
+        public string Image;
+        public string Name;
+        public string Description;
+        public int ItemId;
+        public int CreditValue;
+        public int CoinValue;
+        public DateTime AddDate;
+        public string ItemDetailString;
+        public List<int> Behaviours;
+        public Dictionary<string, int> Tags = new Dictionary<string, int>();
+
+        public List<StoreItemDetail> ItemDetails
+        {
+            get
+            {
+                if (ParsedItemDetail != null)
+                    return ParsedItemDetail;
+                else
+                {
+                    ParsedItemDetail = new List<StoreItemDetail>();
+
+                    JsonData data = JsonMapper.ToObject(ItemDetailString);
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        StoreItemDetail itemDetail = new StoreItemDetail()
+                        {
+                            Name = data[i]["Name"].ToString(),
+                            Value = data[i]["Value"].ToString()
+                        };
+                        ParsedItemDetail.Add(itemDetail);
+                    }
+                    return ParsedItemDetail;
+                }
+            }
+        }
+
+        List<StoreItemDetail> ParsedItemDetail;
+    }
+
 
     #endregion
 

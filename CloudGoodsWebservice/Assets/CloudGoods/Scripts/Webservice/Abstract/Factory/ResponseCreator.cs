@@ -24,11 +24,17 @@ namespace CloudGoods.Webservice
 
         ItemBundlesResponse CreateItemBundlesResponse(string responseData);
 
-        ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string x);
+        CurrencyInfoResponse CreateCurrencyInfoResponse(string responseData);
 
         CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData);
 
-        CurrencyInfoResponse CreateCurrencyInfoResponse(string responseData);
+        SimpleItemInfo CreateSimpleItemInfoResponse(string responseData);
+
+        List<StoreItem> CreateGetStoreItemResponse(string responseData);
+
+        bool IsValidData(string data);
+
+        bool IsWebserviceError(string data);
     }
 
 }

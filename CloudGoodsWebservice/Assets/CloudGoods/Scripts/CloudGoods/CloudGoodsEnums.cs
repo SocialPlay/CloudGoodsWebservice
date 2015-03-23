@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CloudGoods.Emuns
+namespace CloudGoods.Enums
 {
 
     public enum CloudGoodsPlatform

@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\StoreExample.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CallHandler.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CloudGoodsEnums.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CloudGoodsSettings.cs" />
@@ -73,6 +74,20 @@
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityItemDataDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDragComponent.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\Abstract\StoreLoader.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\FilterNewestItems.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\Sortables\ISortItem.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\Sortables\SortByProperty.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\StoreInitializer.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\StoreOrganizer.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIItemPurchase.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUILabelCurrency.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPageInfo.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseButtonDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseSuccessful.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreItem.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreLoader.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUITextureCurrency.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\IGridLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\UIGridLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\IgnoreRaycast.cs" />

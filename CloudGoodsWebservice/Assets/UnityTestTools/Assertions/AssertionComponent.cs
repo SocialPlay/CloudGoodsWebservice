@@ -42,11 +42,10 @@ namespace UnityTest
 
         public Object GetFailureReferenceObject()
         {
-            if (!string.IsNullOrEmpty(m_CreatedInFilePath))
-            {
-            
-                return Resources.LoadAssetAtPath(m_CreatedInFilePath, typeof(Object));
-            }
+            //if (!string.IsNullOrEmpty(m_CreatedInFilePath))
+            //{
+            //    return Resources.LoadAssetAtPath(m_CreatedInFilePath, typeof(Object));
+            //}
             return this;
         }
 

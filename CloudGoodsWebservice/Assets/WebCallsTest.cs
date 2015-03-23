@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using LitJson;
 using CloudGoods;
 using CloudGoods.Models;
-using CloudGoods.Emuns;
+using CloudGoods.Enums;
 using System.Linq;
 using System;
 

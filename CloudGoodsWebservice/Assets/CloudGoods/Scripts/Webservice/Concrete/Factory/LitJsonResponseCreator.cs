@@ -53,7 +53,6 @@ namespace CloudGoods.Webservice
             return JsonMapper.ToObject<ItemBundlesResponse>(responseData);
         }
 
-
         public CurrencyInfoResponse CreateCurrencyInfoResponse(string responseData)
         {
             return JsonMapper.ToObject<CurrencyInfoResponse>(responseData);
@@ -64,8 +63,18 @@ namespace CloudGoods.Webservice
             return JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
         }
 
-        #endregion
+        public List<StoreItem> CreateGetStoreItemResponse(string responseData)
+        {
+            JsonData data = JsonMapper.ToObject(responseData);
+            return JsonMapper.ToObject<List<StoreItem>>(data["StoreItems"].ToJson());
+        }
 
+        public SimpleItemInfo CreateSimpleItemInfoResponse(string responseData)
+        {
+            return JsonMapper.ToObject<SimpleItemInfo>(responseData);
+        }
+
+        #endregion
 
         #region Utilities
 
@@ -77,7 +86,7 @@ namespace CloudGoods.Webservice
             }
             catch
             {
-                throw new Exception("Invalid Data received from webservice");
+                throw new Exception("Invalid Data received from webservice :" + data);
             }
 
             return true;

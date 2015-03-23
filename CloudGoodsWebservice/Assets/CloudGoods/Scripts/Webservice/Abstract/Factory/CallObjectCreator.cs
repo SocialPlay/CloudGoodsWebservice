@@ -34,6 +34,8 @@ namespace CloudGoods.Webservice
 
         WWW CreatePremiumCurrencyBalanceCall();
 
+        WWW CreateGetStoreItemsCall(string andTags, string orTags);
+
         WWW CreateStandardCurrencyBalanceCall(int accessLocation);
 
         Dictionary<string, string> CreateHeaders(string urlString);
