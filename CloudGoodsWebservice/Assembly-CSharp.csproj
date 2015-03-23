@@ -99,6 +99,7 @@
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\LitJsonResponseCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\StandardHashCreator.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\WebAPICallObjectCreator.cs" />
+     <Compile Include="Assets\TestWebservice.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />

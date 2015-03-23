@@ -32,9 +32,6 @@ namespace CloudGoods.Webservice
 
         List<StoreItem> CreateGetStoreItemResponse(string responseData);
 
-        bool IsValidData(string data);
-
-        bool IsWebserviceError(string data);
     }
 
 }
