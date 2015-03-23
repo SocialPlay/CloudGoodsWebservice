@@ -25,16 +25,18 @@ namespace WebCallTests
         string title = "";
         private static SystemTabs activeTab = SystemTabs.BaseItems;
 
-
-
-
-
-
-
         void OnEnable()
         {
             CallHandler.CloudGoodsInitilized += Instance_CloudGoodsInitilized;
+            CallHandler.IsError += CallHandler_IsError;
         }
+
+        void CallHandler_IsError(WebserviceError obj)
+        {
+            string debug = string.Format("Error Code: {0} , Message: {1}", obj.ErrorCode, obj.Message);
+            DisplayHelper.NewDisplayLine(debug, Color.red);
+        }
+
 
         void Start()
         {
@@ -57,15 +59,6 @@ namespace WebCallTests
             debugString += "\nSession:" + user.SessionID.ToString();
             DisplayHelper.NewDisplayLine(debugString);
         }
-
-
-
-
-
-
-
-
-
 
         void OnGUI()
         {
@@ -131,18 +124,6 @@ namespace WebCallTests
             GUILayout.EndArea();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -151,20 +132,28 @@ namespace WebCallTests
         static string DebugDisplay = "";
         static string Last = "";
 
+        static Color defaultColor = Color.white;
+        static Color currentColor = defaultColor;
+
         public static void DrawRight()
         {
             GUILayout.BeginArea(new Rect(Screen.width / 2, 0, Screen.width, Screen.height));
-            Color orig = GUI.color;
-            GUI.color = Color.green;
+          
+            GUI.color = currentColor;
             GUILayout.TextArea(Last);
-            GUI.color = orig;
+            GUI.color = Color.gray;
             GUILayout.TextField(DebugDisplay);
             GUILayout.EndArea();
         }
 
-
         public static void NewDisplayLine(string line)
         {
+            NewDisplayLine(line, defaultColor);
+        }
+
+        public static void NewDisplayLine(string line, Color newLineColor)
+        {
+            currentColor = newLineColor;
             DebugDisplay = Last + "\n" + DebugDisplay;
             Last = line;
         }
@@ -504,13 +493,13 @@ namespace WebCallTests
                 GetItemBundles();
             }
             GUILayout.BeginHorizontal();
-            GUILayout.Label(string.Format("Current Item Bundles ({0})", ItemBundlesCalls.bundles.Count));
+            GUILayout.Label(string.Format("Current Item Bundles ({0})", bundles.Count));
             if (GUILayout.Button(IsStandard ? "Standard" : "Premium"))
             {
                 IsStandard = !IsStandard;
             }
             GUILayout.EndHorizontal();
-            foreach (ItemBundleInfo info in ItemBundlesCalls.bundles)
+            foreach (ItemBundleInfo info in bundles)
             {
                 if (GUILayout.Button(string.Format("Buy: {0}\nItems {1}\nCost:\nStandard:{2},Premium :{3}", info.Name, info.Items.Count, info.StandardPrice, info.PremiumPrice)))
                 {
@@ -555,7 +544,11 @@ namespace WebCallTests
 
         static void PurchaseItemBundleHandler(ItemBundlePurchaseResponse response)
         {
-            string debug = string.Format("{0}\nStandard Balance: {1}\nPremium Balance: {2}", "Purchased Bundle success", response.StandardCurrency.Amount, response.PremiumBalance);
+            string debug = string.Format("Purchased {0} items", response.purchasedItems.Count);
+            foreach (SimpleItemInfo item in response.purchasedItems)
+            {
+                debug = string.Format("{0}\n  {1}:{2}", debug, item.StackId, item.Amount);
+            }
 
             foreach (var item in ItemManagerCalls.UsersItems)
             {

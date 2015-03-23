@@ -8,11 +8,11 @@ namespace CloudGoods.Webservice
 {
 
     public interface ResponseCreator
-    {
+    {    
 
         bool IsValidData(string data);
 
-        bool IsWebserviceError(string data);
+        WebserviceError IsWebserviceError(string data);
 
         CloudGoodsUser CreateLoginResponse(string responseData);
 

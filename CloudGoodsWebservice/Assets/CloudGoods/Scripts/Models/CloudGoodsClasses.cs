@@ -373,16 +373,7 @@ namespace CloudGoods.Models
     }
 
 
-    public class BundleItemInformation
-    {
-        public int Amount;
-        public ItemInformation Information;
 
-        public BundleItemInformation()
-        {
-            Information = new ItemInformation();
-        }
-    }
 
     public class VoucherItemInformation
     {
@@ -640,13 +631,18 @@ namespace CloudGoods.Models
         public string Image;
         public int PremiumPrice;
         public int StandardPrice;
-        public List<ItemBundleItemInfo> Items = new List<ItemBundleItemInfo>();
+        public List<BundleItemInformation> Items = new List<BundleItemInformation>();
         public int State;
 
-        public class ItemBundleItemInfo
+        public class BundleItemInformation
         {
             public int Amount;
             public ItemInformation Information;
+
+            public BundleItemInformation()
+            {
+                Information = new ItemInformation();
+            }
         }
     }
 
@@ -671,6 +667,10 @@ namespace CloudGoods.Models
             return BundleID.ToString() + PaymentType.ToString() + Location;
         }
     }
+
+
+
+
 
     #endregion
 }

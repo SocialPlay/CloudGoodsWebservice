@@ -12,6 +12,8 @@ namespace CloudGoods
 {
     public class CallHandler : MonoBehaviour
     {
+        public static event Action<WebserviceError> IsError;
+
         public static string SessionId = "";
         public static int ServerTimeDifference = 0;
         public static event Action CloudGoodsInitilized;
@@ -291,8 +293,8 @@ namespace CloudGoods
             // check for errors
             if (www.error == null)
             {
-                ValidateData(www);
-                callback(www.text);
+                if (ValidateData(www))
+                    callback(www.text);
             }
             else
             {
@@ -306,11 +308,26 @@ namespace CloudGoods
 
         #region Utilities
 
-        private void ValidateData(WWW www)
+        private bool ValidateData(WWW www)
         {
             string responseData = www.text;
-            if (!responseCreator.IsValidData(responseData)) { };
-            if (responseCreator.IsWebserviceError(responseData)) { };
+            WebserviceError error = responseCreator.IsWebserviceError(responseData);
+            if (error!= null)
+            {
+                if (IsError != null)
+                {
+                    IsError(error);
+                }
+
+                return false;
+            };
+            if (!responseCreator.IsValidData(responseData))
+            {
+                return false;
+            };
+
+            return true;
+
         }
 
         static void GetServerTime(CallHandler cg)

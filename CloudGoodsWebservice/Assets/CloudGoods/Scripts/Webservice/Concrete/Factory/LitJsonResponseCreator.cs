@@ -83,16 +83,17 @@ namespace CloudGoods.Webservice
             return true;
         }
 
-        public bool IsWebserviceError(string data)
+        public WebserviceError IsWebserviceError(string data)
         {
             JsonData jsonData = JsonMapper.ToObject(data);
 
+
             if (JsonDataContainsKey(jsonData, "errorCode"))
-            {
-                throw new WebserviceException(jsonData["errorCode"].ToString(), jsonData["message"].ToString());
+            {              
+                return new WebserviceError(int.Parse(jsonData["errorCode"].ToString()), jsonData["message"].ToString());
             }
 
-            return false;
+            return null;
         }
 
         public bool JsonDataContainsKey(JsonData data, string key)
@@ -115,7 +116,7 @@ namespace CloudGoods.Webservice
         }
 
         #endregion
-        
+
 
 
         public ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string responseData)
