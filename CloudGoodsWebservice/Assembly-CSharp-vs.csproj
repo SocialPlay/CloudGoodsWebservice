@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\CallHandlerInit.cs" />
      <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\StoreExample.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CallHandler.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CloudGoodsEnums.cs" />
@@ -73,6 +74,10 @@
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ItemDataDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityItemDataDisplay.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDragComponent.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldEmailValidation.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldPasswordValidation.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldValidation.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Login\UnityUICloudGoodsLogin.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\Abstract\StoreLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\FilterNewestItems.cs" />
@@ -88,6 +93,7 @@
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreItem.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUITextureCurrency.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Utilities\BuildPlatform.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\IGridLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\UIGridLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Utilities\IgnoreRaycast.cs" />
