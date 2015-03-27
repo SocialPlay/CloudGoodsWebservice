@@ -13,7 +13,7 @@ namespace CloudGoods.ItemBundles
     public class UnityUIBundlePurchasing : MonoBehaviour
     {
 
-        public static Action<string> OnPurchaseSuccessful;
+        public static Action<ItemBundlePurchaseResponse> OnPurchaseSuccessful;
 
         public GameObject PremiumCurrencyPurchaseWindowHalf;
         public GameObject PremiumCurrencyPurchaseWindowFull;
@@ -67,7 +67,7 @@ namespace CloudGoods.ItemBundles
             {
                 GameObject bundleItemObj = (GameObject)GameObject.Instantiate(bundleItemDisplayPrefab);
 
-                bundleItemObj.transform.parent = bundleGrid.transform;
+                bundleItemObj.transform.SetParent(bundleGrid.transform);
 
                 UnityUIBundleItemInfo bundleInfo = bundleItemObj.GetComponent<UnityUIBundleItemInfo>();
                 bundleInfo.SetupBundleItemDisplay(bundleItem);
@@ -137,22 +137,22 @@ namespace CloudGoods.ItemBundles
 
         public void PurchaseBundleWithStandardCurrency()
         {
-            //CloudGoods.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
+            CallHandler.PurchaseItemBundle(currentItemBundle.Id, (int)CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
             ClosePurchaseWindow();
         }
 
         public void PurchaseBundleWithPremiumCurrency()
         {
-            //CloudGoods.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
+            CallHandler.PurchaseItemBundle(currentItemBundle.Id, (int)CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
             ClosePurchaseWindow();
         }
 
-        void OnReceivedPurchaseCallback(string data)
+        void OnReceivedPurchaseCallback(ItemBundlePurchaseResponse response)
         {
-            Debug.Log("OnReceivedPurchaseCallback " + data);
+            Debug.Log("OnReceivedPurchaseCallback " + response.StatusCode);
 
             if (OnPurchaseSuccessful != null)
-                OnPurchaseSuccessful(data);
+                OnPurchaseSuccessful(response);
         }
     }
 }

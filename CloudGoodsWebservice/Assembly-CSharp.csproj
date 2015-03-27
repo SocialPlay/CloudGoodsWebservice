@@ -95,7 +95,7 @@
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUILabelCurrency.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPageInfo.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseButtonDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseSuccessful.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseStatus.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreItem.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUITextureCurrency.cs" />
