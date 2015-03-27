@@ -112,13 +112,30 @@ namespace CloudGoods.Webservice
 
         #endregion
 
-        public WWW CreateLoginCallObject(string appID, string userEmail, string password)
+        public WWW CreateLoginCallObject(string userEmail, string password)
         {
-            string loginUrl = string.Format("?appId={0}&email={1}&password={2}", appID, userEmail, password);
+            string loginUrl = string.Format("?appId={0}&email={1}&password={2}", CloudGoodsSettings.AppID, userEmail, password);
 
             Dictionary<string, string> headers = CreateHeaders(loginUrl);
             string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
             return new WWW(urlString, null, headers);
+        }
+
+        public WWW CreateRegisterUserCallObject(RegisterUserRequest request)
+        {
+            return GenerateWWWPost("RegisterUser", request);
+        }
+
+        public WWW CreateForgotPasswordCallObject(string userEmail)
+        {
+            return GenerateWWWCall("ForgotPassword", new KeyValuePair<string, string>("appId", CloudGoodsSettings.AppID),
+                new KeyValuePair<string, string>("userEmail", userEmail));
+        }
+
+        public WWW CreateResendVerificationEmailCallObject(string email)
+        {
+            return GenerateWWWCall("ResendVerification", new KeyValuePair<string, string>("appId", CloudGoodsSettings.AppID),
+                new KeyValuePair<string, string>("userEmail", email));
         }
 
         public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")

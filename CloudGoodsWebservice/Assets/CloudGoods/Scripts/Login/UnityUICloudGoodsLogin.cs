@@ -46,6 +46,12 @@ namespace CloudGoods.Login
         public Text confirmationStatus;
         #endregion
 
+        #region ResendVerification Variables
+
+        public GameObject ResendVerificationWindow;
+
+        #endregion
+
         public bool IsKeptActiveOnAllPlatforms;
 
         void OnEnable()
@@ -54,6 +60,7 @@ namespace CloudGoods.Login
             CallHandler.OnForgotPassword += ForgotPasswordResponce;
             CallHandler.OnVerificationSent += ResentVerificationResponce;
             CallHandler.onLogout += OnLogout;
+            CallHandler.IsError += CallHandler_onErrorEvent;
         }
 
         void OnDisable()
@@ -62,6 +69,7 @@ namespace CloudGoods.Login
             CallHandler.OnForgotPassword -= ForgotPasswordResponce;
             CallHandler.OnVerificationSent -= ResentVerificationResponce;
             CallHandler.onLogout -= OnLogout;
+            CallHandler.IsError -= CallHandler_onErrorEvent;
         }
 
         void Start()
@@ -173,6 +181,11 @@ namespace CloudGoods.Login
             registerTab.SetActive(false);
         }
 
+        public void CloseResendVerificationTab()
+        {
+            ResendVerificationWindow.SetActive(false);
+        }
+
         void CloseAllTabsOnLogin()
         {
             confirmationTab.SetActive(false);
@@ -221,23 +234,15 @@ namespace CloudGoods.Login
             if (string.IsNullOrEmpty(ErrorMsg))
             {
                 SwitchToConfirmation();
-                //CloudGoods.Register(registerUserEmail.text, registerUserPassword.text, registerUserName.text, OnRegisteredUser);
+                CallHandler.Register(CloudGoodsSettings.AppID, registerUserEmail.text, registerUserPassword.text, registerUserName.text, OnRegisteredUser);
             }
         }
 
-        void OnRegisteredUser(UserResponse userResponse)
+        void OnRegisteredUser(RegisteredUser userResponse)
         {
-            resendVerificationTextObject.SetActive(false);
-            confirmationStatus.gameObject.SetActive(true);
+            Debug.Log("User has been registered");
 
-            if (userResponse.code == 0)
-            {
-                confirmationStatus.text = "Verification Email has been sent to your Email";
-            }
-            else
-            {
-                confirmationStatus.text = userResponse.message;
-            }
+            confirmationStatus.text = "Verification Email has been sent to your Email";
         }
 
         public void ForgotPassword()
@@ -252,13 +257,13 @@ namespace CloudGoods.Login
             if (string.IsNullOrEmpty(ErrorMsg))
             {
                 SwitchToConfirmation();
-                //CloudGoods.ForgotPassword(loginUserEmail.text, OnSentPassword);
+                CallHandler.ForgotPassword(loginUserEmail.text, OnSentPassword);
             }
         }
 
-        void OnSentPassword(UserResponse userResponse)
+        void OnSentPassword(StatusMessageResponse userResponse)
         {
-            confirmationStatus.text = "Password reset has been sent";
+            confirmationStatus.text = userResponse.message;
         }
 
         public void ResendVerificationEmail()
@@ -272,9 +277,15 @@ namespace CloudGoods.Login
             if (string.IsNullOrEmpty(ErrorMsg))
             {
                 SwitchToConfirmation();
-                //CloudGoods.ResendVerificationEmail(loginUserEmail.text, null);
+                CloseResendVerificationTab();
+                CallHandler.ResendVerificationEmail(loginUserEmail.text, OnResentVerificationEmail);
             }
 
+        }
+
+        void OnResentVerificationEmail(StatusMessageResponse response)
+        {
+            confirmationStatus.text = response.message;
         }
 
         void OnLogout()
@@ -284,6 +295,21 @@ namespace CloudGoods.Login
         }
 
         #endregion
+
+        void CallHandler_onErrorEvent(WebserviceError obj)
+        {
+            Debug.Log("ErrorOccured: " + obj.ErrorCode + "   message: " + obj.Message);
+
+            if(obj.ErrorCode == 1001 || obj.ErrorCode == 1000)
+            {
+                confirmationStatus.text = obj.Message;
+            }
+            
+            if(obj.ErrorCode == 1003)
+            {
+                ResendVerificationWindow.SetActive(true);
+            }
+        }
 
 
         public bool RemoveIfNeeded()

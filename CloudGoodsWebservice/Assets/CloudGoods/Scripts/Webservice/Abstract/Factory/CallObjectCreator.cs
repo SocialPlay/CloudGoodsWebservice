@@ -9,8 +9,13 @@ namespace CloudGoods.Webservice
 
     public interface CallObjectCreator
     {
+        WWW CreateLoginCallObject(string userEmail, string password);
 
-        WWW CreateLoginCallObject(string appID, string userEmail, string password);
+        WWW CreateRegisterUserCallObject(RegisterUserRequest request);
+
+        WWW CreateForgotPasswordCallObject(string userEmail);
+
+        WWW CreateResendVerificationEmailCallObject(string email);
 
         WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 

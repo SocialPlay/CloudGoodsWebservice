@@ -4,10 +4,12 @@ using CloudGoods;
 using CloudGoods.Models;
 using CloudGoods.Enums;
 using CloudGoods.Store;
+using CloudGoods.ItemBundles;
 
 public class StoreExample : MonoBehaviour {
 
-    public GameObject store;
+    public GameObject storeLoader;
+    public UnityUIItemBundleLoader itemBundlesLoader;
 
     void Awake()
     {
@@ -22,8 +24,9 @@ public class StoreExample : MonoBehaviour {
 
     void OnRegisteredtoSession(CloudGoodsUser user)
     {
-        store.SetActive(true);
-        StoreInitializer initializer = store.GetComponent<StoreInitializer>();
+        storeLoader.SetActive(true);
+        StoreInitializer initializer = storeLoader.GetComponent<StoreInitializer>();
+        itemBundlesLoader.GetItemBundles();
         initializer.InitializeStore();
     }
 }

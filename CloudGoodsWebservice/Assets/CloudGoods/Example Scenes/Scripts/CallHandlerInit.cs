@@ -9,8 +9,4 @@ public class CallHandlerInit : MonoBehaviour {
         CallHandler.Initialize();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
