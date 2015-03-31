@@ -32,6 +32,8 @@ namespace CloudGoods.Webservice
 
         List<StoreItem> CreateGetStoreItemResponse(string responseData);
 
+        ConsumePremiumResponce CreateConsumePremiumResponce(string responseData);
+
     }
 
 }

@@ -663,6 +663,54 @@ namespace CloudGoods.Models
         List<StoreItemDetail> ParsedItemDetail;
     }
 
+    /// <summary>
+    /// used to purchase a amount of items from an in app store
+    /// </summary>    
+    public class PurchaseItemRequest : IRequestClass
+    {
+        public int ItemId;
+        public int BuyAmount;
+        public PaymentType PaymentOption;
+        public int SaveLocation;
+        public ConsumeUponPurchase Consume = null;
+
+        public string ToHashable()
+        {
+            return string.Format("{0}{1}{2}{3}{4}", ItemId, BuyAmount, PaymentOption, SaveLocation, (Consume != null ? Consume.Amount.ToString() : ""));
+        }
+
+        /// <summary>
+        /// if not null will take the selected amount of item and instantly consume them from the users purchase.
+        /// </summary>
+        public class ConsumeUponPurchase
+        {
+            public int Amount;
+        }
+
+        public enum PaymentType
+        {
+            NotValid,
+            Standard = 1,
+            Premium = 2
+        }
+
+    }
+
+    public class ConsumePremiumRequest : IRequestClass
+    {
+        public int Amount;
+
+        public string ToHashable()
+        {
+            return Amount.ToString();
+        }
+    }
+
+    public class ConsumePremiumResponce
+    {
+        public bool isSuccess;
+        public int currentBalance;
+    }
 
     #endregion
 

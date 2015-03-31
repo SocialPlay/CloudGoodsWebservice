@@ -24,7 +24,7 @@ public class TestWebservice : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login(CloudGoodsPlatform.SocialPlay, "lionel", "lionel.sy@gmail.com", "123456", OnReceivedLoginResponse);
+        CallHandler.Login( "lionel.sy@gmail.com", "123456", OnReceivedLoginResponse);
     }
 
     void OnReceivedLoginResponse(CloudGoodsUser user)

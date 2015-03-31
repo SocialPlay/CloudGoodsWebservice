@@ -5,7 +5,8 @@ using CloudGoods.Models;
 using CloudGoods.Enums;
 using CloudGoods.Store;
 
-public class StoreExample : MonoBehaviour {
+public class StoreExample : MonoBehaviour
+{
 
     public GameObject store;
 
@@ -17,7 +18,7 @@ public class StoreExample : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login(CloudGoodsPlatform.SocialPlay, "lionelsy", "lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+        CallHandler.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)

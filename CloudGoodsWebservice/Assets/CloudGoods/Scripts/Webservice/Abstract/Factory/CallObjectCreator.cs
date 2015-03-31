@@ -12,6 +12,8 @@ namespace CloudGoods.Webservice
 
         WWW CreateLoginCallObject(string appID, string userEmail, string password);
 
+        WWW CreateLoginByPlatformCallObject(string appId, string userName, int platformId, string platformUserID);
+
         WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 
         WWW CreateMoveItemsCallObject(MoveItemsRequest request);
@@ -47,5 +49,9 @@ namespace CloudGoods.Webservice
         string GenerateNonce();
 
         WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request);
+
+        WWW CreateConsumePremiumCall(ConsumePremiumRequest request);
+
+        WWW CreatePurchaseItemCall(PurchaseItemRequest request);
     }
 }
