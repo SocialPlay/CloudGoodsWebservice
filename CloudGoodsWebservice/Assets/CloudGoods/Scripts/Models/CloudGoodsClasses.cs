@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CloudGoods.Models;
 using CloudGoods.Container;
+using CloudGoods.Enums;
 using LitJson;
 
 namespace CloudGoods.Models
@@ -35,6 +36,21 @@ namespace CloudGoods.Models
         public string UserEmail = "";
         public string SessionID;
     }
+
+    public class RegisteredUser
+    {
+        public int ID;
+        public bool Active;
+        public bool Deleted;
+        public int PlatformId;
+        public string PlatformUserId;
+        public string FirstName;
+        public string LastName;
+        public string email;
+        public string password;
+        public Nullable<int> WorldID;
+    }
+
 
     public class UserResponse
     {
@@ -87,6 +103,27 @@ namespace CloudGoods.Models
             Email = userEmail;
         }
     }
+
+    public class RegisterUserRequest: IRequestClass
+    {
+        public string AppId;
+        public string UserName;
+        public string UserEmail;
+        public string Password;
+
+        public string ToHashable()
+        {
+            return AppId + UserName + UserEmail + Password;
+        }
+    }
+
+    public class StatusMessageResponse
+    {
+        public int code;
+        public string message;
+
+    }
+
 
     public class WebserviceError
     {
@@ -715,6 +752,52 @@ namespace CloudGoods.Models
     #endregion
 
     #region Item Bundles
+
+    public class ItemBundle
+    {
+        public int ID;
+        public int CreditPrice;
+        public int CoinPrice;
+
+        //State 1 = Credit and Coin Purchaseable
+        //State 2 = Credit purchase only
+        //State 3 = Coin Purchase only
+        //State 4 = Free
+        public CloudGoodsBundle State;
+
+        public string Name;
+        public string Description;
+        public string Image;
+
+        public List<BundleItem> bundleItems = new List<BundleItem>();
+    }
+
+    public class BundleItem
+    {
+        public int Quantity;
+        public int Quality;
+
+        public string Name;
+        public string Image;
+        public string Description;
+
+        public List<BundleItemDetails> bundleItemDetails = new List<BundleItemDetails>();
+    }
+
+    public class BundleItemDetails
+    {
+        public float Value;
+        public string BundleDetailName;
+    }
+
+    public class BundlePurchaseRequest
+    {
+        public int BundleID;
+        public string UserID;
+        public string ReceiptToken;
+        public int PaymentPlatform;
+    }
+
     public class ItemBundlesResponse
     {
         public List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();   

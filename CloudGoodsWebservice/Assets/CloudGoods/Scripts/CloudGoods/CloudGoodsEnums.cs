@@ -35,8 +35,8 @@ namespace CloudGoods.Enums
 
     public enum CurrencyType
     {
-        Standard,
-        Premium
+        Standard = 1,
+        Premium = 2
     }
 
     public enum PlatformPurchase

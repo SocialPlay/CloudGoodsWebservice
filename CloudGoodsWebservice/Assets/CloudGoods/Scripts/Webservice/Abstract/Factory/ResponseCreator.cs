@@ -16,6 +16,8 @@ namespace CloudGoods.Webservice
 
         CloudGoodsUser CreateLoginResponse(string responseData);
 
+        RegisteredUser CreateRegisteredUserResponse(string responseData);
+
         List<InstancedItemInformation> CreateItemDataListResponse(string responseData);
 
         UpdatedStacksResponse CreateUpdatedStacksResponse(string responseData);
@@ -33,6 +35,10 @@ namespace CloudGoods.Webservice
         List<StoreItem> CreateGetStoreItemResponse(string responseData);
 
         ConsumePremiumResponce CreateConsumePremiumResponce(string responseData);
+
+        ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string responseData);
+
+        StatusMessageResponse CreateStatusMessageResponse(string responseData);
 
     }
 

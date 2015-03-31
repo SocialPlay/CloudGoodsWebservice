@@ -27,6 +27,11 @@ public class TestWebservice : MonoBehaviour {
         CallHandler.Login( "lionel.sy@gmail.com", "123456", OnReceivedLoginResponse);
     }
 
+    void OnReceivedStatuseMessage(StatusMessageResponse response)
+    {
+        Debug.Log("response code: " + response.code + "   repsonse message: " + response.message);
+    }
+
     void OnReceivedLoginResponse(CloudGoodsUser user)
     {
         CallHandler.GetCurrencyInfo(OnReceivedCurrencyInfo);

@@ -82,12 +82,8 @@ namespace CloudGoods.Store.UI
             PremiumCurrencyFullWindow.SetActive(false);
             PremiumCurrencyHalfWindow.SetActive(false);
 
-            Debug.Log("Item Prmeium Cost: " + itemCreditCost + "  Item Standard Cost: " + itemCoinCost);
-
             if (itemCreditCost > 0 && itemCoinCost > 0)
             {
-                Debug.Log("Display Half costs");
-
                 StandardCurrencyHalfWindow.SetActive(true);
                 PremiumCurrencyHalfWindow.SetActive(true);
 
@@ -98,8 +94,6 @@ namespace CloudGoods.Store.UI
             }
             else if (itemCreditCost < 0)
             {
-                Debug.Log("Display full standard costs");
-
                 StandardCurrencyFullWindow.SetActive(true);
 
                 UnityUIPurchaseButtonDisplay StandardOnlyButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
@@ -107,8 +101,6 @@ namespace CloudGoods.Store.UI
             }
             else if (itemCoinCost < 0)
             {
-                Debug.Log("Display Full Premium Costs");
-
                 PremiumCurrencyFullWindow.SetActive(true);
 
                 UnityUIPurchaseButtonDisplay PremiumOnlyButtonDisplay = PremiumCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();

@@ -19,6 +19,11 @@ namespace CloudGoods.Webservice
             return JsonMapper.ToObject<CloudGoodsUser>(responseData);
         }
 
+        public RegisteredUser CreateRegisteredUserResponse(string responseData)
+        {
+            return JsonMapper.ToObject<RegisteredUser>(responseData);
+        }
+
         #endregion
 
         #region Item Management
@@ -60,7 +65,10 @@ namespace CloudGoods.Webservice
 
         public CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData)
         {
-            return JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
+            CurrencyBalanceResponse response = JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
+            Debug.Log("amount: " + response.Amount);
+
+            return response;
         }
 
         public List<StoreItem> CreateGetStoreItemResponse(string responseData)
@@ -126,7 +134,10 @@ namespace CloudGoods.Webservice
 
         #endregion
 
-
+        public StatusMessageResponse CreateStatusMessageResponse(string responseData)
+        {
+            return JsonMapper.ToObject<StatusMessageResponse>(responseData);
+        }
 
         public ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string responseData)
         {

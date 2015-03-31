@@ -24,8 +24,8 @@ namespace CloudGoods
         static public event Action<string> OnRegisteredUserToSession;
         static public event Action<CloudGoodsUser> OnUserAuthorized;
         static public event Action<List<StoreItem>> OnStoreListLoaded;
-        //static public event Action<List<ItemBundle>> OnStoreItemBundleListLoaded;
-        //static public event Action<List<ItemData>> OnItemsLoaded;
+        static public event Action<List<ItemBundle>> OnStoreItemBundleListLoaded;
+        //static public event Action<List<Item>> OnItemsLoaded;
         static public event Action<int> OnStandardCurrency;
         static public event Action<int> OnPremiumCurrency;
         static public event Action<string> OnStandardCurrencyName;
@@ -202,6 +202,56 @@ namespace CloudGoods
             }));
         }
 
+        public static void Register(string appId, string userName, string userEmail, string password, Action<RegisteredUser> callback)
+        {
+            Instance._Register(appId, userName, userEmail, password, callback);
+        }
+
+        private void _Register(string appId, string userName, string userEmail, string password, Action<RegisteredUser> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateRegisterUserCallObject(new RegisterUserRequest()
+            {
+                AppId = appId,
+                UserName = userName,
+                UserEmail = userEmail,
+                Password = password
+            }), x =>
+            {
+                callback(responseCreator.CreateRegisteredUserResponse(x));
+            }
+            ));
+        }
+
+        public static void ForgotPassword(string userEmail, Action<StatusMessageResponse> callback)
+        {
+            Instance._ForgotPassword(userEmail, callback);
+        }
+
+        private void _ForgotPassword(string userEmail, Action<StatusMessageResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateForgotPasswordCallObject(userEmail), x =>
+            {
+                callback(responseCreator.CreateStatusMessageResponse(x));
+            }));
+        }
+
+        public static void ResendVerificationEmail(string email, Action<StatusMessageResponse> callback)
+        {
+            Instance._ResendVerificationEmail(email, callback);
+        }
+
+        private void _ResendVerificationEmail(string email, Action<StatusMessageResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateResendVerificationEmailCallObject(email), x =>
+                {
+                    if (callback != null)
+                        callback(responseCreator.CreateStatusMessageResponse(x));
+                }));
+        }
+
+
+
+        #endregion
         /// <summary>
         /// Log a user into the cloudgoods system.
         /// Only usable for external Users (Use Login for SP Users) 
@@ -220,6 +270,7 @@ namespace CloudGoods
                 callback(User);
             }));
         }
+
 
         #region Items
         public static void GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
@@ -524,7 +575,7 @@ namespace CloudGoods
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.ItemBundlePurchaseCall(new ItemBundlePurchaseRequest() { BundleID = bundleId, PaymentType = paymentType, Location = location }), x =>
             {
-                //callback(responseCreator.CreateItemBundlePurchaseResponse(x));
+                callback(responseCreator.CreateItemBundlePurchaseResponse(x));
             }));
         }
 
@@ -559,6 +610,8 @@ namespace CloudGoods
             WebserviceError error = responseCreator.IsWebserviceError(responseData);
             if (error!= null)
             {
+                Debug.LogError("Error: " + error.Message);
+
                 if (IsError != null)
                 {
                     IsError(error);
