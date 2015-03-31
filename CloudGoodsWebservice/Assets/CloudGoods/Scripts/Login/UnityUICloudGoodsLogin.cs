@@ -234,13 +234,13 @@ namespace CloudGoods.Login
             if (string.IsNullOrEmpty(ErrorMsg))
             {
                 SwitchToConfirmation();
-                CallHandler.Register(CloudGoodsSettings.AppID, registerUserEmail.text, registerUserPassword.text, registerUserName.text, OnRegisteredUser);
+                CallHandler.Register(CloudGoodsSettings.AppID, registerUserName.text, registerUserEmail.text, registerUserPassword.text, OnRegisteredUser);
             }
         }
 
         void OnRegisteredUser(RegisteredUser userResponse)
         {
-            Debug.Log("User has been registered");
+            Debug.Log("User has been registered: " + userResponse.Active);
 
             confirmationStatus.text = "Verification Email has been sent to your Email";
         }

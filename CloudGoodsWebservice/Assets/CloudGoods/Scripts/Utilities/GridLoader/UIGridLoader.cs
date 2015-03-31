@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using SocialPlay.Utilities;
+using CloudGoods.Utilities;
 using CloudGoods.Models;
 
 namespace CloudGoods.Utilities

@@ -521,7 +521,7 @@ namespace CloudGoods
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.ItemBundlePurchaseCall(new ItemBundlePurchaseRequest() { BundleID = bundleId, PaymentType = paymentType, Location = location }), x =>
             {
-                //callback(responseCreator.CreateItemBundlePurchaseResponse(x));
+                callback(responseCreator.CreateItemBundlePurchaseResponse(x));
             }));
         }
 

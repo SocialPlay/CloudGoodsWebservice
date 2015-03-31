@@ -34,6 +34,8 @@ namespace CloudGoods.Webservice
 
         List<StoreItem> CreateGetStoreItemResponse(string responseData);
 
+        ItemBundlePurchaseResponse CreateItemBundlePurchaseResponse(string responseData);
+
         StatusMessageResponse CreateStatusMessageResponse(string responseData);
 
     }
