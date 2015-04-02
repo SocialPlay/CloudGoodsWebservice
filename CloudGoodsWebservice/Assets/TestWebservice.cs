@@ -48,7 +48,7 @@ public class TestWebservice : MonoBehaviour {
 
         foreach(StoreItem storeItem in storeItems)
         {
-            Debug.Log("store item found: " + storeItem.Name);
+            Debug.Log("store item found: " + storeItem.ItemInformation.Name);
 
             foreach(StoreItemDetail detail in storeItem.ItemDetails)
             {

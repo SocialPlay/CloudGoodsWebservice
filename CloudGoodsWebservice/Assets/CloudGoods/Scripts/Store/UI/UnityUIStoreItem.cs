@@ -13,6 +13,9 @@ namespace CloudGoods.Store.UI
 
         public StoreItem storeItem { get; private set; }
 
+        public GameObject SalePanel;
+        public Text SaleName;
+
         UnityUIStoreLoader storeLoader;
 
         //public UISprite itemImageSprite;
@@ -50,7 +53,18 @@ namespace CloudGoods.Store.UI
             //if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
             storeItem = item;
             storeLoader = unityStoreLoader;
-            ItemTextureCache.Instance.GetItemTexture(storeItem.Image, OnReceivedItemTexture);
+            ItemTextureCache.Instance.GetItemTexture(storeItem.ItemInformation.ImageName, OnReceivedItemTexture);
+
+            SetDisplayForSale();
+        }
+
+        void SetDisplayForSale()
+        {
+            if (storeItem.Sale.Count > 0)
+            {
+                SalePanel.SetActive(true);
+                SaleName.text = storeItem.Sale[0].SaleName;
+            }
         }
 
         public void OnStoreItemClicked()

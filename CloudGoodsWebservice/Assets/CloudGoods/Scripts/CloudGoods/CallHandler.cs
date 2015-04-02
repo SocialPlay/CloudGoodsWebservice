@@ -512,6 +512,7 @@ namespace CloudGoods
                 callback(responseCreator.CreateItemBundlesResponse(x));
             }));
         }
+
         public static void PurchaseItemBundle(int bundleId, int paymentType, int location, Action<ItemBundlePurchaseResponse> callback)
         {
             Instance._PurchaseItemBundle(bundleId, paymentType, location, callback);
@@ -523,6 +524,19 @@ namespace CloudGoods
             {
                 callback(responseCreator.CreateItemBundlePurchaseResponse(x));
             }));
+        }
+
+        public static void GetPremiumBundles(int platformId, Action<List<PremiumCurrencyBundle>> callback)
+        {
+            Instance._GetPremiumBundles(platformId, callback);
+        }
+
+        private void _GetPremiumBundles(int platformId, Action<List<PremiumCurrencyBundle>> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetPremiumCurrencyBundlesCall(platformId), x =>
+                {
+                    callback(responseCreator.CreatePremiumCurrencyBundleResponse(x));
+                }));
         }
 
         #endregion

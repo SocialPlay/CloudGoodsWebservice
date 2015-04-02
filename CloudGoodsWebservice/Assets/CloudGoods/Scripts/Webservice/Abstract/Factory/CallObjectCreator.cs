@@ -39,6 +39,8 @@ namespace CloudGoods.Webservice
 
         WWW CreatePremiumCurrencyBalanceCall();
 
+        WWW CreateGetPremiumCurrencyBundlesCall(int PlatformId);
+
         WWW CreateGetStoreItemsCall(string andTags, string orTags);
 
         WWW CreateStandardCurrencyBalanceCall(int accessLocation);

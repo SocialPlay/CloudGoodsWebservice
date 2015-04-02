@@ -66,7 +66,6 @@ namespace CloudGoods.Webservice
         public CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData)
         {
             CurrencyBalanceResponse response = JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
-            Debug.Log("amount: " + response.Amount);
 
             return response;
         }
@@ -75,6 +74,11 @@ namespace CloudGoods.Webservice
         {
             JsonData data = JsonMapper.ToObject(responseData);
             return JsonMapper.ToObject<List<StoreItem>>(data["StoreItems"].ToJson());
+        }
+
+        public List<PremiumCurrencyBundle> CreatePremiumCurrencyBundleResponse(string responseData)
+        {
+            return JsonMapper.ToObject<List<PremiumCurrencyBundle>>(responseData);
         }
 
         public SimpleItemInfo CreateSimpleItemInfoResponse(string responseData)
@@ -103,7 +107,6 @@ namespace CloudGoods.Webservice
         public WebserviceError IsWebserviceError(string data)
         {
             JsonData jsonData = JsonMapper.ToObject(data);
-
 
             if (JsonDataContainsKey(jsonData, "errorCode"))
             {              

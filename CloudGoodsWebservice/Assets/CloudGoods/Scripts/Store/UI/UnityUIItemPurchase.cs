@@ -121,17 +121,36 @@ namespace CloudGoods.Store.UI
         public void DisplayItemPurchasePanel(UnityUIStoreItem item)
         {
             itemInfo = item;
-            itemNameDisplay.text = item.storeItem.Name;
+            itemNameDisplay.text = item.storeItem.ItemInformation.Name;
 
-            premiumCurrencyCost = item.storeItem.CreditValue;
-            standardCurrencyCost = item.storeItem.CoinValue;
+            if(item.storeItem.Sale.Count > 0)
+            {
+                if (item.storeItem.CreditValue > 0)
+                    premiumCurrencyCost = item.storeItem.Sale[0].PremiumCurrencySaleValue;
+                else
+                {
+                    premiumCurrencyCost = item.storeItem.CreditValue;
+                }
+
+                if (item.storeItem.CoinValue > 0)
+                    standardCurrencyCost = item.storeItem.Sale[0].StandardCurrencySaleValue;
+                else
+                    standardCurrencyCost = item.storeItem.CoinValue;
+            }
+            else
+            {
+                premiumCurrencyCost = item.storeItem.CreditValue;
+                standardCurrencyCost = item.storeItem.CoinValue;
+            }
 
             itemQuantityAmount.text = "1";
             SetItemDetailDisplay(item);
 
             itemTexture.texture = item.gameObject.GetComponentInChildren<RawImage>().texture;
 
-            ChangePurchaseButtonDisplay(item.storeItem.CreditValue, item.storeItem.CoinValue);
+            Debug.Log(premiumCurrencyCost);
+
+            ChangePurchaseButtonDisplay(premiumCurrencyCost, standardCurrencyCost);
         }
 
         void SetItemDetailDisplay(UnityUIStoreItem storeItem)
@@ -149,14 +168,14 @@ namespace CloudGoods.Store.UI
         public void PurchaseItemWithPremiumCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            //CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
+            //CallHandler.(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
         public void PurchaseItemWithStandardCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            //CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+            //CallHandler.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 

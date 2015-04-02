@@ -339,6 +339,17 @@ namespace CloudGoods.Models
         public string Message;
     }
 
+    public class PremiumCurrencyBundle
+    {
+        public int ID;
+        public string Name;
+        public string Image;
+        public string Description;
+        public double Cost;
+        public int CreditAmount;
+        public string Currency;
+    }
+
     #endregion
 
     #region Items
@@ -660,17 +671,13 @@ namespace CloudGoods.Models
 
     public class StoreItem
     {
-        public int BaseItemId;
-        public string Image;
-        public string Name;
-        public string Description;
+
+        public ItemInformation ItemInformation;
+        public List<SalePrices> Sale;
         public int ItemId;
         public int CreditValue;
         public int CoinValue;
         public DateTime AddDate;
-        public string ItemDetailString;
-        public List<int> Behaviours;
-        public Dictionary<string, int> Tags = new Dictionary<string, int>();
 
         public List<StoreItemDetail> ItemDetails
         {
@@ -682,7 +689,7 @@ namespace CloudGoods.Models
                 {
                     ParsedItemDetail = new List<StoreItemDetail>();
 
-                    JsonData data = JsonMapper.ToObject(ItemDetailString);
+                    JsonData data = JsonMapper.ToObject(ItemInformation.Detail);
                     for (int i = 0; i < data.Count; i++)
                     {
                         StoreItemDetail itemDetail = new StoreItemDetail()
@@ -698,6 +705,17 @@ namespace CloudGoods.Models
         }
 
         List<StoreItemDetail> ParsedItemDetail;
+    }
+
+    public class SalePrices
+    {
+        public int PremiumCurrencySaleValue;
+        public int StandardCurrencySaleValue;
+        public string SaleName;
+
+        public DateTime SaleStartDate;
+        public DateTime SaleEndDate;
+
     }
 
 

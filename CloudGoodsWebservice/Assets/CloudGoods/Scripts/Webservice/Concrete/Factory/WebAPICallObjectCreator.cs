@@ -200,6 +200,10 @@ namespace CloudGoods.Webservice
             return GenerateWWWCall("StandardCurrency", new KeyValuePair<string, string> ("accessLocation", accessLocation.ToString()));
         }
 
+        public WWW CreateGetPremiumCurrencyBundlesCall(int PlatformId)
+        {
+            return GenerateWWWCall("PremiumCurrencyBundles", new KeyValuePair<string, string>("platformId", PlatformId.ToString()));
+        }
 
         public WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request)
         {

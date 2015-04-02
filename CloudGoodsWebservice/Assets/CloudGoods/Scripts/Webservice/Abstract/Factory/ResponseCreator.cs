@@ -38,6 +38,8 @@ namespace CloudGoods.Webservice
 
         StatusMessageResponse CreateStatusMessageResponse(string responseData);
 
+        List<PremiumCurrencyBundle> CreatePremiumCurrencyBundleResponse(string responseData);
+
     }
 
 }
