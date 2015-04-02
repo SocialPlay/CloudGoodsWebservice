@@ -65,20 +65,13 @@ namespace CloudGoods.Webservice
 
         public CurrencyBalanceResponse CreateCurrencyBalanceResponse(string responseData)
         {
-            CurrencyBalanceResponse response = JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
-
-            return response;
+            return JsonMapper.ToObject<CurrencyBalanceResponse>(responseData);
         }
 
         public List<StoreItem> CreateGetStoreItemResponse(string responseData)
         {
             JsonData data = JsonMapper.ToObject(responseData);
             return JsonMapper.ToObject<List<StoreItem>>(data["StoreItems"].ToJson());
-        }
-
-        public List<PremiumCurrencyBundle> CreatePremiumCurrencyBundleResponse(string responseData)
-        {
-            return JsonMapper.ToObject<List<PremiumCurrencyBundle>>(responseData);
         }
 
         public SimpleItemInfo CreateSimpleItemInfoResponse(string responseData)
@@ -107,6 +100,7 @@ namespace CloudGoods.Webservice
         public WebserviceError IsWebserviceError(string data)
         {
             JsonData jsonData = JsonMapper.ToObject(data);
+
 
             if (JsonDataContainsKey(jsonData, "errorCode"))
             {              
@@ -151,6 +145,23 @@ namespace CloudGoods.Webservice
         public ConsumePremiumResponce CreateConsumePremiumResponce(string responseData)
         {
             return JsonMapper.ToObject<ConsumePremiumResponce>(responseData);
+        }
+
+
+        public UserDataValue CreateUserDataResponse(string responseData)
+        {
+            return JsonMapper.ToObject<UserDataValue>(responseData);
+        }
+
+
+        public List<OwnedUserDataValues> CreateUserDataByKeyResponse(string responseData)
+        {
+            return JsonMapper.ToObject<List<OwnedUserDataValues>>(responseData);
+        }
+
+        public List<UserDataValue> CreateUserDataAllResponse(string responseData)
+        {
+            return JsonMapper.ToObject<List<UserDataValue>>(responseData);
         }
     }
 

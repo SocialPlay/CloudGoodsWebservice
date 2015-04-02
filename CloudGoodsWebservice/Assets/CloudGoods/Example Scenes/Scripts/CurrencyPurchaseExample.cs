@@ -24,7 +24,7 @@ public class CurrencyPurchaseExample : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login(CloudGoodsPlatform.SocialPlay, "lionelsy", "lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+        CallHandler.Login( "lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)

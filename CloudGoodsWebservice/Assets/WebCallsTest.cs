@@ -20,13 +20,16 @@ namespace WebCallTests
             ItemVouchers,
             Store,
             ItemBundles,
-            UserCurrency
+            UserCurrency,
+            UserData
         }
 
 
 
         string title = "";
         private static SystemTabs activeTab = SystemTabs.BaseItems;
+
+        Vector2 option = Vector2.zero;
 
         void OnEnable()
         {
@@ -49,7 +52,7 @@ namespace WebCallTests
 
         void Instance_CloudGoodsInitilized()
         {
-            // CallHandler.Login( "lionel.sy@gmail.com", "123456", OnReceivedUser);
+
         }
 
 
@@ -62,6 +65,7 @@ namespace WebCallTests
         void drawLeft()
         {
             GUILayout.BeginArea(new Rect(25, 25, Screen.width / 2 - 50, Screen.height - 50));
+
             if (CallHandler.User != null)
             {
                 GUILayout.BeginHorizontal();
@@ -79,35 +83,50 @@ namespace WebCallTests
                 return;
             }
 
+
+            option = GUILayout.BeginScrollView(option, GUILayout.MaxHeight(50));
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Basic Items"))
             {
                 activeTab = SystemTabs.BaseItems;
                 title = "Basic Item Calls";
+                SelctionInit();
             }
             if (GUILayout.Button("Item voucher"))
             {
                 activeTab = SystemTabs.ItemVouchers;
                 title = "Item Voucher Calls";
+                SelctionInit();
             }
             if (GUILayout.Button("Store"))
             {
                 activeTab = SystemTabs.Store;
                 title = "Store Calls";
+                SelctionInit();
             }
             if (GUILayout.Button("Item Bundle"))
             {
                 activeTab = SystemTabs.ItemBundles;
                 title = "Item Bundle Calls";
+                SelctionInit();
             }
 
             if (GUILayout.Button("User Currency"))
             {
                 activeTab = SystemTabs.UserCurrency;
                 title = "Users currency";
-                UsersCurrency.Init();
+                SelctionInit();
+            }
+
+            if (GUILayout.Button("User Data"))
+            {
+                activeTab = SystemTabs.UserData;
+                title = "Users Data";
+                SelctionInit();
             }
             GUILayout.EndHorizontal();
+            GUILayout.EndScrollView();
+
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label(title);
             switch (activeTab)
@@ -127,12 +146,20 @@ namespace WebCallTests
                 case SystemTabs.UserCurrency:
                     UsersCurrency.Draw();
                     break;
+                case SystemTabs.UserData:
+                    UserDataCalls.Draw();
+                    break;
             }
             ItemManagerCalls.DrawItemDetails();
             GUILayout.EndVertical();
             GUILayout.EndArea();
         }
 
+
+        void SelctionInit()
+        {
+            UsersCurrency.Init();
+        }
     }
 
 
@@ -167,7 +194,6 @@ namespace WebCallTests
             Last = line;
         }
     }
-
 
     internal static class ItemManagerCalls
     {
@@ -595,7 +621,6 @@ namespace WebCallTests
         }
     }
 
-
     internal static class StoreCalls
     {
         static List<StoreItem> storeItems = new List<StoreItem>();
@@ -603,25 +628,36 @@ namespace WebCallTests
 
         public static void Draw()
         {
+            UsersCurrency.SimpleDisplay();
             if (GUILayout.Button("Get Store Items"))
             {
                 GetStoreItems();
             }
 
             GUILayout.FlexibleSpace();
+
             scroll = GUILayout.BeginScrollView(scroll);
             foreach (StoreItem item in storeItems)
             {
-                GUILayout.Label(string.Format("{0}{1}", item.ItemId, item.Name));
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button(string.Format("Premium: {0}", item.CreditValue)))
+                GUILayout.BeginHorizontal(GUI.skin.box);
+                GUILayout.Label(string.Format("{1}\n  ID:{0}", item.ItemId, item.Name));
+                GUILayout.FlexibleSpace();
+                GUILayout.BeginVertical(GUILayout.Width(300));
+                if (item.CreditValue != -1)
                 {
-                    CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Premium, 0, StoreItemPurchaseResponse);
+                    if (GUILayout.Button(string.Format("{1}: {0}", item.CreditValue, UsersCurrency.PremiumName())))
+                    {
+                        CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Premium, 0, StoreItemPurchaseResponse);
+                    }
                 }
-                if (GUILayout.Button(string.Format("Standard: {0}", item.CoinValue)))
+                if (item.CoinValue != -1)
                 {
-                    CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Standard, 0, StoreItemPurchaseResponse);
+                    if (GUILayout.Button(string.Format("{1}: {0}", item.CoinValue, UsersCurrency.StandardName())))
+                    {
+                        CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Standard, 0, StoreItemPurchaseResponse);
+                    }
                 }
+                GUILayout.EndVertical();
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndScrollView();
@@ -650,6 +686,8 @@ namespace WebCallTests
 
     internal static class UsersCurrency
     {
+
+
 
         static CurrencyInfoResponse info;
 
@@ -701,7 +739,7 @@ namespace WebCallTests
             if (GUILayout.Button("-"))
             {
                 consumeAmount--;
-                if (consumeAmount > 1) consumeAmount = 1;
+                if (consumeAmount < 1) consumeAmount = 1;
             }
             GUILayout.EndHorizontal();
             if (GUILayout.Button("Consume Premium Currency"))
@@ -720,8 +758,32 @@ namespace WebCallTests
                 }
             });
         }
-    }
+        public static void SimpleDisplay()
+        {
+            if (info == null)
+            {
+                GUILayout.Label("Waiting");
+            }
+            else
+            {
+                GUILayout.BeginHorizontal(GUI.skin.box);
+                GUILayout.Label(string.Format("{0}: {1}", info.PremiumCurrencyName, premiumAmount));
+                GUILayout.Label(string.Format("{0}: {1}", info.StandardCurrencyName, standardAmount));
+                GUILayout.EndHorizontal();
+            }
+        }
 
+        public static string StandardName()
+        {
+            return info != null ? info.StandardCurrencyName : "Standard";
+        }
+
+        public static string PremiumName()
+        {
+            return info != null ? info.PremiumCurrencyName : "Premium";
+        }
+
+    }
 
     internal static class LoginCalls
     {
@@ -729,9 +791,10 @@ namespace WebCallTests
         static bool isSent = false;
         static bool isPlatform = false;
 
-        static string userName = "";
+        static string userEmail = "";
         static string password = "";
         static int platform = 1;
+        static string platformUserName = "";
         static string platformUserId = "";
         static string platString = "1";
 
@@ -749,26 +812,31 @@ namespace WebCallTests
             {
                 isPlatform = false;
                 isSent = false;
+                userEmail = PlayerPrefs.GetString("SPLogin_UserEmail", "");
+                password = PlayerPrefs.GetString("SPLogin_Password", "");
             }
             if (GUILayout.Button("Use Platform Id"))
             {
                 isPlatform = true;
                 isSent = false;
+                platformUserName = PlayerPrefs.GetString("SPLogin_PlatformUserName", "");
+                platformUserId = PlayerPrefs.GetString("SPLogin_PlatformUserID", "");
+                platform = PlayerPrefs.GetInt("SPLogin_PlatformId", 1);
             }
             GUILayout.EndHorizontal();
+            if (!isPlatform)
+            {
+
+                GUILayout.Label("User Email");
+                userEmail = GUILayout.TextField(userEmail);
+
+                GUILayout.Label("Password");
+                password = GUILayout.PasswordField(password, '*');
+            }
             if (isPlatform)
             {
                 GUILayout.Label("User Name");
-            }
-            else
-            {
-                GUILayout.Label("User Email");
-            }
-            userName = GUILayout.TextField(userName);
-            GUILayout.Label("Password");
-            password = GUILayout.PasswordField(password, '*');
-            if (isPlatform)
-            {
+                platformUserName = GUILayout.TextField(platformUserName);
                 GUILayout.BeginHorizontal();
                 GUILayout.BeginVertical();
                 GUILayout.Label("Platform ID");
@@ -798,10 +866,8 @@ namespace WebCallTests
                 {
                     GUILayout.Label("Unknow");
                 }
-
                 GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
-
                 GUILayout.BeginVertical();
                 GUILayout.Label("User ID");
                 platformUserId = GUILayout.TextField(platformUserId);
@@ -816,11 +882,16 @@ namespace WebCallTests
                     {
                         if (isPlatform)
                         {
-                            CallHandler.LoginByPlatform((CloudGoodsPlatform)platform, platformUserId, userName, OnReceivedUser);
+                            PlayerPrefs.SetString("SPLogin_PlatformUserName", platformUserName);
+                            PlayerPrefs.SetString("SPLogin_PlatformUserID", platformUserId);
+                            PlayerPrefs.SetInt("SPLogin_PlatformId", platform);
+                            CallHandler.LoginByPlatform((CloudGoodsPlatform)platform, platformUserId, userEmail, OnReceivedUser);
                         }
                         else
                         {
-                            CallHandler.Login(userName, password, OnReceivedUser);
+                            PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
+                            PlayerPrefs.SetString("SPLogin_Password", password);
+                            CallHandler.Login(userEmail, password, OnReceivedUser);
                         }
                     }
                 }
@@ -839,9 +910,12 @@ namespace WebCallTests
         {
             if (isPlatform)
             {
-                if (!Enum.IsDefined(typeof(CloudGoodsPlatform), platform) || string.IsNullOrEmpty(platformUserId)) return false;
+                if (string.IsNullOrEmpty(platformUserName) || !Enum.IsDefined(typeof(CloudGoodsPlatform), platform) || string.IsNullOrEmpty(platformUserId)) return false;
             }
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password)) return false;
+            else
+            {
+                if (string.IsNullOrEmpty(userEmail) || string.IsNullOrEmpty(password)) return false;
+            }
 
             return true;
         }
@@ -853,6 +927,105 @@ namespace WebCallTests
             debugString += "\nEmail: " + user.UserEmail;
             debugString += "\nIs New: " + user.IsNewUserToWorld;
             debugString += "\nSession:" + user.SessionID.ToString();
+            DisplayHelper.NewDisplayLine(debugString);
+
+            UsersCurrency.Init();
+        }
+    }
+
+    internal static class UserDataCalls
+    {
+        static List<OwnedUserDataValues> worldsData = new List<OwnedUserDataValues>();
+        static List<UserDataValue> userDatas = new List<UserDataValue>();
+        static string lookupKey = "";
+        static string lookupValue = "";
+
+        public static void Draw()
+        {
+            GUILayout.Space(5);
+            GUILayout.Label("Look up key");
+            lookupKey = GUILayout.TextField(lookupKey);
+            GUILayout.Label("Set value");
+            lookupValue = GUILayout.TextField(lookupValue);
+            GUILayout.Space(5);
+
+            if (GUILayout.Button("Get User Key"))
+            {
+                if (!String.IsNullOrEmpty(lookupKey))
+                    CallHandler.UserDataGet(lookupKey, OnReciveData);
+            }
+            if (GUILayout.Button("Update User Key"))
+            {
+                if (!String.IsNullOrEmpty(lookupKey) && !string.IsNullOrEmpty(lookupValue))
+                    CallHandler.UserDataUpdate(lookupKey, lookupValue, OnReciveData);
+            }
+            if (GUILayout.Button("Get All Users Values"))
+            {
+                CallHandler.UserDataAll(OnReciveUserDatas);
+
+            }
+            if (GUILayout.Button("Get all data by Key"))
+            {
+                if (!String.IsNullOrEmpty(lookupKey))
+                    CallHandler.UserDataByKey(lookupKey, OnRecivedDataByKey);
+            }
+            GUILayout.FlexibleSpace();
+            foreach (UserDataValue udv in userDatas)
+            {
+                GUILayout.Label(string.Format("key: {0}, Value: {1}", udv.Key, udv.Value),GUI.skin.box); 
+            }
+
+        }
+
+        static void OnReciveData(UserDataValue userData)
+        {
+            if (userData.IsExisting)
+            {
+                DisplayHelper.NewDisplayLine(string.Format("Recived User Data\n  Key: {0}\n  Value: {1}", userData.Key, userData.Value));
+            }
+            else
+            {
+                DisplayHelper.NewDisplayLine("User does not have that key", Color.yellow);
+            }
+            AddToExisting(userData);
+        }
+
+        static void OnReciveUserDatas(List<UserDataValue> values)
+        {
+            string debugString = "Recived User Datas";
+            foreach (UserDataValue value in values)
+            {
+                AddToExisting(value);
+                debugString = string.Format("{0}\n  Key: {1}, Value: {2}", debugString, value.Key, value.Value);
+            }
+            DisplayHelper.NewDisplayLine(debugString);
+        }
+
+        static void AddToExisting(UserDataValue userData)
+        {
+            if (!userData.IsExisting) return;
+
+            UserDataValue existing = userDatas.FirstOrDefault(u => u.Key == userData.Key);
+            if (existing != null)
+            {
+                existing.Value = userData.Value;
+                existing.LastUpdated = userData.LastUpdated;
+            }
+            else
+            {
+                userDatas.Add(userData);
+            }
+        }
+
+        static void OnRecivedDataByKey(List<OwnedUserDataValues> response)
+        {
+            worldsData = response;
+            if (response.Count() == 0) return;
+            string debugString = "Recived User Data of " + response[0].UserData.Key;
+            foreach (OwnedUserDataValues ownedData in response)
+            {
+                debugString = string.Format("{0}\n {1}\n   {2}", debugString, ownedData.UserId, ownedData.UserData.Value);
+            }
             DisplayHelper.NewDisplayLine(debugString);
         }
     }

@@ -121,9 +121,9 @@ namespace CloudGoods.Webservice
             return new WWW(urlString, null, headers);
         }
 
-        public WWW CreateLoginByPlatformCallObject(string appId, string userName, int platformId, string platformUserID)
+        public WWW CreateLoginByPlatformCallObject(string userName, int platformId, string platformUserID)
         {
-            string loginUrl = string.Format("?appId={0}&userName={1}&platformId={2}&platformUserId={3}", appId, userName, platformId, platformUserID);
+            string loginUrl = string.Format("?appId={0}&userName={1}&platformId={2}&platformUserId={3}", CloudGoodsSettings.AppID, userName, platformId, platformUserID);
 
             Dictionary<string, string> headers = CreateHeaders(loginUrl);
             string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/LoginByPlatform" + loginUrl);
@@ -228,6 +228,28 @@ namespace CloudGoods.Webservice
         public WWW CreatePurchaseItemCall(PurchaseItemRequest request)
         {
             return GenerateWWWPost("PurchaseItem", request);
+        }
+
+
+        public WWW CreateUserDataCall(string key)
+        {
+            return GenerateWWWCall("UserData", new KeyValuePair<string, string>("key", key));
+        }
+
+
+        public WWW CreateUserDataUpdateCall(string key, string value)
+        {
+            return GenerateWWWCall("UserDataUpdate", new KeyValuePair<string, string>("key", key), new KeyValuePair<string, string>("value", value));
+        }
+
+        public WWW CreateUserDataAllCall()
+        {
+            return GenerateWWWCall("UserDataAll");
+        }
+
+        public WWW CreateUserDataByKeyCall(string key)
+        {
+            return GenerateWWWCall("UserDataByKey", new KeyValuePair<string, string>("key", key));
         }
     }
 }
