@@ -17,7 +17,7 @@ namespace CloudGoods.Webservice
 
         WWW CreateResendVerificationEmailCallObject(string email);
 
-        WWW CreateLoginByPlatformCallObject(string appId, string userName, int platformId, string platformUserID);
+        WWW CreateLoginByPlatformCallObject( string userName, int platformId, string platformUserID);
 
         WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
 
@@ -58,5 +58,13 @@ namespace CloudGoods.Webservice
         WWW CreateConsumePremiumCall(ConsumePremiumRequest request);
 
         WWW CreatePurchaseItemCall(PurchaseItemRequest request);
+
+        WWW CreateUserDataCall(string key);
+
+        WWW CreateUserDataUpdateCall(string key, string value);
+
+        WWW CreateUserDataAllCall();
+
+        WWW CreateUserDataByKeyCall(string key);
     }
 }

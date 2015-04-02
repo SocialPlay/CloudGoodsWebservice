@@ -104,7 +104,7 @@ namespace CloudGoods.Models
         }
     }
 
-    public class RegisterUserRequest: IRequestClass
+    public class RegisterUserRequest : IRequestClass
     {
         public string AppId;
         public string UserName;
@@ -185,7 +185,7 @@ namespace CloudGoods.Models
 
     public class ItemVouchersResponse
     {
-        public List<VoucherItemInformation> Vouchers;     
+        public List<VoucherItemInformation> Vouchers;
     }
 
 
@@ -323,7 +323,7 @@ namespace CloudGoods.Models
 
         public Dictionary<string, string> CreditPlatformIDs = new Dictionary<string, string>();
     }
-    
+
     public class WorldCurrencyInfo
     {
         public string FreeCurrencyName;
@@ -454,10 +454,10 @@ namespace CloudGoods.Models
             {
                 return false;
             }
-            if (Information. Id ==  other.Information.Id)
+            if (Information.Id == other.Information.Id)
                 return true;
             else return false;
-        }   
+        }
     }
 
     public class PickedItemInformation
@@ -800,7 +800,7 @@ namespace CloudGoods.Models
 
     public class ItemBundlesResponse
     {
-        public List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();   
+        public List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();
     }
 
     public class ItemBundleInfo
@@ -853,4 +853,25 @@ namespace CloudGoods.Models
 
 
     #endregion
+
+    #region UserData
+
+    public class UserDataValue
+    {
+        public bool IsExisting;
+        public string Key;
+        public string Value;
+        public DateTime LastUpdated;
+    } 
+
+    public class OwnedUserDataValues
+    {
+        public string UserId;
+        public UserDataValue UserData;
+        public int platfomrId;
+        public string PlatformUserId;
+    }
+
+    #endregion
+
 }

@@ -108,7 +108,7 @@ namespace CloudGoods.Login
                     UserEmail = PlayerPrefs.GetString("SocialPlay_UserEmail")
                 };
 
-                CallHandler.Login(CloudGoodsPlatform.SocialPlay, userInfo.UserID, userInfo.UserEmail, "", RecivedUserGuid);
+                CallHandler.Login(userInfo.UserEmail, "", RecivedUserGuid);
 
                 RecivedUserGuid(userInfo);
             }
@@ -212,7 +212,7 @@ namespace CloudGoods.Login
                 Debug.Log("login email: " + loginUserEmail.text + " login password: " + loginUserPassword.text);
 
                 PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.text);
-                CallHandler.Login(CloudGoodsPlatform.SocialPlay, loginUserEmail.text.ToLower(),  loginUserEmail.text.ToLower(), loginUserPassword.text, RecivedUserGuid);
+                CallHandler.Login( loginUserEmail.text.ToLower(), loginUserPassword.text, RecivedUserGuid);
             }
         }
 

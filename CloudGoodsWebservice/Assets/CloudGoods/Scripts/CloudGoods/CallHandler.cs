@@ -187,14 +187,14 @@ namespace CloudGoods
         /// Log a user into the cloudgoods system.
         /// Only usable for SP Users (Use LoginByPlatform for external login)
         /// </summary>
-        public static void Login( string userEmail, string password, Action<CloudGoodsUser> callback)
+        public static void Login(string userEmail, string password, Action<CloudGoodsUser> callback)
         {
             Instance._Login(userEmail, password, callback);
         }
 
-        private void _Login( string userEmail, string password, Action<CloudGoodsUser> callback)
+        private void _Login(string userEmail, string password, Action<CloudGoodsUser> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(CloudGoodsSettings.AppID, userEmail, password), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(userEmail, password), x =>
             {
                 User = responseCreator.CreateLoginResponse(x);
                 SessionId = User.SessionID;
@@ -251,7 +251,6 @@ namespace CloudGoods
 
 
 
-        #endregion
         /// <summary>
         /// Log a user into the cloudgoods system.
         /// Only usable for external Users (Use Login for SP Users) 
@@ -261,9 +260,9 @@ namespace CloudGoods
             Instance._LoginByPlatform(cloudGoodsPlatform, platformUserID, userEmail, callback);
         }
 
-        private void _LoginByPlatform(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail,  Action<CloudGoodsUser> callback)
+        private void _LoginByPlatform(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail, Action<CloudGoodsUser> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginByPlatformCallObject(CloudGoodsSettings.AppID, userEmail,  (int)cloudGoodsPlatform, platformUserID), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginByPlatformCallObject(userEmail, (int)cloudGoodsPlatform, platformUserID), x =>
             {
                 User = responseCreator.CreateLoginResponse(x);
                 SessionId = User.SessionID;
@@ -463,7 +462,7 @@ namespace CloudGoods
                     }
 
                     if (callback != null)
-                    callback(responseCreator.CreateCurrencyInfoResponse(x));
+                        callback(responseCreator.CreateCurrencyInfoResponse(x));
                 }));
         }
 
@@ -479,12 +478,12 @@ namespace CloudGoods
                     CurrencyBalanceResponse balanceResponse = responseCreator.CreateCurrencyBalanceResponse(x);
                     PremiumCurrency = balanceResponse.Amount;
 
-                    if(OnPremiumCurrency != null)
+                    if (OnPremiumCurrency != null)
                         CallHandler.OnPremiumCurrency(balanceResponse.Amount);
 
                     if (callback != null)
                         callback(balanceResponse);
-                        
+
                 }));
         }
 
@@ -500,7 +499,7 @@ namespace CloudGoods
                 SimpleItemInfo itemInfo = responseCreator.CreateSimpleItemInfoResponse(x);
                 StandardCurrency = itemInfo.Amount;
 
-                if(OnStandardCurrency != null)
+                if (OnStandardCurrency != null)
                     CallHandler.OnStandardCurrency(itemInfo.Amount);
 
                 if (callback != null)
@@ -514,7 +513,7 @@ namespace CloudGoods
         }
         private void _ConsumePremiumCurrency(int amount, Action<ConsumePremiumResponce> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumePremiumCall(new ConsumePremiumRequest(){ Amount =amount}), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumePremiumCall(new ConsumePremiumRequest() { Amount = amount }), x =>
             {
                 callback(responseCreator.CreateConsumePremiumResponce(x));
             }));
@@ -533,8 +532,9 @@ namespace CloudGoods
             }));
         }
 
-        public static void PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int  amountToConsume = -1){
-            Instance._PurchaseItem(itemId,amount,paymentOption,saveLocation,callback,amountToConsume);
+        public static void PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int amountToConsume = -1)
+        {
+            Instance._PurchaseItem(itemId, amount, paymentOption, saveLocation, callback, amountToConsume);
         }
 
         private void _PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int amountToConsume = -1)
@@ -580,6 +580,69 @@ namespace CloudGoods
         }
 
         #endregion
+
+        #region UserData
+        public static void UserDataGet(string key, Action<UserDataValue> callback)
+        {
+            Instance._GetUserData(key, callback);
+        }
+
+        void _GetUserData(string key, Action<UserDataValue> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataCall(key), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateUserDataResponse(x));
+            }));
+        }
+
+
+        public static void UserDataUpdate(string key, string value, Action<UserDataValue> callback)
+        {
+            Instance._UserDataUpdate(key, value, callback);
+        }
+
+
+        void _UserDataUpdate(string key, string value, Action<UserDataValue> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataUpdateCall(key, value), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateUserDataResponse(x));
+            }));
+        }
+
+
+        public static void UserDataAll(Action<List<UserDataValue>> callback)
+        {
+            Instance._UserDataAll(callback);
+        }
+
+        void _UserDataAll(Action<List<UserDataValue>> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataAllCall(), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateUserDataAllResponse(x));
+            }));
+        }
+
+        public static void UserDataByKey(string key, Action<List<OwnedUserDataValues>> callback)
+        {
+            Instance._UserDataByKey(key, callback);
+        }
+
+        void _UserDataByKey(string key, Action<List<OwnedUserDataValues>> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataByKeyCall(key), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateUserDataByKeyResponse(x));
+            }));
+        }
+
+        #endregion
+
         #region Coroutines
 
         IEnumerator ServiceGetString(WWW www, Action<string> callback)
@@ -608,7 +671,7 @@ namespace CloudGoods
         {
             string responseData = www.text;
             WebserviceError error = responseCreator.IsWebserviceError(responseData);
-            if (error!= null)
+            if (error != null)
             {
                 Debug.LogError("Error: " + error.Message);
 
