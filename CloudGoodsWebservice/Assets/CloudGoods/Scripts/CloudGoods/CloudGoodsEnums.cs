@@ -60,5 +60,6 @@ namespace CloudGoods.Enums
         Instance, Session, User
     }
 
+
 }
 

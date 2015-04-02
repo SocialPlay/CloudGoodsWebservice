@@ -45,6 +45,8 @@ namespace CloudGoods.Webservice
         List<OwnedUserDataValues> CreateUserDataByKeyResponse(string responseData);
 
         List<UserDataValue> CreateUserDataAllResponse(string responseData);
+
+        List<PremiumCurrencyBundle> CreatePremiumCurrencyBundleResponse(string responseData);
     }
 
 }
