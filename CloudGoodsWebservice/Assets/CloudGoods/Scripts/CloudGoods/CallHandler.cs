@@ -183,16 +183,18 @@ namespace CloudGoods
 
         #endregion
 
-        #region Login
-
-        public static void Login(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail, string password, Action<CloudGoodsUser> callback)
+        /// <summary>
+        /// Log a user into the cloudgoods system.
+        /// Only usable for SP Users (Use LoginByPlatform for external login)
+        /// </summary>
+        public static void Login( string userEmail, string password, Action<CloudGoodsUser> callback)
         {
-            Instance._Login(cloudGoodsPlatform, platformUserID, userEmail, password, callback);
+            Instance._Login(userEmail, password, callback);
         }
 
-        private void _Login(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail, string password, Action<CloudGoodsUser> callback)
+        private void _Login( string userEmail, string password, Action<CloudGoodsUser> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(userEmail, password), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(CloudGoodsSettings.AppID, userEmail, password), x =>
             {
                 User = responseCreator.CreateLoginResponse(x);
                 SessionId = User.SessionID;
@@ -250,6 +252,25 @@ namespace CloudGoods
 
 
         #endregion
+        /// <summary>
+        /// Log a user into the cloudgoods system.
+        /// Only usable for external Users (Use Login for SP Users) 
+        /// </summary> 
+        public static void LoginByPlatform(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail, Action<CloudGoodsUser> callback)
+        {
+            Instance._LoginByPlatform(cloudGoodsPlatform, platformUserID, userEmail, callback);
+        }
+
+        private void _LoginByPlatform(CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, string userEmail,  Action<CloudGoodsUser> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginByPlatformCallObject(CloudGoodsSettings.AppID, userEmail,  (int)cloudGoodsPlatform, platformUserID), x =>
+            {
+                User = responseCreator.CreateLoginResponse(x);
+                SessionId = User.SessionID;
+                callback(User);
+            }));
+        }
+
 
         #region Items
         public static void GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
@@ -487,6 +508,18 @@ namespace CloudGoods
             }));
         }
 
+        public static void ConsumePremiumCurrency(int amount, Action<ConsumePremiumResponce> callback)
+        {
+            Instance._ConsumePremiumCurrency(amount, callback);
+        }
+        private void _ConsumePremiumCurrency(int amount, Action<ConsumePremiumResponce> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumePremiumCall(new ConsumePremiumRequest(){ Amount =amount}), x =>
+            {
+                callback(responseCreator.CreateConsumePremiumResponce(x));
+            }));
+        }
+
         public static void GetStoreItems(Action<List<StoreItem>> callback, string andTags = null, string orTags = null)
         {
             Instance._GetStoreItems(andTags, orTags, callback);
@@ -497,6 +530,26 @@ namespace CloudGoods
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetStoreItemsCall(andTags, orTags), x =>
             {
                 callback(responseCreator.CreateGetStoreItemResponse(x));
+            }));
+        }
+
+        public static void PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int  amountToConsume = -1){
+            Instance._PurchaseItem(itemId,amount,paymentOption,saveLocation,callback,amountToConsume);
+        }
+
+        private void _PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int amountToConsume = -1)
+        {
+            PurchaseItemRequest request = new PurchaseItemRequest()
+            {
+                ItemId = itemId,
+                BuyAmount = amount,
+                PaymentOption = (PurchaseItemRequest.PaymentType)paymentOption,
+                SaveLocation = saveLocation,
+                Consume = amountToConsume == -1 ? null : new PurchaseItemRequest.ConsumeUponPurchase() { Amount = amountToConsume }
+            };
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePurchaseItemCall(request), x =>
+            {
+                callback(responseCreator.CreateSimpleItemInfoResponse(x));
             }));
         }
 

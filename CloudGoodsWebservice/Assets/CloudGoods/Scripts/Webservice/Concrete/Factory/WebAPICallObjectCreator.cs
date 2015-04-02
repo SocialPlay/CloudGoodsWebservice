@@ -121,6 +121,15 @@ namespace CloudGoods.Webservice
             return new WWW(urlString, null, headers);
         }
 
+        public WWW CreateLoginByPlatformCallObject(string appId, string userName, int platformId, string platformUserID)
+        {
+            string loginUrl = string.Format("?appId={0}&userName={1}&platformId={2}&platformUserId={3}", appId, userName, platformId, platformUserID);
+
+            Dictionary<string, string> headers = CreateHeaders(loginUrl);
+            string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/LoginByPlatform" + loginUrl);
+            return new WWW(urlString, null, headers);
+        }
+
         public WWW CreateRegisterUserCallObject(RegisterUserRequest request)
         {
             return GenerateWWWPost("RegisterUser", request);
@@ -197,7 +206,7 @@ namespace CloudGoods.Webservice
 
         public WWW CreateStandardCurrencyBalanceCall(int accessLocation)
         {
-            return GenerateWWWCall("StandardCurrency", new KeyValuePair<string, string> ("accessLocation", accessLocation.ToString()));
+            return GenerateWWWCall("StandardCurrency", new KeyValuePair<string, string>("accessLocation", accessLocation.ToString()));
         }
 
         public WWW CreateGetPremiumCurrencyBundlesCall(int PlatformId)
@@ -208,7 +217,17 @@ namespace CloudGoods.Webservice
         public WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request)
         {
             return GenerateWWWPost("ItemBundlePurchase", request);
-           
+
+        }
+
+        public WWW CreateConsumePremiumCall(ConsumePremiumRequest request)
+        {
+            return GenerateWWWPost("ConsumePremium", request);
+        }
+
+        public WWW CreatePurchaseItemCall(PurchaseItemRequest request)
+        {
+            return GenerateWWWPost("PurchaseItem", request);
         }
     }
 }

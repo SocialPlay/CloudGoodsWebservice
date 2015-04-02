@@ -19,8 +19,11 @@ namespace WebCallTests
             BaseItems,
             ItemVouchers,
             Store,
-            ItemBundles
+            ItemBundles,
+            UserCurrency
         }
+
+
 
         string title = "";
         private static SystemTabs activeTab = SystemTabs.BaseItems;
@@ -46,19 +49,9 @@ namespace WebCallTests
 
         void Instance_CloudGoodsInitilized()
         {
-            CallHandler.Login(CloudGoodsPlatform.SocialPlay, "0", "lionel.sy@gmail.com", "123456", OnReceivedUser);
-
+            // CallHandler.Login( "lionel.sy@gmail.com", "123456", OnReceivedUser);
         }
 
-        void OnReceivedUser(CloudGoodsUser user)
-        {
-            string debugString = "login Info\nName: " + user.UserName;
-            debugString += "\nId: " + user.UserID;
-            debugString += "\nEmail: " + user.UserEmail;
-            debugString += "\nIs New: " + user.IsNewUserToWorld;
-            debugString += "\nSession:" + user.SessionID.ToString();
-            DisplayHelper.NewDisplayLine(debugString);
-        }
 
         void OnGUI()
         {
@@ -71,11 +64,17 @@ namespace WebCallTests
             GUILayout.BeginArea(new Rect(25, 25, Screen.width / 2 - 50, Screen.height - 50));
             if (CallHandler.User != null)
             {
+                GUILayout.BeginHorizontal();
                 GUILayout.Label("Welcome " + CallHandler.User.UserName + ".");
+                if (GUILayout.Button("Logout"))
+                {
+                    LoginCalls.logout();
+                }
+                GUILayout.EndHorizontal();
             }
             else
             {
-                GUILayout.Label("Waiting for login");
+                LoginCalls.Draw();
                 GUILayout.EndArea();
                 return;
             }
@@ -101,6 +100,13 @@ namespace WebCallTests
                 activeTab = SystemTabs.ItemBundles;
                 title = "Item Bundle Calls";
             }
+
+            if (GUILayout.Button("User Currency"))
+            {
+                activeTab = SystemTabs.UserCurrency;
+                title = "Users currency";
+                UsersCurrency.Init();
+            }
             GUILayout.EndHorizontal();
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label(title);
@@ -113,10 +119,13 @@ namespace WebCallTests
                     ItemVouchersCalls.Draw();
                     break;
                 case SystemTabs.Store:
-
+                    StoreCalls.Draw();
                     break;
                 case SystemTabs.ItemBundles:
                     ItemBundlesCalls.DrawGUI();
+                    break;
+                case SystemTabs.UserCurrency:
+                    UsersCurrency.Draw();
                     break;
             }
             ItemManagerCalls.DrawItemDetails();
@@ -138,7 +147,7 @@ namespace WebCallTests
         public static void DrawRight()
         {
             GUILayout.BeginArea(new Rect(Screen.width / 2, 0, Screen.width, Screen.height));
-          
+
             GUI.color = currentColor;
             GUILayout.TextArea(Last);
             GUI.color = Color.gray;
@@ -352,6 +361,32 @@ namespace WebCallTests
 
         }
 
+        public static void AddSimpleItemInfo(SimpleItemInfo info)
+        {
+            foreach (OwnedItemInformation item in UsersItems)
+            {
+                if (info.StackId == item.StackLocationId)
+                {
+                    item.Amount = info.Amount;
+                    item.Location = info.Location;
+                }
+                else
+                {
+                    OwnedItemInformation newItem = new OwnedItemInformation()
+                           {
+                               Amount = info.Amount,
+                               Location = info.Location,
+                               StackLocationId = info.StackId,
+                               Information = new ItemInformation()
+                               {
+                                   Name = "--- Needs Refresh ---"
+                               }
+                           };
+                    UsersItems.Add(newItem);
+                }
+            }
+        }
+
         public static string ToReadable(this ItemManagerCalls.ItemAction action)
         {
             switch (action)
@@ -380,10 +415,11 @@ namespace WebCallTests
         }
     }
 
-    internal class ItemVouchersCalls
+    internal static class ItemVouchersCalls
     {
         static List<VoucherItemInformation> CurrentVouchers = new List<VoucherItemInformation>();
         static int voucherModifyamount = 0;
+        static Vector2 scroll = Vector2.zero;
 
         public static void Draw()
         {
@@ -414,12 +450,10 @@ namespace WebCallTests
                 if (voucherModifyamount < 0) voucherModifyamount = 0;
             }
             GUILayout.EndHorizontal();
-            int count = CurrentVouchers.Count;
-            int shown = 5;
-            for (int i = count < shown ? 0 : count - shown; i < count; i++)
+            scroll = GUILayout.BeginScrollView(scroll);
+            foreach (VoucherItemInformation voucher in CurrentVouchers)
             {
                 GUILayout.BeginHorizontal();
-                VoucherItemInformation voucher = CurrentVouchers[i];
                 if (GUILayout.Button(string.Format("({0}) {1} : {2}", voucher.VoucherId, voucher.Information.Id, voucher.Information.Name)))
                 {
                     RedeemItemVoucher(voucher);
@@ -432,6 +466,7 @@ namespace WebCallTests
                 }
                 GUILayout.EndHorizontal();
             }
+            GUILayout.EndScrollView();
         }
 
 
@@ -481,7 +516,7 @@ namespace WebCallTests
         }
     }
 
-    internal class ItemBundlesCalls
+    internal static class ItemBundlesCalls
     {
         static List<ItemBundleInfo> bundles = new List<ItemBundleInfo>();
         static bool IsStandard = true;
@@ -561,5 +596,264 @@ namespace WebCallTests
     }
 
 
+    internal static class StoreCalls
+    {
+        static List<StoreItem> storeItems = new List<StoreItem>();
+        static Vector2 scroll = Vector2.zero;
 
+        public static void Draw()
+        {
+            if (GUILayout.Button("Get Store Items"))
+            {
+                GetStoreItems();
+            }
+
+            GUILayout.FlexibleSpace();
+            scroll = GUILayout.BeginScrollView(scroll);
+            foreach (StoreItem item in storeItems)
+            {
+                GUILayout.Label(string.Format("{0}{1}", item.ItemId, item.Name));
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button(string.Format("Premium: {0}", item.CreditValue)))
+                {
+                    CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Premium, 0, StoreItemPurchaseResponse);
+                }
+                if (GUILayout.Button(string.Format("Standard: {0}", item.CoinValue)))
+                {
+                    CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Standard, 0, StoreItemPurchaseResponse);
+                }
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndScrollView();
+        }
+
+        private static void StoreItemPurchaseResponse(SimpleItemInfo info)
+        {
+            ItemManagerCalls.AddSimpleItemInfo(info);
+
+            string debugString = "Purchased item success";
+            debugString = string.Format("{0}\nItem\n   Amount:{1}\n   Location:{2}\n   stack Id:{3}", debugString, info.Amount, info.Location, info.StackId);
+        }
+
+        private static void StoreResponse(List<StoreItem> items)
+        {
+            storeItems = items;
+        }
+
+        private static void GetStoreItems()
+        {
+            CallHandler.GetStoreItems(StoreResponse);
+        }
+
+
+    }
+
+    internal static class UsersCurrency
+    {
+
+        static CurrencyInfoResponse info;
+
+        static int premiumAmount;
+        static int standardAmount;
+        static int consumeAmount = 1;
+
+        public static void Init()
+        {
+            if (info == null)
+            {
+                CallHandler.GetCurrencyInfo(delegate(CurrencyInfoResponse newInfo)
+                {
+                    info = newInfo;
+                    GetUserAmounts();
+                });
+            }
+            else
+            {
+                GetUserAmounts();
+            }
+        }
+
+        private static void GetUserAmounts()
+        {
+            CallHandler.GetPremiumCurrencyBalance(delegate(CurrencyBalanceResponse response)
+            {
+                premiumAmount = response.Amount;
+            });
+
+            CallHandler.GetStandardCurrencyBalance(0, delegate(SimpleItemInfo response)
+            {
+                standardAmount = response.Amount;
+            });
+        }
+
+        public static void Draw()
+        {
+            if (info == null) return;
+            GUILayout.Label(string.Format("Premium:\n  Name: {0}\n  Amount: {1}\nStandard\n  Name: {2}\n  Amount: {3}", info.PremiumCurrencyName, premiumAmount, info.StandardCurrencyName, standardAmount));
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("+"))
+            {
+                consumeAmount++;
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(consumeAmount.ToString());
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("-"))
+            {
+                consumeAmount--;
+                if (consumeAmount > 1) consumeAmount = 1;
+            }
+            GUILayout.EndHorizontal();
+            if (GUILayout.Button("Consume Premium Currency"))
+            {
+                ConsumePremium();
+            }
+        }
+
+        static void ConsumePremium()
+        {
+            CallHandler.ConsumePremiumCurrency(consumeAmount, delegate(ConsumePremiumResponce responce)
+            {
+                if (responce.isSuccess)
+                {
+                    premiumAmount = responce.currentBalance;
+                }
+            });
+        }
+    }
+
+
+    internal static class LoginCalls
+    {
+
+        static bool isSent = false;
+        static bool isPlatform = false;
+
+        static string userName = "";
+        static string password = "";
+        static int platform = 1;
+        static string platformUserId = "";
+        static string platString = "1";
+
+
+        public static void logout()
+        {
+            CallHandler.User = null;
+        }
+
+        public static void Draw()
+        {
+            GUILayout.Label("LOGIN");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Use SP"))
+            {
+                isPlatform = false;
+                isSent = false;
+            }
+            if (GUILayout.Button("Use Platform Id"))
+            {
+                isPlatform = true;
+                isSent = false;
+            }
+            GUILayout.EndHorizontal();
+            if (isPlatform)
+            {
+                GUILayout.Label("User Name");
+            }
+            else
+            {
+                GUILayout.Label("User Email");
+            }
+            userName = GUILayout.TextField(userName);
+            GUILayout.Label("Password");
+            password = GUILayout.PasswordField(password, '*');
+            if (isPlatform)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.BeginVertical();
+                GUILayout.Label("Platform ID");
+                GUILayout.BeginHorizontal();
+                platString = GUILayout.TextField(platString, GUILayout.MaxWidth(100));
+                if (!String.IsNullOrEmpty(platString))
+                {
+                    if (!int.TryParse(platString, out  platform))
+                    {
+                        platform = -1;
+                    }
+                }
+                if (Enum.IsDefined(typeof(CloudGoodsPlatform), platform))
+                {
+                    if (GUILayout.Button(((CloudGoodsPlatform)platform).ToString()))
+                    {
+                        platform++;
+                        if (!Enum.IsDefined(typeof(CloudGoodsPlatform), platform))
+                        {
+                            platform = 1;
+                        }
+
+                        platString = platform.ToString();
+                    }
+                }
+                else
+                {
+                    GUILayout.Label("Unknow");
+                }
+
+                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
+
+                GUILayout.BeginVertical();
+                GUILayout.Label("User ID");
+                platformUserId = GUILayout.TextField(platformUserId);
+                GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
+            }
+            if (!isSent)
+            {
+                if (isReadyToLogin())
+                {
+                    if (GUILayout.Button("LOGIN"))
+                    {
+                        if (isPlatform)
+                        {
+                            CallHandler.LoginByPlatform((CloudGoodsPlatform)platform, platformUserId, userName, OnReceivedUser);
+                        }
+                        else
+                        {
+                            CallHandler.Login(userName, password, OnReceivedUser);
+                        }
+                    }
+                }
+                else
+                {
+                    GUILayout.Label("Missing elements");
+                }
+            }
+            else
+            {
+                GUILayout.Label("Waiting");
+            }
+        }
+
+        static bool isReadyToLogin()
+        {
+            if (isPlatform)
+            {
+                if (!Enum.IsDefined(typeof(CloudGoodsPlatform), platform) || string.IsNullOrEmpty(platformUserId)) return false;
+            }
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password)) return false;
+
+            return true;
+        }
+
+        static void OnReceivedUser(CloudGoodsUser user)
+        {
+            string debugString = "login Info\nName: " + user.UserName;
+            debugString += "\nId: " + user.UserID;
+            debugString += "\nEmail: " + user.UserEmail;
+            debugString += "\nIs New: " + user.IsNewUserToWorld;
+            debugString += "\nSession:" + user.SessionID.ToString();
+            DisplayHelper.NewDisplayLine(debugString);
+        }
+    }
 }

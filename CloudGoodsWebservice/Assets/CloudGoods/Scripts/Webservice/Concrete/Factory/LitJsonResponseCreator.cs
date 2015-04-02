@@ -146,6 +146,12 @@ namespace CloudGoods.Webservice
         {
             return JsonMapper.ToObject<ItemBundlePurchaseResponse>(responseData);
         }
+
+
+        public ConsumePremiumResponce CreateConsumePremiumResponce(string responseData)
+        {
+            return JsonMapper.ToObject<ConsumePremiumResponce>(responseData);
+        }
     }
 
     public class WebserviceException : Exception

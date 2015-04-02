@@ -80,6 +80,9 @@
      <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldValidation.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Login\UnityUICloudGoodsLogin.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs.BASE.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs.LOCAL.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs.REMOTE.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\Abstract\StoreLoader.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\AndroidPremiumCurrencyPurchaser.cs" />
      <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\FaceBookPurchaser.cs" />
