@@ -10,7 +10,7 @@ namespace CloudGoods.Store.UI
 {
     public class UnityUIItemPurchase : MonoBehaviour
     {
-        public static event Action<string> OnPurchasedItem;
+        public static event Action<SimpleItemInfo> OnPurchasedItem;
 
         UnityUIStoreItem itemInfo;
 
@@ -168,20 +168,22 @@ namespace CloudGoods.Store.UI
         public void PurchaseItemWithPremiumCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            //CallHandler.(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
+            CallHandler.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
         public void PurchaseItemWithStandardCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            //CallHandler.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+            CallHandler.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
-        void OnReceivedItemPurchaseConfirmation(string msg)
+        void OnReceivedItemPurchaseConfirmation(SimpleItemInfo msg)
         {
             ReloadContainerItems();
+            CallHandler.GetPremiumCurrencyBalance(null);
+            CallHandler.GetStandardCurrencyBalance(0, null);
 
             if (OnPurchasedItem != null)
                 OnPurchasedItem(msg);

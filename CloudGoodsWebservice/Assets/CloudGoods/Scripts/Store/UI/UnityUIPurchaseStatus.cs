@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using CloudGoods.Models;
 
 namespace CloudGoods.Store.UI
 {
@@ -26,7 +27,7 @@ namespace CloudGoods.Store.UI
             }
         }
 
-        void UnityUIItemPurchase_OnPurchasedItem(string obj)
+        void UnityUIItemPurchase_OnPurchasedItem(SimpleItemInfo obj)
         {
             purchasePopup.SetActive(true);
             purchasePopup.GetComponentInChildren<Text>().text = "Purchase Successful";
