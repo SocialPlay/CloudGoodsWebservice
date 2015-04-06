@@ -84,6 +84,11 @@ namespace CloudGoods.Webservice
             return Guid.NewGuid().ToString();
         }
 
+        private KeyValuePair<string, string> GetParameter(string key, string value)
+        {
+            return new KeyValuePair<string, string>(key, value);
+        }
+
         public WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
         {
             string createdURL = "";
@@ -147,11 +152,13 @@ namespace CloudGoods.Webservice
                 new KeyValuePair<string, string>("userEmail", email));
         }
 
-        public WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default")
+        public WWW CreateGetUserItemsCallObject(int location, string andTags = null, string orTags = null)
         {
-            return GenerateWWWCall("UserItems", new KeyValuePair<string, string>("location", location.ToString()),
-                new KeyValuePair<string, string>("location", ownerType),
-                    new KeyValuePair<string, string>("location", ownerId));
+            return GenerateWWWCall("UserItems"
+                , GetParameter("location", location.ToString())
+                , GetParameter("andTags", andTags)
+                , GetParameter("orTags", orTags)
+                );
         }
 
         public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
@@ -246,6 +253,28 @@ namespace CloudGoods.Webservice
         public WWW CreateUserDataByKeyCall(string key)
         {
             return GenerateWWWCall("UserDataByKey", new KeyValuePair<string, string>("key", key));
+        }
+
+
+        public WWW CreateUserItemCall(int itemId, int location)
+        {
+            return GenerateWWWCall("UserItem", GetParameter("itemId", itemId.ToString()), GetParameter("location", location.ToString()));
+        }
+
+
+        public WWW CreateAppDataCall(string key)
+        {
+            return GenerateWWWCall("AppData", GetParameter("key", key));
+        }
+
+        public WWW CreateAppDataAllCall()
+        {
+            return GenerateWWWCall("AppDataAll");
+        }
+
+        public WWW CreateUpdateAppDataCall(string key, string value)
+        {
+            return GenerateWWWCall("AppDataUpdate", GetParameter("key", key), GetParameter("value", value));
         }
     }
 }

@@ -856,7 +856,7 @@ namespace CloudGoods.Models
 
     #region UserData
 
-    public class UserDataValue
+    public class CloudData
     {
         public bool IsExisting;
         public string Key;
@@ -864,10 +864,10 @@ namespace CloudGoods.Models
         public DateTime LastUpdated;
     } 
 
-    public class OwnedUserDataValues
+    public class OwnedCloudData
     {
         public string UserId;
-        public UserDataValue UserData;
+        public CloudData UserData;
         public int platfomrId;
         public string PlatformUserId;
     }

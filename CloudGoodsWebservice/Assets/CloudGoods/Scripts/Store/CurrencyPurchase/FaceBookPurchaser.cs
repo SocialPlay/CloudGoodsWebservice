@@ -2,7 +2,7 @@
 using UnityEngine;
 using LitJson;
 using CloudGoods.Models;
-using LitJson;
+
 
 namespace CloudGoods.CurrencyPurchase
 {

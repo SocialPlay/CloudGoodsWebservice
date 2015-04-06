@@ -48,7 +48,10 @@ namespace CloudGoods.Webservice
             return JsonMapper.ToObject<ItemVouchersResponse>(responseData);
         }
 
-
+        public InstancedItemInformation CreateInstancedItemInformationResponse(string responseData)
+        {
+            return JsonMapper.ToObject<InstancedItemInformation>(responseData);
+        }
 
         #endregion
 
@@ -103,7 +106,7 @@ namespace CloudGoods.Webservice
 
 
             if (JsonDataContainsKey(jsonData, "errorCode"))
-            {              
+            {
                 return new WebserviceError(int.Parse(jsonData["errorCode"].ToString()), jsonData["message"].ToString());
             }
 
@@ -148,21 +151,23 @@ namespace CloudGoods.Webservice
         }
 
 
-        public UserDataValue CreateUserDataResponse(string responseData)
+        public CloudData CreateCloudDataResponse(string responseData)
         {
-            return JsonMapper.ToObject<UserDataValue>(responseData);
+            return JsonMapper.ToObject<CloudData>(responseData);
         }
 
 
-        public List<OwnedUserDataValues> CreateUserDataByKeyResponse(string responseData)
+        public List<OwnedCloudData> CreateUserDataByKeyResponse(string responseData)
         {
-            return JsonMapper.ToObject<List<OwnedUserDataValues>>(responseData);
+            return JsonMapper.ToObject<List<OwnedCloudData>>(responseData);
         }
 
-        public List<UserDataValue> CreateUserDataAllResponse(string responseData)
+        public List<CloudData> CreateCloudDataListResponse(string responseData)
         {
-            return JsonMapper.ToObject<List<UserDataValue>>(responseData);
+            return JsonMapper.ToObject<List<CloudData>>(responseData);
         }
+
+     
     }
 
     public class WebserviceException : Exception

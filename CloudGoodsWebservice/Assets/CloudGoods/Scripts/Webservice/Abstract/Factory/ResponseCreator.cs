@@ -40,11 +40,13 @@ namespace CloudGoods.Webservice
 
         StatusMessageResponse CreateStatusMessageResponse(string responseData);
 
-        UserDataValue CreateUserDataResponse(string responseData);
+        CloudData CreateCloudDataResponse(string responseData);
 
-        List<OwnedUserDataValues> CreateUserDataByKeyResponse(string responseData);
+        List<OwnedCloudData> CreateUserDataByKeyResponse(string responseData);
 
-        List<UserDataValue> CreateUserDataAllResponse(string responseData);
+        List<CloudData> CreateCloudDataListResponse(string responseData);
+
+        InstancedItemInformation CreateInstancedItemInformationResponse(string responseData);
     }
 
 }
