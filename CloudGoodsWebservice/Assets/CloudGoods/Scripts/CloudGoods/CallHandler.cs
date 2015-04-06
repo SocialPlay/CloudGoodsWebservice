@@ -285,6 +285,20 @@ namespace CloudGoods
             }));
         }
 
+        public static void UserItem(int lookupItemId, int location, Action<InstancedItemInformation> callback)
+        {
+            Instance._UserItem(lookupItemId, location, callback);
+        }
+
+        void _UserItem(int lookupItemId, int location, Action<InstancedItemInformation> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserItemCall(lookupItemId,location), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateInstancedItemInformationResponse(x));
+            }));
+        }
+
         public static void MoveItem(OwnedItemInformation item, int location, int amountToMove, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
         {
             List<MoveItemsRequest.MoveOrder> orders = new List<MoveItemsRequest.MoveOrder>(){
@@ -595,62 +609,103 @@ namespace CloudGoods
         #endregion
 
         #region UserData
-        public static void UserDataGet(string key, Action<UserDataValue> callback)
+        public static void UserDataGet(string key, Action<CloudData> callback)
         {
             Instance._GetUserData(key, callback);
         }
 
-        void _GetUserData(string key, Action<UserDataValue> callback)
+        void _GetUserData(string key, Action<CloudData> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataCall(key), x =>
             {
                 if (callback != null)
-                    callback(responseCreator.CreateUserDataResponse(x));
+                    callback(responseCreator.CreateCloudDataResponse(x));
             }));
         }
 
 
-        public static void UserDataUpdate(string key, string value, Action<UserDataValue> callback)
+        public static void UserDataUpdate(string key, string value, Action<CloudData> callback)
         {
             Instance._UserDataUpdate(key, value, callback);
         }
 
 
-        void _UserDataUpdate(string key, string value, Action<UserDataValue> callback)
+        void _UserDataUpdate(string key, string value, Action<CloudData> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataUpdateCall(key, value), x =>
             {
                 if (callback != null)
-                    callback(responseCreator.CreateUserDataResponse(x));
+                    callback(responseCreator.CreateCloudDataResponse(x));
             }));
         }
 
 
-        public static void UserDataAll(Action<List<UserDataValue>> callback)
+        public static void UserDataAll(Action<List<CloudData>> callback)
         {
             Instance._UserDataAll(callback);
         }
 
-        void _UserDataAll(Action<List<UserDataValue>> callback)
+        void _UserDataAll(Action<List<CloudData>> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataAllCall(), x =>
             {
                 if (callback != null)
-                    callback(responseCreator.CreateUserDataAllResponse(x));
+                    callback(responseCreator.CreateCloudDataListResponse(x));
             }));
         }
 
-        public static void UserDataByKey(string key, Action<List<OwnedUserDataValues>> callback)
+        public static void UserDataByKey(string key, Action<List<OwnedCloudData>> callback)
         {
             Instance._UserDataByKey(key, callback);
         }
 
-        void _UserDataByKey(string key, Action<List<OwnedUserDataValues>> callback)
+        void _UserDataByKey(string key, Action<List<OwnedCloudData>> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataByKeyCall(key), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateUserDataByKeyResponse(x));
+            }));
+        }
+
+        public static void AppData(string key, Action<CloudData> callback)
+        {
+            Instance._AppData(key, callback);
+        }
+        void _AppData(string key, Action<CloudData> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataCall(key), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateCloudDataResponse(x));
+            }));
+        }
+
+
+        public static void AppDataAll(Action<List<CloudData>> callback)
+        {
+            Instance._AppDataAll(callback);
+        }
+        void _AppDataAll(Action<List<CloudData>> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataAllCall(), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateCloudDataListResponse(x));
+            }));
+        }
+
+
+        public static void UpdateAppData(string key, string value, Action<CloudData> callback)
+        {
+            Instance._UpdateAppData(key, value, callback);
+        }
+        void _UpdateAppData(string key, string value, Action<CloudData> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateAppDataCall(key,value), x =>
+            {
+                if (callback != null)
+                    callback(responseCreator.CreateCloudDataResponse(x));
             }));
         }
 
@@ -722,6 +777,8 @@ namespace CloudGoods
         }
 
         #endregion
+
+      
     }
 }
 

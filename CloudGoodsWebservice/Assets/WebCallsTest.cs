@@ -211,6 +211,9 @@ namespace WebCallTests
         public static List<OwnedItemInformation> UsersItems = new List<OwnedItemInformation>();
         public static int destinationLocation = 0;
 
+
+        static int LookupItemId;
+
         public static void Draw()
         {
             if (GUILayout.Button("Load users Items"))
@@ -221,6 +224,15 @@ namespace WebCallTests
             {
                 UpdateItemById();
             }
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Item ID");
+            LookupItemId = int.Parse(GUILayout.TextArea(LookupItemId.ToString()));
+            if (GUILayout.Button("Get User Item"))
+            {
+                GetOwnerItem();
+            }
+
+            GUILayout.EndHorizontal();
         }
 
         public static void DrawItemDetails()
@@ -248,7 +260,7 @@ namespace WebCallTests
             GUILayout.EndHorizontal();
             foreach (OwnedItemInformation item in ItemManagerCalls.UsersItems)
             {
-                if (GUILayout.Button(string.Format("{0}\nSLID:{3}\n  Amount:{1}\n  Location:{2}", item.Information.Name, item.Amount, item.Location, item.StackLocationId)))
+                if (GUILayout.Button(string.Format("{0}\nSLID: {3}\nItem Id {4}\nAmount: {1}\nLocation: {2}", item.Information.Name, item.Amount, item.Location, item.StackLocationId, item.Information.Id)))
                 {
                     PerformCurrentAction(item);
                     return;
@@ -285,6 +297,21 @@ namespace WebCallTests
             };
 
             CallHandler.UpdateItemsByIds(infos, ItemManagerCalls.DisplayUpdatedItems);
+        }
+
+        static void GetOwnerItem()
+        {
+            CallHandler.UserItem(LookupItemId, 0, delegate(InstancedItemInformation item)
+            {
+                if (item != null)
+                {
+                    DisplayHelper.NewDisplayLine(string.Format("User has {0} of {1}", item.Amount, item.Information.Name));
+                }
+                else
+                {
+                    DisplayHelper.NewDisplayLine("User has none of that item", Color.yellow);
+                }
+            });
         }
 
         static void LoadUserItems()
@@ -789,9 +816,11 @@ namespace WebCallTests
     {
 
         static bool isSent = false;
+        static bool isRegister = false;
         static bool isPlatform = false;
 
         static string userEmail = "";
+        static string userName="";
         static string password = "";
         static int platform = 1;
         static string platformUserName = "";
@@ -802,6 +831,7 @@ namespace WebCallTests
         public static void logout()
         {
             CallHandler.User = null;
+            isSent = false;
         }
 
         public static void Draw()
@@ -827,11 +857,20 @@ namespace WebCallTests
             if (!isPlatform)
             {
 
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("Login")) isRegister = false;
+                if (GUILayout.Button("Register")) isRegister = true;
+                GUILayout.EndHorizontal();
                 GUILayout.Label("User Email");
                 userEmail = GUILayout.TextField(userEmail);
 
                 GUILayout.Label("Password");
                 password = GUILayout.PasswordField(password, '*');
+                if (isRegister)
+                {
+                    GUILayout.Label("User Name");
+                    userName = GUILayout.TextField(userName);
+                }
             }
             if (isPlatform)
             {
@@ -878,20 +917,43 @@ namespace WebCallTests
             {
                 if (isReadyToLogin())
                 {
-                    if (GUILayout.Button("LOGIN"))
+                    if (isPlatform)
                     {
-                        if (isPlatform)
+                        if (GUILayout.Button("LOGIN"))
                         {
+                            isSent = true;
+
                             PlayerPrefs.SetString("SPLogin_PlatformUserName", platformUserName);
                             PlayerPrefs.SetString("SPLogin_PlatformUserID", platformUserId);
                             PlayerPrefs.SetInt("SPLogin_PlatformId", platform);
                             CallHandler.LoginByPlatform((CloudGoodsPlatform)platform, platformUserId, userEmail, OnReceivedUser);
+
+
+
+                        }
+                    }
+                    else
+                    {
+                        if (isRegister)
+                        {
+                            if(GUILayout.Button("Register")){
+                                isSent = true;
+                                PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
+                                PlayerPrefs.SetString("SPLogin_Password", password);
+                                PlayerPrefs.SetString("SPLogin_UserName", userName);
+                                CallHandler.Register(CloudGoodsSettings.AppID, userName, userEmail, password, Registered);
+                                
+                            }
                         }
                         else
                         {
-                            PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
-                            PlayerPrefs.SetString("SPLogin_Password", password);
-                            CallHandler.Login(userEmail, password, OnReceivedUser);
+                            if (GUILayout.Button("LOGIN"))
+                            {
+                                isSent = true;
+                                PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
+                                PlayerPrefs.SetString("SPLogin_Password", password);
+                                CallHandler.Login(userEmail, password, OnReceivedUser);
+                            }
                         }
                     }
                 }
@@ -904,6 +966,8 @@ namespace WebCallTests
             {
                 GUILayout.Label("Waiting");
             }
+
+
         }
 
         static bool isReadyToLogin()
@@ -931,12 +995,21 @@ namespace WebCallTests
 
             UsersCurrency.Init();
         }
+
+        static void Registered(RegisteredUser user)
+        {
+            string debugString = "Registered User\nName: " + user.FirstName;
+            debugString += "\nId: " + user.ID;
+            debugString += "\nEmail: " + user.email; 
+    
+            DisplayHelper.NewDisplayLine(debugString);
+        }
     }
 
     internal static class UserDataCalls
     {
-        static List<OwnedUserDataValues> worldsData = new List<OwnedUserDataValues>();
-        static List<UserDataValue> userDatas = new List<UserDataValue>();
+        static List<OwnedCloudData> worldsData = new List<OwnedCloudData>();
+        static List<CloudData> userDatas = new List<CloudData>();
         static string lookupKey = "";
         static string lookupValue = "";
 
@@ -970,14 +1043,14 @@ namespace WebCallTests
                     CallHandler.UserDataByKey(lookupKey, OnRecivedDataByKey);
             }
             GUILayout.FlexibleSpace();
-            foreach (UserDataValue udv in userDatas)
+            foreach (CloudData udv in userDatas)
             {
-                GUILayout.Label(string.Format("key: {0}, Value: {1}", udv.Key, udv.Value),GUI.skin.box); 
+                GUILayout.Label(string.Format("key: {0}, Value: {1}", udv.Key, udv.Value), GUI.skin.box);
             }
 
         }
 
-        static void OnReciveData(UserDataValue userData)
+        static void OnReciveData(CloudData userData)
         {
             if (userData.IsExisting)
             {
@@ -990,10 +1063,10 @@ namespace WebCallTests
             AddToExisting(userData);
         }
 
-        static void OnReciveUserDatas(List<UserDataValue> values)
+        static void OnReciveUserDatas(List<CloudData> values)
         {
             string debugString = "Recived User Datas";
-            foreach (UserDataValue value in values)
+            foreach (CloudData value in values)
             {
                 AddToExisting(value);
                 debugString = string.Format("{0}\n  Key: {1}, Value: {2}", debugString, value.Key, value.Value);
@@ -1001,11 +1074,11 @@ namespace WebCallTests
             DisplayHelper.NewDisplayLine(debugString);
         }
 
-        static void AddToExisting(UserDataValue userData)
+        static void AddToExisting(CloudData userData)
         {
             if (!userData.IsExisting) return;
 
-            UserDataValue existing = userDatas.FirstOrDefault(u => u.Key == userData.Key);
+            CloudData existing = userDatas.FirstOrDefault(u => u.Key == userData.Key);
             if (existing != null)
             {
                 existing.Value = userData.Value;
@@ -1017,12 +1090,12 @@ namespace WebCallTests
             }
         }
 
-        static void OnRecivedDataByKey(List<OwnedUserDataValues> response)
+        static void OnRecivedDataByKey(List<OwnedCloudData> response)
         {
             worldsData = response;
             if (response.Count() == 0) return;
             string debugString = "Recived User Data of " + response[0].UserData.Key;
-            foreach (OwnedUserDataValues ownedData in response)
+            foreach (OwnedCloudData ownedData in response)
             {
                 debugString = string.Format("{0}\n {1}\n   {2}", debugString, ownedData.UserId, ownedData.UserData.Value);
             }

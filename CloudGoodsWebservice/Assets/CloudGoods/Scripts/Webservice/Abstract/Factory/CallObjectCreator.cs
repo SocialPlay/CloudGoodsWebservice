@@ -19,7 +19,7 @@ namespace CloudGoods.Webservice
 
         WWW CreateLoginByPlatformCallObject( string userName, int platformId, string platformUserID);
 
-        WWW CreateGetUserItemsCallObject(int location, string ownerType = "User", string ownerId = "Default");
+        WWW CreateGetUserItemsCallObject(int location, string andTags = null, string orTags = null);
 
         WWW CreateMoveItemsCallObject(MoveItemsRequest request);
 
@@ -68,5 +68,13 @@ namespace CloudGoods.Webservice
         WWW CreateUserDataAllCall();
 
         WWW CreateUserDataByKeyCall(string key);
+
+        WWW CreateUserItemCall(int lookupItemId, int location);
+
+        WWW CreateAppDataCall(string key);
+
+        WWW CreateAppDataAllCall();
+
+        WWW CreateUpdateAppDataCall(string key, string value);
     }
 }
