@@ -7,7 +7,7 @@ namespace CloudGoods.Utilities
 {
 	public interface IGridLoader
 	{
-        event Action<PaidCurrencyBundleItem, GameObject> ItemAdded;
-        void LoadGrid(List<PaidCurrencyBundleItem> data);
+        event Action<PremiumCurrencyBundle, GameObject> ItemAdded;
+        void LoadGrid(List<PremiumCurrencyBundle> data);
 	}
 }

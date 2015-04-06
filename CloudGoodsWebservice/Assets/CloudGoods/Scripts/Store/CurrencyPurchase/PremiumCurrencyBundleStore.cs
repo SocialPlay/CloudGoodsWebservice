@@ -97,23 +97,24 @@ namespace CloudGoods.CurrencyPurchase
             {
                 Debug.Log("Get credit bundles from editor");
 
-                //CloudGoods.GetCreditBundles(1, OnPurchaseBundlesRecieved);
+                CallHandler.GetPremiumBundles(1, OnPurchaseBundlesRecieved);
             }
             else
             {
                 Debug.Log("Purchasing credit bundles from platform:" + BuildPlatform.Platform);
-                //CloudGoods.GetCreditBundles((int)BuildPlatform.Platform, OnPurchaseBundlesRecieved);
+                CallHandler.GetPremiumBundles((int)BuildPlatform.Platform, OnPurchaseBundlesRecieved);
             }
 
             isInitialized = true;
         }
+
 
         void OnDisable()
         {
             if (platformPurchasor != null) platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
         }
 
-        void OnPurchaseBundlesRecieved(List<PaidCurrencyBundleItem> data)
+        void OnPurchaseBundlesRecieved(List<PremiumCurrencyBundle> data)
         {
             Debug.Log("Got credit bundles");
             gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
@@ -121,19 +122,19 @@ namespace CloudGoods.CurrencyPurchase
             gridLoader.LoadGrid(data);
         }
 
-        void OnItemInGrid(PaidCurrencyBundleItem item, GameObject obj)
+        void OnItemInGrid(PremiumCurrencyBundle item, GameObject obj)
         {
             PremiumBundle creditBundle = obj.GetComponent<PremiumBundle>();
-            creditBundle.Amount = item.Amount.ToString();
+            creditBundle.Amount = item.CreditAmount.ToString();
             creditBundle.Cost = item.Cost.ToString();
 
-            if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
-            {
-                creditBundle.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
-            }
+            //if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
+            //{
+            //    creditBundle.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
+            //}
 
-            if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
-                creditBundle.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
+            //if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
+            //    creditBundle.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
 
             creditBundle.BundleID = item.ID.ToString();
 
@@ -141,15 +142,15 @@ namespace CloudGoods.CurrencyPurchase
             creditBundle.Description = item.Description;
 
 
-            if (!string.IsNullOrEmpty(item.CurrencyIcon))
+            if (!string.IsNullOrEmpty(item.Image))
             {
-                ItemTextureCache.Instance.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
+                ItemTextureCache.Instance.GetItemTexture(item.Image, delegate(ImageStatus imageStatus, Texture2D texture)
                 {
                     creditBundle.SetIcon(texture);
                 });
             }
 
-            creditBundle.SetBundleName(item.BundleName);
+            creditBundle.SetBundleName(item.Name);
 
             creditBundle.OnPurchaseRequest = OnPurchaseRequest;
         }

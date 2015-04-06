@@ -144,6 +144,10 @@ namespace CloudGoods.Webservice
             return JsonMapper.ToObject<ItemBundlePurchaseResponse>(responseData);
         }
 
+        public List<PremiumCurrencyBundle> CreatePremiumCurrencyBundleResponse(string responseData)
+        {
+            return JsonMapper.ToObject<List<PremiumCurrencyBundle>>(responseData);
+        }
 
         public ConsumePremiumResponce CreateConsumePremiumResponce(string responseData)
         {

@@ -667,7 +667,7 @@ namespace WebCallTests
             foreach (StoreItem item in storeItems)
             {
                 GUILayout.BeginHorizontal(GUI.skin.box);
-                GUILayout.Label(string.Format("{1}\n  ID:{0}", item.ItemId, item.Name));
+                GUILayout.Label(string.Format("{1}\n  ID:{0}", item.ItemId, item.ItemId));
                 GUILayout.FlexibleSpace();
                 GUILayout.BeginVertical(GUILayout.Width(300));
                 if (item.CreditValue != -1)

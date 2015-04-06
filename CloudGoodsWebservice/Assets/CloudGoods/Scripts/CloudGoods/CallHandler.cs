@@ -593,6 +593,19 @@ namespace CloudGoods
             }));
         }
 
+        public static void GetPremiumBundles(int platformId, Action<List<PremiumCurrencyBundle>> callback)
+        {
+            Instance._GetPremiumBundles(platformId, callback);
+        }
+
+        private void _GetPremiumBundles(int platformId, Action<List<PremiumCurrencyBundle>> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetPremiumCurrencyBundlesCall(platformId), x =>
+                {
+                    callback(responseCreator.CreatePremiumCurrencyBundleResponse(x));
+                }));
+        }
+
         #endregion
 
         #region UserData

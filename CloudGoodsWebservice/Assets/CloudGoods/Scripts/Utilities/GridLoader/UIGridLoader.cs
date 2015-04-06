@@ -13,11 +13,11 @@ namespace CloudGoods.Utilities
         public GameObject itemPrefab = null;
 
 
-        public event Action<PaidCurrencyBundleItem, GameObject> ItemAdded;
+        public event Action<PremiumCurrencyBundle, GameObject> ItemAdded;
 
-        public void LoadGrid(List<PaidCurrencyBundleItem> PaidCurrenyBundles)
+        public void LoadGrid(List<PremiumCurrencyBundle> PaidCurrenyBundles)
         {
-            foreach (PaidCurrencyBundleItem PaidCurrencyBundle in PaidCurrenyBundles)
+            foreach (PremiumCurrencyBundle PaidCurrencyBundle in PaidCurrenyBundles)
             {
                 GameObject gItem = Instantiate(itemPrefab) as GameObject;
                 gItem.transform.SetParent(grid, false);

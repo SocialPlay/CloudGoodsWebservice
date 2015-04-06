@@ -164,34 +164,34 @@
      <None Include="Assets\Plugins\Android\facebook\res\values\styles.xml" />
      <None Include="Assets\Plugins\Android\facebook\res\values-xhdpi\dimens.xml" />
  <Reference Include="Assembly-UnityScript">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="JsonFx.Json">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
  </Reference>
  <Reference Include="LitJson">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
  </Reference>
  <Reference Include="protobuf-net">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil.Mdb">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.Mdb.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.Mdb.dll</HintPath>
  </Reference>
  <Reference Include="nunit.core">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.dll</HintPath>
  </Reference>
  <Reference Include="nunit.core.interfaces">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.interfaces.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.interfaces.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.framework.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.framework.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>

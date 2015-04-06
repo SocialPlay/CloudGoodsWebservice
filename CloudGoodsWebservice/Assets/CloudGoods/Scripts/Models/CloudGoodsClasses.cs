@@ -339,6 +339,17 @@ namespace CloudGoods.Models
         public string Message;
     }
 
+    public class PremiumCurrencyBundle
+    {
+        public int ID;
+        public string Name;
+        public string Image;
+        public string Description;
+        public double Cost;
+        public int CreditAmount;
+        public string Currency;
+    }
+
     #endregion
 
     #region Items
@@ -660,17 +671,13 @@ namespace CloudGoods.Models
 
     public class StoreItem
     {
-        public int BaseItemId;
-        public string Image;
-        public string Name;
-        public string Description;
+
+        public ItemInformation ItemInformation;
+        public List<SalePrices> Sale;
         public int ItemId;
         public int CreditValue;
         public int CoinValue;
         public DateTime AddDate;
-        public string ItemDetailString;
-        public List<int> Behaviours;
-        public Dictionary<string, int> Tags = new Dictionary<string, int>();
 
         public List<StoreItemDetail> ItemDetails
         {
@@ -682,7 +689,7 @@ namespace CloudGoods.Models
                 {
                     ParsedItemDetail = new List<StoreItemDetail>();
 
-                    JsonData data = JsonMapper.ToObject(ItemDetailString);
+                    JsonData data = JsonMapper.ToObject(ItemInformation.Detail);
                     for (int i = 0; i < data.Count; i++)
                     {
                         StoreItemDetail itemDetail = new StoreItemDetail()
@@ -700,9 +707,18 @@ namespace CloudGoods.Models
         List<StoreItemDetail> ParsedItemDetail;
     }
 
-    /// <summary>
-    /// used to purchase a amount of items from an in app store
-    /// </summary>    
+    public class SalePrices
+    {
+        public int PremiumCurrencySaleValue;
+        public int StandardCurrencySaleValue;
+        public string SaleName;
+
+        public DateTime SaleStartDate;
+        public DateTime SaleEndDate;
+
+    }
+
+
     public class PurchaseItemRequest : IRequestClass
     {
         public int ItemId;
@@ -730,7 +746,6 @@ namespace CloudGoods.Models
             Standard = 1,
             Premium = 2
         }
-
     }
 
     public class ConsumePremiumRequest : IRequestClass
@@ -748,7 +763,6 @@ namespace CloudGoods.Models
         public bool isSuccess;
         public int currentBalance;
     }
-
     #endregion
 
     #region Item Bundles

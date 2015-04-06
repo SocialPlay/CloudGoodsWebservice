@@ -47,6 +47,13 @@ namespace CloudGoods.Webservice
         List<CloudData> CreateCloudDataListResponse(string responseData);
 
         InstancedItemInformation CreateInstancedItemInformationResponse(string responseData);
+        UserDataValue CreateUserDataResponse(string responseData);
+
+        List<OwnedUserDataValues> CreateUserDataByKeyResponse(string responseData);
+
+        List<UserDataValue> CreateUserDataAllResponse(string responseData);
+
+        List<PremiumCurrencyBundle> CreatePremiumCurrencyBundleResponse(string responseData);
     }
 
 }
