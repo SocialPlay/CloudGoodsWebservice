@@ -27,7 +27,6 @@ public class StoreExample : MonoBehaviour
     {
         storeLoader.SetActive(true);
         StoreInitializer initializer = storeLoader.GetComponent<StoreInitializer>();
-        itemBundlesLoader.GetItemBundles();
         initializer.InitializeStore();
     }
 }

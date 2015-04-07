@@ -16,25 +16,21 @@ namespace CloudGoods.Store.UI
         public GameObject SalePanel;
         public Text SaleName;
 
+        public GameObject StandardCurrencyFullWindow;
+        public Text StandardCurrencyFullText;
+
+        public GameObject PremiumCurrencyFullWindow;
+        public Text PremiumCurrencyFullText;
+
+        public GameObject CurrencyHalfWindow;
+        public Text StandardCurrencyHalfText;
+        public Text PremiumCurrencyHalfText;
+
+        public Text StoreItemText;
+
+
         UnityUIStoreLoader storeLoader;
 
-        //public UISprite itemImageSprite;
-
-
-        //protected virtual void OnEnable()
-        //{
-        //    if (itemID != 0) SP.OnStoreListLoaded += OnStoreListLoaded;
-        //}
-
-        //protected virtual void OnDisable()
-        //{
-        //    if (itemID != 0) SP.OnStoreListLoaded -= OnStoreListLoaded;
-        //}
-
-        //protected virtual void OnStoreListLoaded(List<StoreItem> storeList)
-        //{
-        //    SetItemData(SP.GetStoreItem(itemID));
-        //}
 
         void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D texture)
         {
@@ -42,20 +38,47 @@ namespace CloudGoods.Store.UI
 
             RawImage uiTexture = gameObject.GetComponentInChildren<RawImage>();
             uiTexture.texture = texture;
-            //if (loader != null) NGUITools.SetActive(loader, false);
-
-            //TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
         }
 
         public virtual void Init(StoreItem item, UnityUIStoreLoader unityStoreLoader)
         {
-            //if (nameLabel != null) nameLabel.text = item.itemName;
-            //if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
             storeItem = item;
             storeLoader = unityStoreLoader;
             ItemTextureCache.Instance.GetItemTexture(storeItem.ItemInformation.ImageName, OnReceivedItemTexture);
+            StoreItemText.text = storeItem.ItemInformation.Name;
 
             SetDisplayForSale();
+            ChangePurchaseButtonDisplay(storeItem.CreditValue, storeItem.CoinValue);
+        }
+
+        private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
+        {
+            StandardCurrencyFullWindow.SetActive(false);
+            PremiumCurrencyFullWindow.SetActive(false);
+            CurrencyHalfWindow.SetActive(false);
+
+            if (itemCreditCost > 0 && itemCoinCost > 0)
+            {
+                CurrencyHalfWindow.SetActive(true);
+                StandardCurrencyHalfText.text = itemCoinCost.ToString();
+                PremiumCurrencyHalfText.text = itemCreditCost.ToString();
+            }
+            else if (itemCreditCost < 0)
+            {
+                StandardCurrencyFullWindow.SetActive(true);
+                StandardCurrencyFullText.text = itemCoinCost.ToString();
+            }
+            else if (itemCoinCost < 0)
+            {
+                PremiumCurrencyFullWindow.SetActive(true);
+                PremiumCurrencyFullText.text = itemCreditCost.ToString();
+            }
+            else
+            {
+                CurrencyHalfWindow.SetActive(true);
+                StandardCurrencyHalfText.text = itemCoinCost.ToString();
+                PremiumCurrencyHalfText.text = itemCreditCost.ToString();
+            }
         }
 
         void SetDisplayForSale()
