@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using CloudGoods.Services;
 using CloudGoods.Services.WebCommunication;
+using CloudGoods.SDK.Models;
 
 namespace CloudGoods.SDK.Store.UI
 {
@@ -16,7 +17,6 @@ namespace CloudGoods.SDK.Store.UI
         {
             UnityUIItemPurchase.OnPurchasedItem += UnityUIItemPurchase_OnPurchasedItem;
             CallHandler.IsError += CallHandler_IsError;
-            //UnityUIBundlePurchasing.OnPurchaseSuccessful += UnityUIItemPurchase_OnPurchasedItem;
         }
 
         void CallHandler_IsError(SDK.Models.WebserviceError obj)

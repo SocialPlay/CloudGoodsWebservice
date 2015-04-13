@@ -17,27 +17,12 @@ namespace CloudGoods.SDK.Store
 
         FilterNewestItems newestItemFilter = new FilterNewestItems();
         List<StoreItem> storeItems = new List<StoreItem>();
-        //List<ItemBundle> itemBundles = new List<ItemBundle>();
 
         public void InitializeStore()
         {
-            UpdateUserCurrency();
-
             ItemStoreServices.GetStoreItems(OnReceivedStoreItems);
-            //CallHandler.GetItemBundles(null);
-
         }
 
-        public void UpdateUserCurrency()
-        {
-            ItemStoreServices.GetStandardCurrencyBalance(0, null);
-            ItemStoreServices.GetPremiumCurrencyBalance(null);
-        }
-
-        //void OnReceivedStoreItemBundles(List<ItemBundle> newItemBundles)
-        //{
-        //    itemBundles = newItemBundles;
-        //}
 
         void OnReceivedStoreItems(List<StoreItem> newStoreItems)
         {

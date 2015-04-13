@@ -30,9 +30,9 @@ namespace CloudGoods.CurrencyPurchase
 
         void Start()
         {
-            CurrencyManager.GetPremiumCurrency(0, p =>
+            CurrencyManager.GetPremiumCurrencyDetails(delegate (string name,Texture2D icon)
             {
-                PremiumCurrencyName = p.Name;
+                PremiumCurrencyName = name;
             });
         }
 

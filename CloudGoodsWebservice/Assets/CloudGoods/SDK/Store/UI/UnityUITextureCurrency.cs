@@ -19,17 +19,17 @@ namespace CloudGoods.SDK.Store.UI
             mTexture = GetComponent<RawImage>();
             if (type == CurrencyType.Standard)
             {
-                CurrencyManager.GetStandardCurrency(0, SetCurrencyLabel);
+                CurrencyManager.GetStandardCurrencyDetails(0, SetCurrencyLabel);
             }
             else if (type == CurrencyType.Premium)
             {
-                CurrencyManager.GetPremiumCurrency(0, SetCurrencyLabel);
+                CurrencyManager.GetPremiumCurrencyDetails(SetCurrencyLabel);
             }
         }
 
-        void SetCurrencyLabel(CurrencyManager.CurrencyInfo currencyInfo)
+        void SetCurrencyLabel(string name, Texture2D icon)
         {
-            mTexture.texture = currencyInfo.Icon;
+            mTexture.texture = icon;
         }
     }
 }

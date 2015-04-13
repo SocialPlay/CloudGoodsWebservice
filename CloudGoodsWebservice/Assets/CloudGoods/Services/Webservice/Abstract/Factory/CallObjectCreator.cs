@@ -47,7 +47,7 @@ namespace CloudGoods.Services.Webservice
 
         WWW CreateStandardCurrencyBalanceCall(int accessLocation);
 
-        Dictionary<string, string> CreateHeaders(string urlString);
+        Dictionary<string, string> CreateHeaders(string urlString, bool isFull= true );
 
         Dictionary<string, string> CreatePostHeaders(IRequestClass requestObject);
 

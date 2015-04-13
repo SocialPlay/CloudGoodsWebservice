@@ -5,6 +5,7 @@ using System;
 using CloudGoods.SDK.Container;
 using CloudGoods.Enums;
 using CloudGoods.SDK.Models;
+using CloudGoods.Services;
 
 namespace CloudGoods.SDK.Store.UI
 {
@@ -148,8 +149,6 @@ namespace CloudGoods.SDK.Store.UI
 
             itemTexture.texture = item.gameObject.GetComponentInChildren<RawImage>().texture;
 
-            Debug.Log(premiumCurrencyCost);
-
             ChangePurchaseButtonDisplay(premiumCurrencyCost, standardCurrencyCost);
         }
 
@@ -168,22 +167,20 @@ namespace CloudGoods.SDK.Store.UI
         public void PurchaseItemWithPremiumCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            CallHandler.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
+            ItemStoreServices.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
         public void PurchaseItemWithStandardCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            CallHandler.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+            ItemStoreServices.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
         void OnReceivedItemPurchaseConfirmation(SimpleItemInfo msg)
         {
-            ReloadContainerItems();
-            CallHandler.GetPremiumCurrencyBalance(null);
-            CallHandler.GetStandardCurrencyBalance(0, null);
+            ReloadContainerItems();       
 
             if (OnPurchasedItem != null)
                 OnPurchasedItem(msg);

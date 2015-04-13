@@ -54,19 +54,19 @@ namespace CloudGoods.SDK.Store.UI
             else if (currencyType == CurrencyType.Standard)
             {
                 SetInactive();
-                CurrencyManager.GetStandardCurrency(0, RecivedCurrencyInfo);
+                CurrencyManager.GetStandardCurrencyBalance(0, RecivedCurrencyInfo);
               
             }
             else if (currencyType == CurrencyType.Premium)
             {
                 SetInactive();
-                CurrencyManager.GetPremiumCurrency(0, RecivedCurrencyInfo);
+                CurrencyManager.GetPremiumCurrencyBalance( RecivedCurrencyInfo);
             }
         }
 
-        public void RecivedCurrencyInfo(CurrencyManager.CurrencyInfo info)
+        public void RecivedCurrencyInfo(int amount)
         {
-            if (ItemCost <= info.Amount)
+            if (ItemCost <= amount)
                 SetActive();
             else
                 SetInactive();

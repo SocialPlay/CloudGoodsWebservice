@@ -47,7 +47,7 @@ namespace CloudGoods.Services.Webservice
 
 
 
-        public Dictionary<string, string> CreateHeaders(string dataString)
+        public Dictionary<string, string> CreateHeaders(string dataString, bool isFull = true)
         {
             string timeStamp = GetTimestamp().ToString();
 
@@ -56,7 +56,7 @@ namespace CloudGoods.Services.Webservice
             List<string> values = new List<string>();
             headers.Add("Timestamp", timeStamp);
             values.Add(timeStamp);
-            if (!string.IsNullOrEmpty(AccountServices.ActiveUser.SessionId))
+            if (isFull)
             {
                 headers.Add("SessionID", AccountServices.ActiveUser.SessionId);
                 values.Add(AccountServices.ActiveUser.SessionId);
@@ -90,7 +90,7 @@ namespace CloudGoods.Services.Webservice
             return new KeyValuePair<string, string>(key, value);
         }
 
-        public WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
+        WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
         {
             string createdURL = "";
             foreach (KeyValuePair<string, string> urlA in urlPrams)
@@ -106,10 +106,27 @@ namespace CloudGoods.Services.Webservice
             return new WWW(urlString, null, headers);
         }
 
-        public WWW GenerateWWWPost(string controller, IRequestClass dataObject)
+
+        WWW GenerateWWWCallWithoutUser(string controller, params KeyValuePair<string, string>[] urlPrams)
+        {
+            string createdURL = "";
+            foreach (KeyValuePair<string, string> urlA in urlPrams)
+            {
+                if (createdURL == "")
+                    createdURL += "?";
+                else
+                    createdURL += "&";
+                createdURL += urlA.Key + "=" + urlA.Value;
+            }
+            Dictionary<string, string> headers = CreateHeaders(createdURL, false);
+            string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
+            return new WWW(urlString, null, headers);
+        }
+
+        WWW GenerateWWWPost(string controller, IRequestClass dataObject, bool fullHeaders = true)
         {
             string objectString = LitJson.JsonMapper.ToJson(dataObject);
-            Dictionary<string, string> headers = CreateHeaders(dataObject.ToHashable());
+            Dictionary<string, string> headers = CreateHeaders(dataObject.ToHashable(), fullHeaders);
             headers.Add("Content-Type", "application/json");
             string urlString = string.Format("{0}api/CloudGoods/{1}", CloudGoodsSettings.Url, controller);
             byte[] body = Encoding.UTF8.GetBytes(objectString);
@@ -122,7 +139,7 @@ namespace CloudGoods.Services.Webservice
         {
             string loginUrl = string.Format("?appId={0}&email={1}&password={2}", CloudGoodsSettings.AppID, userEmail, password);
 
-            Dictionary<string, string> headers = CreateHeaders(loginUrl);
+            Dictionary<string, string> headers = CreateHeaders(loginUrl, false);
             string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
             return new WWW(urlString, null, headers);
         }
@@ -131,31 +148,35 @@ namespace CloudGoods.Services.Webservice
         {
             string loginUrl = string.Format("?appId={0}&userName={1}&platformId={2}&platformUserId={3}", CloudGoodsSettings.AppID, userName, platformId, platformUserID);
 
-            Dictionary<string, string> headers = CreateHeaders(loginUrl);
+            Dictionary<string, string> headers = CreateHeaders(loginUrl, false);
             string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/LoginByPlatform" + loginUrl);
             return new WWW(urlString, null, headers);
         }
 
         public WWW CreateRegisterUserCallObject(RegisterUserRequest request)
         {
-            return GenerateWWWPost("RegisterUser", request);
+            return GenerateWWWPost("RegisterUser", request, true);
         }
 
         public WWW CreateForgotPasswordCallObject(string userEmail)
         {
-            return GenerateWWWCall("ForgotPassword", new KeyValuePair<string, string>("appId", CloudGoodsSettings.AppID),
-                new KeyValuePair<string, string>("userEmail", userEmail));
+            return GenerateWWWCallWithoutUser("ForgotPassword", 
+                GetParameter("appId", CloudGoodsSettings.AppID),
+                GetParameter("userEmail", userEmail));
         }
 
         public WWW CreateResendVerificationEmailCallObject(string email)
         {
-            return GenerateWWWCall("ResendVerification", new KeyValuePair<string, string>("appId", CloudGoodsSettings.AppID),
-                new KeyValuePair<string, string>("userEmail", email));
+            return GenerateWWWCallWithoutUser(
+                "ResendVerification",
+                GetParameter("appId", CloudGoodsSettings.AppID),
+                GetParameter("userEmail", email)
+                );
         }
 
         public WWW CreateGetUserItemsCallObject(int location, string andTags = null, string orTags = null)
         {
-            return GenerateWWWCall("UserItems"
+            return GenerateWWWCallWithoutUser("UserItems"
                 , GetParameter("location", location.ToString())
                 , GetParameter("andTags", andTags)
                 , GetParameter("orTags", orTags)

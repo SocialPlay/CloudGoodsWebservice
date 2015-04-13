@@ -10,99 +10,148 @@ namespace CloudGoods.SDK
 {
     public static class CurrencyManager
     {
-
-        private static bool _IsInitilized = false;
-
-        private static CurrencyInfo _PremiumcurrencyInfo = null;
-
-        private static CurrencyInfo _StandardCurrencyInfo = null;
-
-        public class CurrencyInfo
+        public class CurrencyDetails
         {
             public string Name;
             public Texture2D Icon;
-            public int Amount = -1;
         }
 
-        private static bool isGettingWolrdCurrency = false;
+        private static CurrencyDetails PremiumInfo = null;
+        private static int? PremiumAmount = null;
+        private static CurrencyDetails StandardInfo = null;
+        private static int? StandardAmount = null;
 
-        private static Action<CurrencyInfo> RecivedPremiumCurrency;
-        private static Action<CurrencyInfo> RecivedStandardCurrency;
 
-        public static void GetPremiumCurrency(int location, Action<CurrencyInfo> callback, bool dontUpdate = false)
+        private static bool IsGettingWolrdCurrency = false;
+
+        private static Action<string, Texture2D> RecivedPremiumDetails;
+        private static Action<int> RecivecdPremiumAmount;
+        private static Action<string, Texture2D> RecivedStandardDetails;
+        private static Action<int> RecivecdStandardAmount;
+        private static int StandardCurrencyLoaction = 0;
+
+        public static void GetPremiumCurrencyDetails(Action<string, Texture2D> callback)
         {
-            if (!_IsInitilized)
+            if (PremiumInfo == null)
             {
-                GetWolrdCurrencyInfo(location);
-                RecivedPremiumCurrency += callback;
+                GetWolrdCurrencyInfo(StandardCurrencyLoaction);
+                RecivedPremiumDetails += callback;
             }
             else
             {
-                if (dontUpdate) callback(_PremiumcurrencyInfo);
-                else
-                {
-                    ItemStoreServices.GetPremiumCurrencyBalance(x =>
-                    {
-                        _PremiumcurrencyInfo.Amount = x.Amount;
-                        callback(_PremiumcurrencyInfo);
-                    });
-                }
+                callback(PremiumInfo.Name, PremiumInfo.Icon);
             }
         }
 
-        public static void GetStandardCurrency(int location, Action<CurrencyInfo> callback, bool dontUpdate = false)
+        public static void GetPremiumCurrencyBalance(Action<int> callback, bool forceUpdate = true)
         {
-            if (!_IsInitilized)
+            if (PremiumAmount == null)
             {
-                GetWolrdCurrencyInfo(location);
-                RecivedStandardCurrency += callback;
+                GetWolrdCurrencyInfo(StandardCurrencyLoaction);
+                RecivecdPremiumAmount += callback;
+            }
+            else if (forceUpdate)
+            {
+                ItemStoreServices.GetPremiumCurrencyBalance(balance =>
+                {
+                    callback(balance.Amount);
+                });
             }
             else
             {
-                if (dontUpdate) callback(_StandardCurrencyInfo);
-                else
-                {
-                    ItemStoreServices.GetPremiumCurrencyBalance(x =>
-                    {
-                        _StandardCurrencyInfo.Amount = x.Amount;
-                        callback(_StandardCurrencyInfo);
-                    });
-                }
+                callback(PremiumAmount.GetValueOrDefault(0));
             }
         }
 
+        public static void GetStandardCurrencyBalance(int location, Action<int> callback, bool forceUpdate = true)
+        {
+            StandardCurrencyLoaction = location;
+            if (StandardAmount == null)
+            {
+                GetWolrdCurrencyInfo(StandardCurrencyLoaction);
+                RecivecdStandardAmount += callback;
+            }
+            else if (forceUpdate)
+            {
+                ItemStoreServices.GetStandardCurrencyBalance(StandardCurrencyLoaction, item =>
+                {
+                    StandardAmount = item.Amount;
+                    callback(StandardAmount.GetValueOrDefault(0));
+                });
+            }
+            else
+            {
+                callback(StandardAmount.GetValueOrDefault(0));
+            }
+
+        }
+
+        public static void GetStandardCurrencyDetails(int location, Action<string, Texture2D> callback)
+        {
+            StandardCurrencyLoaction = location;
+            if (StandardInfo == null)
+            {
+                GetWolrdCurrencyInfo(StandardCurrencyLoaction);
+                RecivedStandardDetails += callback;
+            }
+            else
+            {
+                callback(StandardInfo.Name, StandardInfo.Icon);
+            }
+        }
 
 
         private static void GetWolrdCurrencyInfo(int location)
         {
-            if (!isGettingWolrdCurrency)
-                ItemStoreServices.GetCurrencyInfo(WorldCurrencyInfo =>
+            if (!IsGettingWolrdCurrency)
+            {
+                IsGettingWolrdCurrency = true;
+                ItemStoreServices.GetCurrencyInfo(worldCurrencyInfo =>
                 {
-                    _PremiumcurrencyInfo = new CurrencyInfo() { Name = WorldCurrencyInfo.PremiumCurrencyName };
+                    ItemTextureCache.GetItemTexture(worldCurrencyInfo.PremiumCurrencyImage, icon =>
+                    {
+                        PremiumInfo = new CurrencyDetails()
+                        {
+                            Name = worldCurrencyInfo.PremiumCurrencyName,
+                            Icon = icon
+                        };
+                        if (RecivedPremiumDetails != null)
+                        {
+                            RecivedPremiumDetails(PremiumInfo.Name, PremiumInfo.Icon);
+                        }
+                    });
                     ItemStoreServices.GetPremiumCurrencyBalance(premiumCurrencyResponse =>
                     {
-                        _PremiumcurrencyInfo.Amount = premiumCurrencyResponse.Amount;
-                        ItemTextureCache.GetItemTexture(WorldCurrencyInfo.PremiumCurrencyImage, icon =>
+                        PremiumAmount = premiumCurrencyResponse.Amount;
+                        if (RecivecdPremiumAmount != null)
                         {
-                            _PremiumcurrencyInfo.Icon = icon;
-                            RecivedPremiumCurrency(_PremiumcurrencyInfo);
-                            RecivedPremiumCurrency = null;
-                        });
+                            RecivecdPremiumAmount(premiumCurrencyResponse.Amount);
+                        }
                     });
 
-                    _StandardCurrencyInfo = new CurrencyInfo() { Name = WorldCurrencyInfo.StandardCurrencyName };
-                    ItemStoreServices.GetStandardCurrencyBalance(location, standardCurrencyItem =>
+                    ItemTextureCache.GetItemTexture(worldCurrencyInfo.StandardCurrencyImage, icon =>
                     {
-                        _StandardCurrencyInfo.Amount = standardCurrencyItem.Amount;
-                        ItemTextureCache.GetItemTexture(WorldCurrencyInfo.PremiumCurrencyImage, icon =>
+                        StandardInfo = new CurrencyDetails()
                         {
-                            _StandardCurrencyInfo.Icon = icon;
-                            RecivedStandardCurrency(_StandardCurrencyInfo);
-                            RecivedStandardCurrency = null;
-                        });
+                            Name = worldCurrencyInfo.StandardCurrencyName,
+                            Icon = icon
+                        };
+                        if (RecivedStandardDetails != null)
+                        {
+                            RecivedStandardDetails(StandardInfo.Name, StandardInfo.Icon);
+                        }
                     });
 
+                    ItemStoreServices.GetStandardCurrencyBalance(StandardCurrencyLoaction, standardCurrencyItem =>
+                    {
+                        StandardAmount = standardCurrencyItem.Amount;
+                        if (RecivecdStandardAmount != null)
+                        {
+                            RecivecdStandardAmount(standardCurrencyItem.Amount);
+                        }
+                    });
                 });
+            }
         }
     }
 }

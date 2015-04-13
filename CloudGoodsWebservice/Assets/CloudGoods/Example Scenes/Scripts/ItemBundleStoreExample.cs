@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using CloudGoods.ItemBundles;
-using CloudGoods.Models;
 using CloudGoods;
+using CloudGoods.SDK.Models;
+using CloudGoods.Services.WebCommunication;
 
 public class ItemBundleStoreExample : MonoBehaviour {
 
@@ -17,19 +18,14 @@ public class ItemBundleStoreExample : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+      CloudGoods.Services.AccountServices.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)
     {
-        StoreDisplay.SetActive(true);
-        UpdateUserCurrency();
+        StoreDisplay.SetActive(true);   
         itemBundlesLoader.GetItemBundles();
     }
 
-    public void UpdateUserCurrency()
-    {
-        CallHandler.GetStandardCurrencyBalance(0, null);
-        CallHandler.GetPremiumCurrencyBalance(null);
-    }
+  
 }

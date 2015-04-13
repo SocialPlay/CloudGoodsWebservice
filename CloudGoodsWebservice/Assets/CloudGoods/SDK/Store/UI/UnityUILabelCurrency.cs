@@ -15,22 +15,43 @@ namespace CloudGoods.SDK.Store.UI
         public CurrencyType type = CurrencyType.Standard;
         Text mLabel;
 
+        void OnEnable()
+        {
+            UnityUIItemPurchase.OnPurchasedItem += UnityUIItemPurchase_OnPurchasedItem;
+        }
+
+        void OnDisable()
+        {
+            UnityUIItemPurchase.OnPurchasedItem -= UnityUIItemPurchase_OnPurchasedItem;
+        }
+
+        void UnityUIItemPurchase_OnPurchasedItem(SimpleItemInfo obj)
+        {
+            UpdateLabels();
+        }
+
         void Start()
+        {
+            UpdateLabels();
+        }
+
+
+        void UpdateLabels()
         {
             mLabel = GetComponent<Text>();
             if (type == CurrencyType.Standard)
             {
-                CurrencyManager.GetStandardCurrency(0, SetCurrencyLabel);
+                CurrencyManager.GetStandardCurrencyBalance(0, SetCurrencyLabel);
             }
             else if (type == CurrencyType.Premium)
             {
-                CurrencyManager.GetPremiumCurrency(0, SetCurrencyLabel);
+                CurrencyManager.GetPremiumCurrencyBalance(SetCurrencyLabel);
             }
         }
 
-        void SetCurrencyLabel(CurrencyManager.CurrencyInfo currencyInfo)
+        void SetCurrencyLabel(int amount)
         {
-            mLabel.text = currencyInfo.Amount.ToString();
+            mLabel.text = amount.ToString();
         }
     }
 }
