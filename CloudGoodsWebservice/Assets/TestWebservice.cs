@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CloudGoods.Models;
-using CloudGoods;
+using CloudGoods.SDK.Models;
+using CloudGoods.Services;
 using CloudGoods.Enums;
 using System.Collections.Generic;
+using CloudGoods.Services.WebCommunication;
 
 public class TestWebservice : MonoBehaviour {
 
@@ -24,7 +25,7 @@ public class TestWebservice : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login( "lionel.sy@gmail.com", "123456", OnReceivedLoginResponse);
+        AccountServices.Login("lionel.sy@gmail.com", "123456", OnReceivedLoginResponse);
     }
 
     void OnReceivedStatuseMessage(StatusMessageResponse response)
@@ -34,10 +35,10 @@ public class TestWebservice : MonoBehaviour {
 
     void OnReceivedLoginResponse(CloudGoodsUser user)
     {
-        CallHandler.GetCurrencyInfo(OnReceivedCurrencyInfo);
-        CallHandler.GetPremiumCurrencyBalance(OnReceivedPremiumCurrencyBalance);
-        CallHandler.GetStandardCurrencyBalance(0, OnReceivedStandardCurrencyBalance);
-        CallHandler.GetStoreItems(OnReceivedStoreItems);
+        ItemStoreServices.GetCurrencyInfo(OnReceivedCurrencyInfo);
+        ItemStoreServices.GetPremiumCurrencyBalance(OnReceivedPremiumCurrencyBalance);
+        ItemStoreServices.GetStandardCurrencyBalance(0, OnReceivedStandardCurrencyBalance);
+        ItemStoreServices.GetStoreItems(OnReceivedStoreItems);
     }
 
     void OnReceivedStoreItems(List<StoreItem> storeItems)

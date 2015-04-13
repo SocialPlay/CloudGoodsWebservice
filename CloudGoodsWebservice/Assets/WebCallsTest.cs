@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using LitJson;
-using CloudGoods;
-using CloudGoods.Models;
+using CloudGoods.Services.WebCommunication;
+using CloudGoods.SDK.Models;
+using CloudGoods.Services;
 using CloudGoods.Enums;
 using System.Linq;
 using System;
+
 
 namespace WebCallTests
 {
@@ -66,10 +68,10 @@ namespace WebCallTests
         {
             GUILayout.BeginArea(new Rect(25, 25, Screen.width / 2 - 50, Screen.height - 50));
 
-            if (CallHandler.User != null)
+            if (AccountServices.ActiveUser != null)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label("Welcome " + CallHandler.User.UserName + ".");
+                GUILayout.Label("Welcome " + AccountServices.ActiveUser.UserName + ".");
                 if (GUILayout.Button("Logout"))
                 {
                     LoginCalls.logout();
@@ -210,9 +212,12 @@ namespace WebCallTests
         public static ItemAction CurrentAction;
         public static List<OwnedItemInformation> UsersItems = new List<OwnedItemInformation>();
         public static int destinationLocation = 0;
-
+        static string LookupItemIDString = "0";
 
         static int LookupItemId;
+        static int LookupLocationId = 0;
+        static string GiveAmountString = "0";
+        static int GiveAmountValue = 0;
 
         public static void Draw()
         {
@@ -220,19 +225,54 @@ namespace WebCallTests
             {
                 ItemManagerCalls.LoadUserItems();
             }
-            if (GUILayout.Button("Give User Item"))
-            {
-                UpdateItemById();
-            }
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Item ID");
-            LookupItemId = int.Parse(GUILayout.TextArea(LookupItemId.ToString()));
+            LookupItemIDString = GUILayout.TextArea(LookupItemIDString);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Location");
+            if (GUILayout.Button((LookupLocationId == 0 ? "(Vault)" : LookupLocationId.ToString())))
+            {
+                ItemManagerCalls.LookupLocationId++;
+                if (ItemManagerCalls.LookupLocationId > 10)
+                {
+                    ItemManagerCalls.LookupLocationId = 0;
+                }
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("amount");
+            GiveAmountString = GUILayout.TextArea(GiveAmountString);
+            GUILayout.EndHorizontal();
+
             if (GUILayout.Button("Get User Item"))
             {
-                GetOwnerItem();
+                if (!int.TryParse(LookupItemIDString, out LookupItemId))
+                {
+                    DisplayHelper.NewDisplayLine("item Id must be valid int");
+                }
+                else
+                {
+                    GetOwnerItem();
+                }
             }
 
-            GUILayout.EndHorizontal();
+            if (GUILayout.Button("Give User item"))
+            {
+                if (!int.TryParse(LookupItemIDString, out LookupItemId))
+                {
+                    DisplayHelper.NewDisplayLine("item Id must be valid int");
+                }
+                else if (!int.TryParse(GiveAmountString, out GiveAmountValue) && GiveAmountValue < 0)
+                {
+                    DisplayHelper.NewDisplayLine("Give amount must be valid possative int");
+                }
+                else
+                {
+                    UpdateItemById(LookupItemId, GiveAmountValue, LookupLocationId);
+                }
+            }
         }
 
         public static void DrawItemDetails()
@@ -247,7 +287,7 @@ namespace WebCallTests
             }
             if (CurrentAction == ItemAction.move)
             {
-                if (GUILayout.Button((ItemManagerCalls.destinationLocation == 0 ? "(Vault)" : ItemManagerCalls.destinationLocation.ToString()), GUILayout.MaxWidth(140)))
+                if (GUILayout.Button((destinationLocation == 0 ? "(Vault)" : destinationLocation.ToString()), GUILayout.MaxWidth(140)))
                 {
                     ItemManagerCalls.destinationLocation++;
                     if (ItemManagerCalls.destinationLocation > 10)
@@ -289,23 +329,22 @@ namespace WebCallTests
             }
         }
 
-        static void UpdateItemById()
+        static void UpdateItemById(int itemId, int amount, int location)
         {
             List<UpdateItemByIdRequest.UpdateOrderByID> infos = new List<UpdateItemByIdRequest.UpdateOrderByID>(){
-                new UpdateItemByIdRequest.UpdateOrderByID(){location = 0, itemId = 111542, amount = 50000},
-                new UpdateItemByIdRequest.UpdateOrderByID(){location = 6, itemId = 111542, amount = 2}
+                new UpdateItemByIdRequest.UpdateOrderByID(){location = location, itemId = itemId, amount = amount}
             };
 
-            CallHandler.UpdateItemsByIds(infos, ItemManagerCalls.DisplayUpdatedItems);
+            ItemManipulationServices.UpdateItemsByIds(infos, ItemManagerCalls.DisplayUpdatedItems);
         }
 
         static void GetOwnerItem()
         {
-            CallHandler.UserItem(LookupItemId, 0, delegate(InstancedItemInformation item)
+            ItemManipulationServices.UserItem(LookupItemId, 0, delegate(SimpleItemInfo item)
             {
                 if (item != null)
                 {
-                    DisplayHelper.NewDisplayLine(string.Format("User has {0} of {1}", item.Amount, item.Information.Name));
+                    DisplayHelper.NewDisplayLine(string.Format("User has {0} in location {1}", item.Amount, item.Location));
                 }
                 else
                 {
@@ -316,7 +355,7 @@ namespace WebCallTests
 
         static void LoadUserItems()
         {
-            CallHandler.GetUserItems(0, delegate(List<InstancedItemInformation> items)
+            ItemManipulationServices.GetUserItems(0, delegate(List<InstancedItemInformation> items)
             {
                 DisplayItems(items);
             });
@@ -324,25 +363,25 @@ namespace WebCallTests
 
         static void MoveItem(OwnedItemInformation item)
         {
-            CallHandler.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
+            ItemManipulationServices.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
             UsersItems.Remove(item);
         }
 
         static void RemoveStack(OwnedItemInformation item)
         {
-            CallHandler.UpdateItemByStackIds(item.StackLocationId, -item.Amount, item.Location, DisplayUpdatedItems);
+            ItemManipulationServices.UpdateItemByStackIds(item.StackLocationId, -item.Amount, item.Location, DisplayUpdatedItems);
             UsersItems.Remove(item);
         }
 
         static void MakeStackSizeOne(OwnedItemInformation item)
         {
-            CallHandler.UpdateItemByStackIds(item.StackLocationId, -(item.Amount - 1), item.Location, DisplayUpdatedItems);
+            ItemManipulationServices.UpdateItemByStackIds(item.StackLocationId, -(item.Amount - 1), item.Location, DisplayUpdatedItems);
             item.Amount = 1;
         }
 
         public static void AddFiveToStack(OwnedItemInformation item)
         {
-            CallHandler.UpdateItemByStackIds(item.StackLocationId, 5, item.Location, DisplayUpdatedItems);
+            ItemManipulationServices.UpdateItemByStackIds(item.StackLocationId, 5, item.Location, DisplayUpdatedItems);
 
             item.Amount += 5;
 
@@ -372,6 +411,7 @@ namespace WebCallTests
                 });
             }
             DisplayHelper.NewDisplayLine(debugString);
+            
         }
 
 
@@ -380,6 +420,7 @@ namespace WebCallTests
             string debugString = "Update Items";
             foreach (var item in response.UpdatedStackIds)
             {
+                if (item == null) { debugString += "\n null item"; break; }
                 debugString += "\n" + item.StackId;
                 debugString += "\n  Amount: " + item.Amount;
                 debugString += "\n  Location: " + item.Location;
@@ -388,6 +429,7 @@ namespace WebCallTests
             DisplayHelper.NewDisplayLine(debugString);
             foreach (var item in response.UpdatedStackIds)
             {
+                if (item == null) { break; }
                 InstancedItemInformation data = UsersItems.Find(x => x.StackLocationId == item.StackId);
                 if (data != null)
                 {
@@ -525,7 +567,7 @@ namespace WebCallTests
 
         static void CreateItemVoucher()
         {
-            CallHandler.CreateItemVouchers(1, 700, DisaplayItemVouchers);
+            ItemManipulationServices.CreateItemVouchers(1, 700, DisaplayItemVouchers);
 
         }
 
@@ -534,7 +576,7 @@ namespace WebCallTests
 
             List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Amount, ItemId = voucher.Information.Id, Location = 0, VoucherId = voucher.VoucherId } };
 
-            CallHandler.RedeemItemVouchers(selectedVouchers, delegate(UpdatedStacksResponse response)
+            ItemManipulationServices.RedeemItemVouchers(selectedVouchers, delegate(UpdatedStacksResponse response)
             {
                 ItemManagerCalls.DisplayUpdatedItems(response);
                 CurrentVouchers.Remove(voucher);
@@ -545,7 +587,7 @@ namespace WebCallTests
 
         static void GetItemVoucher(int Id)
         {
-            CallHandler.GetItemVoucher(Id, DisaplayItemVouchers);
+            ItemManipulationServices.GetItemVoucher(Id, DisaplayItemVouchers);
         }
 
 
@@ -598,7 +640,7 @@ namespace WebCallTests
 
         static void GetItemBundles()
         {
-            CallHandler.GetItemBundles("", "", delegate(ItemBundlesResponse response)
+            ItemStoreServices.GetItemBundles("", "", delegate(ItemBundlesResponse response)
             {
                 ItemBundleResponseHandler(response);
             });
@@ -627,7 +669,7 @@ namespace WebCallTests
 
         static void PurchaseItemBundle(int bundleId)
         {
-            CallHandler.PurchaseItemBundle(bundleId, IsStandard ? 1 : 2, 0, PurchaseItemBundleHandler);
+            ItemStoreServices.PurchaseItemBundle(bundleId, IsStandard ? 1 : 2, 0, PurchaseItemBundleHandler);
         }
 
         static void PurchaseItemBundleHandler(ItemBundlePurchaseResponse response)
@@ -674,14 +716,14 @@ namespace WebCallTests
                 {
                     if (GUILayout.Button(string.Format("{1}: {0}", item.CreditValue, UsersCurrency.PremiumName())))
                     {
-                        CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Premium, 0, StoreItemPurchaseResponse);
+                        ItemStoreServices.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Premium, 0, StoreItemPurchaseResponse);
                     }
                 }
                 if (item.CoinValue != -1)
                 {
                     if (GUILayout.Button(string.Format("{1}: {0}", item.CoinValue, UsersCurrency.StandardName())))
                     {
-                        CallHandler.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Standard, 0, StoreItemPurchaseResponse);
+                        ItemStoreServices.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Standard, 0, StoreItemPurchaseResponse);
                     }
                 }
                 GUILayout.EndVertical();
@@ -705,17 +747,12 @@ namespace WebCallTests
 
         private static void GetStoreItems()
         {
-            CallHandler.GetStoreItems(StoreResponse);
+            ItemStoreServices.GetStoreItems(StoreResponse);
         }
-
-
     }
 
     internal static class UsersCurrency
     {
-
-
-
         static CurrencyInfoResponse info;
 
         static int premiumAmount;
@@ -726,7 +763,7 @@ namespace WebCallTests
         {
             if (info == null)
             {
-                CallHandler.GetCurrencyInfo(delegate(CurrencyInfoResponse newInfo)
+                ItemStoreServices.GetCurrencyInfo(delegate(CurrencyInfoResponse newInfo)
                 {
                     info = newInfo;
                     GetUserAmounts();
@@ -740,12 +777,12 @@ namespace WebCallTests
 
         private static void GetUserAmounts()
         {
-            CallHandler.GetPremiumCurrencyBalance(delegate(CurrencyBalanceResponse response)
+            ItemStoreServices.GetPremiumCurrencyBalance(delegate(CurrencyBalanceResponse response)
             {
                 premiumAmount = response.Amount;
             });
 
-            CallHandler.GetStandardCurrencyBalance(0, delegate(SimpleItemInfo response)
+            ItemStoreServices.GetStandardCurrencyBalance(0, delegate(SimpleItemInfo response)
             {
                 standardAmount = response.Amount;
             });
@@ -777,7 +814,7 @@ namespace WebCallTests
 
         static void ConsumePremium()
         {
-            CallHandler.ConsumePremiumCurrency(consumeAmount, delegate(ConsumePremiumResponce responce)
+            ItemStoreServices.ConsumePremiumCurrency(consumeAmount, delegate(ConsumePremiumResponce responce)
             {
                 if (responce.isSuccess)
                 {
@@ -820,7 +857,7 @@ namespace WebCallTests
         static bool isPlatform = false;
 
         static string userEmail = "";
-        static string userName="";
+        static string userName = "";
         static string password = "";
         static int platform = 1;
         static string platformUserName = "";
@@ -830,7 +867,7 @@ namespace WebCallTests
 
         public static void logout()
         {
-            CallHandler.User = null;
+            AccountServices.Logout();
             isSent = false;
         }
 
@@ -926,9 +963,7 @@ namespace WebCallTests
                             PlayerPrefs.SetString("SPLogin_PlatformUserName", platformUserName);
                             PlayerPrefs.SetString("SPLogin_PlatformUserID", platformUserId);
                             PlayerPrefs.SetInt("SPLogin_PlatformId", platform);
-                            CallHandler.LoginByPlatform((CloudGoodsPlatform)platform, platformUserId, userEmail, OnReceivedUser);
-
-
+                            AccountServices.LoginByPlatform(platformUserName, (CloudGoodsPlatform)platform, platformUserId, OnReceivedUser);
 
                         }
                     }
@@ -936,13 +971,14 @@ namespace WebCallTests
                     {
                         if (isRegister)
                         {
-                            if(GUILayout.Button("Register")){
+                            if (GUILayout.Button("Register"))
+                            {
                                 isSent = true;
                                 PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
                                 PlayerPrefs.SetString("SPLogin_Password", password);
                                 PlayerPrefs.SetString("SPLogin_UserName", userName);
-                                CallHandler.Register(CloudGoodsSettings.AppID, userName, userEmail, password, Registered);
-                                
+                                AccountServices.Register(CloudGoodsSettings.AppID, userName, userEmail, password, Registered);
+
                             }
                         }
                         else
@@ -952,7 +988,7 @@ namespace WebCallTests
                                 isSent = true;
                                 PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
                                 PlayerPrefs.SetString("SPLogin_Password", password);
-                                CallHandler.Login(userEmail, password, OnReceivedUser);
+                                AccountServices.Login(userEmail, password, OnReceivedUser);
                             }
                         }
                     }
@@ -990,7 +1026,7 @@ namespace WebCallTests
             debugString += "\nId: " + user.UserID;
             debugString += "\nEmail: " + user.UserEmail;
             debugString += "\nIs New: " + user.IsNewUserToWorld;
-            debugString += "\nSession:" + user.SessionID.ToString();
+            debugString += "\nSession:" + user.SessionId.ToString();
             DisplayHelper.NewDisplayLine(debugString);
 
             UsersCurrency.Init();
@@ -1000,8 +1036,8 @@ namespace WebCallTests
         {
             string debugString = "Registered User\nName: " + user.FirstName;
             debugString += "\nId: " + user.ID;
-            debugString += "\nEmail: " + user.email; 
-    
+            debugString += "\nEmail: " + user.email;
+
             DisplayHelper.NewDisplayLine(debugString);
         }
     }
@@ -1025,22 +1061,22 @@ namespace WebCallTests
             if (GUILayout.Button("Get User Key"))
             {
                 if (!String.IsNullOrEmpty(lookupKey))
-                    CallHandler.UserDataGet(lookupKey, OnReciveData);
+                    CloudDataServices.UserDataGet(lookupKey, OnReciveData);
             }
             if (GUILayout.Button("Update User Key"))
             {
                 if (!String.IsNullOrEmpty(lookupKey) && !string.IsNullOrEmpty(lookupValue))
-                    CallHandler.UserDataUpdate(lookupKey, lookupValue, OnReciveData);
+                    CloudDataServices.UserDataUpdate(lookupKey, lookupValue, OnReciveData);
             }
             if (GUILayout.Button("Get All Users Values"))
             {
-                CallHandler.UserDataAll(OnReciveUserDatas);
+                CloudDataServices.UserDataAll(OnReciveUserDatas);
 
             }
             if (GUILayout.Button("Get all data by Key"))
             {
                 if (!String.IsNullOrEmpty(lookupKey))
-                    CallHandler.UserDataByKey(lookupKey, OnRecivedDataByKey);
+                    CloudDataServices.UserDataByKey(lookupKey, OnRecivedDataByKey);
             }
             GUILayout.FlexibleSpace();
             foreach (CloudData udv in userDatas)

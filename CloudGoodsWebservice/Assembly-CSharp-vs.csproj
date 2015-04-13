@@ -49,82 +49,87 @@
      <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\CallHandlerInit.cs" />
      <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\CurrencyPurchaseExample.cs" />
      <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\StoreExample.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CallHandler.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CloudGoodsEnums.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\CloudGoods\CloudGoodsSettings.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerAdd\BasicAddContainer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerAdd\IContainerAddAction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerAdd\SwapItemAddAction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\AddOnlyRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\ClassIDRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\CollectionsIDRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\IContainerRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\ItemIDRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\ItemLimitRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\NoActionRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ContainerImplementations\ContainerResctrictions\RemoveOnlyRestriction.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainerManager.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\ItemContainerRestrictor.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\PersistentItemContainer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Container\UI\ItemContainerDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\ItemDataComponent.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\ItemDataSelector.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\ItemPrefabInitilizer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ITooltipSetup.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\ItemDataDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityItemDataDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Item\UI\UnityUIItemDragComponent.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldEmailValidation.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldPasswordValidation.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Login\InputFieldValidation.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Login\UnityUICloudGoodsLogin.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Models\CloudGoodsClasses.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\Abstract\StoreLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\AndroidPremiumCurrencyPurchaser.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\FaceBookPurchaser.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\GUIStorePlatform.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\Interfaces\IFacebookPurchase.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\Interfaces\IPlatformPurchaser.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\KongregatePurchase.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\LoadPlatformSetup.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\LoadStoreOnRegister.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\PremiumBundle.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\PremiumCurrencyBundleStore.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\UnityUIPremiumBundle.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\iOSPremiumCurrencyPurchaser.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\FilterNewestItems.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\ItemBundles\UnityUIBundleItemInfo.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\ItemBundles\UnityUIBundleItemScroll.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\ItemBundles\UnityUIBundlePurchasePopupHandler.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\ItemBundles\UnityUIBundlePurchasing.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\ItemBundles\UnityUIItemBundle.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\ItemBundles\UnityUIItemBundleLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\Sortables\ISortItem.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\Sortables\SortByProperty.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\StoreInitializer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\StoreOrganizer.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUICurrencyNameLabel.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIItemPurchase.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUILabelCurrency.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPageInfo.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseButtonDisplay.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIPurchaseStatus.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreItem.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUIStoreLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Store\UI\UnityUITextureCurrency.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\BuildPlatform.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\IGridLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\GridLoader\UIGridLoader.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\IgnoreRaycast.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\InputValueChange.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Utilities\ItemTextureCache.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\CallObjectCreator.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\HashCreator.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Webservice\Abstract\Factory\ResponseCreator.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\LitJsonResponseCreator.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\StandardHashCreator.cs" />
-     <Compile Include="Assets\CloudGoods\Scripts\Webservice\Concrete\Factory\WebAPICallObjectCreator.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerAdd\BasicAddContainer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerAdd\IContainerAddAction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerAdd\SwapItemAddAction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\AddOnlyRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\ClassIDRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\CollectionsIDRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\IContainerRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\ItemIDRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\ItemLimitRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\NoActionRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\RemoveOnlyRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ItemContainer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ItemContainerManager.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ItemContainerRestrictor.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\PersistentItemContainer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\UI\ItemContainerDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\CurrencyManager.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\ItemDataComponent.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\ItemDataSelector.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\ItemPrefabInitilizer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\ITooltipSetup.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\ItemDataDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\UnityItemDataDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\UnityUIItemDragComponent.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\InputFieldEmailValidation.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\InputFieldPasswordValidation.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\InputFieldValidation.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\UnityUICloudGoodsLogin.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Models\CloudGoodsModels.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\Abstract\StoreLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\AndroidPremiumCurrencyPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\FaceBookPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\GUIStorePlatform.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\Interfaces\IFacebookPurchase.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\Interfaces\IPlatformPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\KongregatePurchase.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\LoadPlatformSetup.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\PremiumBundle.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\PremiumCurrencyBundleStore.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\UnityUIPremiumBundle.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\iOSPremiumCurrencyPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\FilterNewestItems.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundleItemInfo.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundleItemScroll.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundlePurchasePopupHandler.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundlePurchasing.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIItemBundle.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIItemBundleLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\Sortables\ISortItem.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\Sortables\SortByProperty.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\StoreInitializer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\StoreOrganizer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUICurrencyNameLabel.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIItemPurchase.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUILabelCurrency.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIPageInfo.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIPurchaseButtonDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIPurchaseStatus.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIStoreItem.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIStoreLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUITextureCurrency.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\BuildPlatform.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\GridLoader\IGridLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\GridLoader\UIGridLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\IgnoreRaycast.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\InputValueChange.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\ItemTextureCache.cs" />
+     <Compile Include="Assets\CloudGoods\Services\AccountServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CallHandler.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CloudDataServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CloudGoodsEnums.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CloudGoodsSettings.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CraftingServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\ItemManipulationServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\ItemStoreServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Abstract\Factory\CallObjectCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Abstract\Factory\HashCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Abstract\Factory\ResponseCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Concrete\Factory\LitJsonResponseCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Concrete\Factory\StandardHashCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Concrete\Factory\WebAPICallObjectCreator.cs" />
      <Compile Include="Assets\TestWebservice.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
      <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
@@ -232,28 +237,28 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="JsonFx.Json">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
  </Reference>
  <Reference Include="LitJson">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
  </Reference>
  <Reference Include="protobuf-net">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil.Mdb">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.Mdb.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/Mono.Cecil.Mdb.dll</HintPath>
  </Reference>
  <Reference Include="nunit.core">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.dll</HintPath>
  </Reference>
  <Reference Include="nunit.core.interfaces">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.interfaces.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.core.interfaces.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.framework.dll</HintPath>
+ <HintPath>C:/Users/User/Documents/SocialPlay/CloudGoodsWebservice/CloudGoodsWebservice/Assets/CloudGoodsUnitTests/Plugins/NUnit/nunit.framework.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

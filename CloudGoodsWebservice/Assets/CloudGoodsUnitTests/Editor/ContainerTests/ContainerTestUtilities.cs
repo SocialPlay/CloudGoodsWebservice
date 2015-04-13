@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using CloudGoods.Models;
-using CloudGoods.Container;
-using CloudGoods.Container.Restrcitions;
+using CloudGoods.SDK.Models;
+using CloudGoods.SDK.Container;
+using CloudGoods.SDK.Container.Restrcitions;
 
 public class ContainerTestUtilities
 {
