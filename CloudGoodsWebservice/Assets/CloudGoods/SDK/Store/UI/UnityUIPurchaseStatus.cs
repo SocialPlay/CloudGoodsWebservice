@@ -28,7 +28,7 @@ namespace CloudGoods.SDK.Store.UI
             }
         }
 
-        void UnityUIItemPurchase_OnPurchasedItem(string obj)
+        void UnityUIItemPurchase_OnPurchasedItem(SimpleItemInfo obj)
         {
             purchasePopup.SetActive(true);
             purchasePopup.GetComponentInChildren<Text>().text = "Purchase Successful";
