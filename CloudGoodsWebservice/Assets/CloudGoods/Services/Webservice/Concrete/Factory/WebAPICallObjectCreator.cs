@@ -58,8 +58,8 @@ namespace CloudGoods.Services.Webservice
             values.Add(timeStamp);
             if (isFull)
             {
-                headers.Add("SessionID", AccountServices.ActiveUser.SessionId);
-                values.Add(AccountServices.ActiveUser.SessionId);
+                headers.Add("SessionID", AccountServices.ActiveUser.SessionID);
+                values.Add(AccountServices.ActiveUser.SessionID);
                 string nonce = GenerateNonce();
                 headers.Add("Nonce", nonce);
                 values.Add(nonce);

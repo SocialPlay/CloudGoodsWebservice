@@ -34,7 +34,7 @@ namespace CloudGoods.SDK.Models
         public bool IsNewUserToWorld = false;
         public string UserName = "";
         public string UserEmail = "";
-        public string SessionId;
+        public string SessionID;
     }
 
     public class RegisteredUser

@@ -2,11 +2,11 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using CloudGoods.Models;
+using CloudGoods.SDK.Models;
 using CloudGoods.Enums;
-using CloudGoods.Utilities;
+using CloudGoods.SDK.Utilities;
 
-namespace CloudGoods.Store.UI
+namespace CloudGoods.SDK.Store.UI
 {
     public class UnityUIStoreItem : MonoBehaviour
     {
@@ -31,7 +31,7 @@ namespace CloudGoods.Store.UI
 
         UnityUIStoreLoader storeLoader;
 
-        void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D texture)
+        void OnReceivedItemTexture(Texture2D texture)
         {
             if (gameObject == null) return;
 
@@ -43,7 +43,7 @@ namespace CloudGoods.Store.UI
         {
             storeItem = item;
             storeLoader = unityStoreLoader;
-            ItemTextureCache.Instance.GetItemTexture(storeItem.ItemInformation.ImageName, OnReceivedItemTexture);
+            ItemTextureCache.GetItemTexture(storeItem.ItemInformation.ImageName, OnReceivedItemTexture);
             StoreItemText.text = storeItem.ItemInformation.Name;
 
             SetPriceDisplay();

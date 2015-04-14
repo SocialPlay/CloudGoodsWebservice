@@ -1026,7 +1026,7 @@ namespace WebCallTests
             debugString += "\nId: " + user.UserID;
             debugString += "\nEmail: " + user.UserEmail;
             debugString += "\nIs New: " + user.IsNewUserToWorld;
-            debugString += "\nSession:" + user.SessionId.ToString();
+            debugString += "\nSession:" + user.SessionID.ToString();
             DisplayHelper.NewDisplayLine(debugString);
 
             UsersCurrency.Init();

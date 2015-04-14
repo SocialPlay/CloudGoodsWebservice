@@ -2,16 +2,18 @@
 using System.Collections;
 using CloudGoods.CurrencyPurchase;
 using System;
-using CloudGoods.Models;
+using CloudGoods.SDK.Models;
 using System.Collections.Generic;
 using CloudGoods;
 using System.Text;
 
+
+
 public class SteamPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser {
 
-    public event Action<CloudGoods.Models.PurchasePremiumCurrencyBundleResponse> RecievedPurchaseResponse;
+    public event Action<PurchasePremiumCurrencyBundleResponse> RecievedPurchaseResponse;
 
-    public event Action<CloudGoods.Models.PurchasePremiumCurrencyBundleResponse> OnPurchaseErrorEvent;
+    public event Action<PurchasePremiumCurrencyBundleResponse> OnPurchaseErrorEvent;
 
     public void Purchase(PremiumBundle id, int amount, string userID)
     {

@@ -36,7 +36,7 @@ namespace CloudGoods.SDK.Container
             switch (OwnerType)
             {            
                 case ItemOwnerTypes.Session:
-                    return AccountServices.ActiveUser.SessionId.ToString();
+                    return AccountServices.ActiveUser.SessionID.ToString();
                 case ItemOwnerTypes.User:
                     return AccountServices.ActiveUser.UserID.ToString();
             }
