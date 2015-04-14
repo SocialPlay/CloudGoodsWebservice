@@ -10,7 +10,6 @@ namespace CloudGoods.Store.UI
 {
     public class UnityUIStoreItem : MonoBehaviour
     {
-
         public StoreItem storeItem { get; private set; }
 
         public GameObject SalePanel;
@@ -28,9 +27,9 @@ namespace CloudGoods.Store.UI
 
         public Text StoreItemText;
 
+        bool IsSale = false;
 
         UnityUIStoreLoader storeLoader;
-
 
         void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D texture)
         {
@@ -47,47 +46,82 @@ namespace CloudGoods.Store.UI
             ItemTextureCache.Instance.GetItemTexture(storeItem.ItemInformation.ImageName, OnReceivedItemTexture);
             StoreItemText.text = storeItem.ItemInformation.Name;
 
-            SetDisplayForSale();
-            ChangePurchaseButtonDisplay(storeItem.CreditValue, storeItem.CoinValue);
+            SetPriceDisplay();
         }
 
-        private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
+        private void ChangePurchaseButtonDisplay()
         {
             StandardCurrencyFullWindow.SetActive(false);
             PremiumCurrencyFullWindow.SetActive(false);
             CurrencyHalfWindow.SetActive(false);
 
-            if (itemCreditCost > 0 && itemCoinCost > 0)
+            int tmpPremiumCost;
+            int tmpStandardCost;
+
+            if (IsSale)
+            {
+                tmpPremiumCost = storeItem.Sale[0].PremiumCurrencySaleValue;
+                tmpStandardCost = storeItem.Sale[0].StandardCurrencySaleValue;
+            }
+            else
+            {
+                tmpPremiumCost = storeItem.CreditValue;
+                tmpStandardCost = storeItem.CoinValue;
+            }
+
+            if (tmpPremiumCost > 0 && tmpStandardCost > 0)
             {
                 CurrencyHalfWindow.SetActive(true);
-                StandardCurrencyHalfText.text = itemCoinCost.ToString();
-                PremiumCurrencyHalfText.text = itemCreditCost.ToString();
+
+                StandardCurrencyHalfText.text = tmpStandardCost.ToString();
+                PremiumCurrencyHalfText.text = tmpPremiumCost.ToString();
             }
-            else if (itemCreditCost < 0)
+            else if(tmpPremiumCost < 0 && tmpStandardCost < 0)
             {
                 StandardCurrencyFullWindow.SetActive(true);
-                StandardCurrencyFullText.text = itemCoinCost.ToString();
+                StandardCurrencyFullText.text = "0";
             }
-            else if (itemCoinCost < 0)
+            else if (tmpPremiumCost < 0)
+            {
+                StandardCurrencyFullWindow.SetActive(true);
+                StandardCurrencyFullText.text = tmpStandardCost.ToString();
+            }
+            else if (tmpStandardCost < 0)
             {
                 PremiumCurrencyFullWindow.SetActive(true);
-                PremiumCurrencyFullText.text = itemCreditCost.ToString();
+                PremiumCurrencyFullText.text = tmpPremiumCost.ToString();
             }
             else
             {
                 CurrencyHalfWindow.SetActive(true);
-                StandardCurrencyHalfText.text = itemCoinCost.ToString();
-                PremiumCurrencyHalfText.text = itemCreditCost.ToString();
+                StandardCurrencyHalfText.text = tmpStandardCost.ToString();
+                PremiumCurrencyHalfText.text = tmpPremiumCost.ToString();
             }
         }
 
-        void SetDisplayForSale()
+        void SetPriceDisplay()
         {
             if (storeItem.Sale.Count > 0)
             {
                 SalePanel.SetActive(true);
                 SaleName.text = storeItem.Sale[0].SaleName;
+                IsSale = true;
+
+                ChangeSalePriceDisplay();
             }
+
+            ChangePurchaseButtonDisplay();
+        }
+
+        void ChangeSalePriceDisplay()
+        {
+            StandardCurrencyFullWindow.GetComponent<Image>().color = Color.green;
+            PremiumCurrencyFullWindow.GetComponent<Image>().color = Color.green;
+            Image[] tmpImages = CurrencyHalfWindow.GetComponentsInChildren<Image>();
+
+            tmpImages[2].color = Color.green;
+            tmpImages[1].color = Color.green;
+            
         }
 
         public void OnStoreItemClicked()

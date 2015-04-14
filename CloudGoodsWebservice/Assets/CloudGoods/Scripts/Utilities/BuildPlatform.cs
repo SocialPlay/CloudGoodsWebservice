@@ -23,7 +23,8 @@ namespace CloudGoods.Utilities
             IOS = 4,
             CloudGoodsStandAlone = 6,
             Unknown = 7,
-            EditorTestPurchasing = 8
+            EditorTestPurchasing = 8,
+            Steam = 9
         }
 
         private static BuildPlatform instance;

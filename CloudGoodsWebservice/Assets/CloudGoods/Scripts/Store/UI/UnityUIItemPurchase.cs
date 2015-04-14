@@ -92,6 +92,13 @@ namespace CloudGoods.Store.UI
                 UnityUIPurchaseButtonDisplay premiumButtonDisplay = PremiumCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
                 premiumButtonDisplay.SetState(itemCreditCost);
             }
+            else if (itemCreditCost < 0 && itemCoinCost < 0)
+            {
+                StandardCurrencyFullWindow.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay StandardOnlyButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+                StandardOnlyButtonDisplay.SetState(0);
+            }
             else if (itemCreditCost < 0)
             {
                 StandardCurrencyFullWindow.SetActive(true);
