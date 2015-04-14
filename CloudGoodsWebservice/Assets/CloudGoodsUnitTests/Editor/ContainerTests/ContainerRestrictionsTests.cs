@@ -3,9 +3,9 @@ using System.Collections;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using CloudGoods.Models;
-using CloudGoods.Container.Restrcitions;
-using CloudGoods.Container;
+using CloudGoods.SDK.Models;
+using CloudGoods.SDK.Container.Restrcitions;
+using CloudGoods.SDK.Container;
 
 [TestFixture]
 public class ContainerRestrictionsTests : MonoBehaviour {

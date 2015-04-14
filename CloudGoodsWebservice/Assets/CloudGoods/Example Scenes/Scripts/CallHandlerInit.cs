@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CloudGoods;
+using CloudGoods.Services.WebCommunication;
 
 public class CallHandlerInit : MonoBehaviour {
 

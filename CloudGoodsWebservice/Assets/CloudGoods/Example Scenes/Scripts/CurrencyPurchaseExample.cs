@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CloudGoods;
-using CloudGoods.Models;
+using CloudGoods.Services;
+using CloudGoods.SDK.Models;
 using CloudGoods.Enums;
+using CloudGoods.Services.WebCommunication;
 
 public class CurrencyPurchaseExample : MonoBehaviour {
 
@@ -24,7 +25,7 @@ public class CurrencyPurchaseExample : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login( "lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+        AccountServices.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)

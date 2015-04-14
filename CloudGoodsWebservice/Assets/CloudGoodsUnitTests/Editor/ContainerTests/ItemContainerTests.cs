@@ -3,8 +3,8 @@ using System.Collections;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using CloudGoods.Models;
-using CloudGoods.Container;
+using CloudGoods.SDK.Models;
+using CloudGoods.SDK.Container;
 
 [TestFixture]
 public class ItemContainerTests : MonoBehaviour {

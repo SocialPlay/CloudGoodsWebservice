@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CloudGoods;
-using CloudGoods.Models;
+using CloudGoods.Services;
+using CloudGoods.SDK.Models;
 using CloudGoods.Enums;
-using CloudGoods.Store;
+using CloudGoods.SDK.Store;
 using CloudGoods.ItemBundles;
+using CloudGoods.Services.WebCommunication;
 
 public class StoreExample : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class StoreExample : MonoBehaviour
 
     void CallHandler_CloudGoodsInitilized()
     {
-        CallHandler.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+        AccountServices.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)
