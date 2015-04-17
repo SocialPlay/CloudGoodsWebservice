@@ -5,6 +5,7 @@ using CloudGoods.Services.WebCommunication;
 using CloudGoods.SDK.Utilities;
 using CloudGoods.Enums;
 using CloudGoods.Services;
+using CloudGoods.SDK.Models;
 
 namespace CloudGoods.SDK
 {
@@ -73,7 +74,7 @@ namespace CloudGoods.SDK
             }
             else if (forceUpdate)
             {
-                ItemStoreServices.GetStandardCurrencyBalance(StandardCurrencyLoaction, item =>
+                ItemStoreServices.GetStandardCurrencyBalance(new StandardCurrencyBalanceRequest(StandardCurrencyLoaction), item =>
                 {
                     StandardAmount = item.Amount;
                     callback(StandardAmount.GetValueOrDefault(0));
@@ -142,7 +143,7 @@ namespace CloudGoods.SDK
                         }
                     });
 
-                    ItemStoreServices.GetStandardCurrencyBalance(StandardCurrencyLoaction, standardCurrencyItem =>
+                    ItemStoreServices.GetStandardCurrencyBalance(new StandardCurrencyBalanceRequest(StandardCurrencyLoaction), standardCurrencyItem =>
                     {
                         StandardAmount = standardCurrencyItem.Amount;
                         if (RecivecdStandardAmount != null)

@@ -20,7 +20,7 @@ namespace CloudGoods.SDK.Store
 
         public void InitializeStore()
         {
-            ItemStoreServices.GetStoreItems(OnReceivedStoreItems);
+            ItemStoreServices.GetStoreItems(new StoreItemsRequest(), OnReceivedStoreItems);
         }
 
 

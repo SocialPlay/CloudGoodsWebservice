@@ -5,7 +5,8 @@ using CloudGoods;
 using CloudGoods.SDK.Models;
 using CloudGoods.Services.WebCommunication;
 
-public class ItemBundleStoreExample : MonoBehaviour {
+public class ItemBundleStoreExample : MonoBehaviour
+{
 
     public UnityUIItemBundleLoader itemBundlesLoader;
     public GameObject StoreDisplay;
@@ -18,14 +19,14 @@ public class ItemBundleStoreExample : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-      CloudGoods.Services.AccountServices.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+        CloudGoods.Services.AccountServices.Login(new LoginRequest("lionel.sy@gmail.com", "123456"), OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)
     {
-        StoreDisplay.SetActive(true);   
+        StoreDisplay.SetActive(true);
         itemBundlesLoader.GetItemBundles();
     }
 
-  
+
 }

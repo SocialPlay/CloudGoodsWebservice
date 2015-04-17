@@ -32,7 +32,7 @@ namespace CloudGoods.CurrencyPurchase
 
         public CurrencyType type = CurrencyType.Standard;
 
-   
+
 
         void Start()
         {
@@ -95,12 +95,12 @@ namespace CloudGoods.CurrencyPurchase
             {
                 Debug.Log("Get credit bundles from editor");
 
-                ItemStoreServices.GetPremiumBundles(1, OnPurchaseBundlesRecieved);
+                ItemStoreServices.GetPremiumBundles(new PremiumBundlesRequest(1), OnPurchaseBundlesRecieved);
             }
             else
             {
                 Debug.Log("Purchasing credit bundles from platform:" + BuildPlatform.Platform);
-                ItemStoreServices.GetPremiumBundles((int)BuildPlatform.Platform, OnPurchaseBundlesRecieved);
+                ItemStoreServices.GetPremiumBundles(new PremiumBundlesRequest((int)BuildPlatform.Platform), OnPurchaseBundlesRecieved);
             }
 
             isInitialized = true;

@@ -9,51 +9,28 @@ namespace CloudGoods.Services
 {
     public class ItemManipulationServices
     {
-        public static void GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
+        public static void UserItems(UserItemsRequest request, Action<List<InstancedItemInformation>> callback)
         {
-            CallHandler.Instance.GetUserItems(location, callback);
+            CallHandler.Instance.UserItems(request, callback);
         }
 
-        public static void UserItem(int lookupItemId, int location, Action<SimpleItemInfo> callback)
+        public static void UserItem(OwnerItemRequest request, Action<SimpleItemInfo> callback)
         {
-            CallHandler.Instance.UserItem(lookupItemId, location, callback);
+            CallHandler.Instance.UserItem(request, callback);
         }
 
-        public static void MoveItem(OwnedItemInformation item, int location, int amountToMove, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public static void MoveItem(MoveItemsRequest request, Action<UpdatedStacksResponse> callback)
         {
-            List<MoveItemsRequest.MoveOrder> orders = new List<MoveItemsRequest.MoveOrder>(){
-                new MoveItemsRequest.MoveOrder(){
-                    StackId = item.StackLocationId,
-                    Amount = amountToMove,
-                    Location =location
-                }
-            };
-            CallHandler.Instance.MoveItems(orders, callback);
+
+            CallHandler.Instance.MoveItems(request, callback);
         }
 
-        public static void MoveItems(List<MoveItemsRequest.MoveOrder> orders, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public static void UpdateItemsByIds(UpdateItemsByIdsRequest request, Action<UpdatedStacksResponse> callback)
         {
-            CallHandler.Instance.MoveItems(orders, callback);
+            CallHandler.Instance.UpdateItemsByIds(request, callback);
         }
 
-        public static void UpdateItemById(int itemId, int amount, int location, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
-        {
-            List<UpdateItemByIdRequest.UpdateOrderByID> orders = new List<UpdateItemByIdRequest.UpdateOrderByID>(){
-            new UpdateItemByIdRequest.UpdateOrderByID(){
-                itemId = itemId,
-                amount = amount,
-                location = location
-            }
-        };
-            CallHandler.Instance.UpdateItemsByIds(orders, callback, otherOwner);
-        }
-
-        public static void UpdateItemsByIds(List<UpdateItemByIdRequest.UpdateOrderByID> orders, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
-        {
-            CallHandler.Instance.UpdateItemsByIds(orders, callback, otherOwner);
-        }
-
-        public static void UpdateItemByStackIds(string stackId, int amount, int location, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public static void UpdateItemByStackIds(string stackId, int amount, int location, Action<UpdatedStacksResponse> callback, AlternateDestinationOwner otherOwner = null)
         {
             List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders = new List<UpdateItemsByStackIdRequest.UpdateOrderByStackId>(){
             new UpdateItemsByStackIdRequest.UpdateOrderByStackId(){
@@ -65,24 +42,24 @@ namespace CloudGoods.Services
             CallHandler.Instance.UpdateItemByStackIds(orders, callback, otherOwner);
         }
 
-        public static void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
+        public static void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, AlternateDestinationOwner destinationOwner = null)
         {
             CallHandler.Instance.UpdateItemByStackIds(orders, callback, destinationOwner);
         }
 
-        public static void RedeemItemVouchers(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null) //ToDo: Add callback
+        public static void RedeemItemVouchers(RedeemItemVouchersRequest request, Action<UpdatedStacksResponse> callback)
         {
-            CallHandler.Instance.RedeemItemVoucher(selections, callback, otherOwner);
+            CallHandler.Instance.RedeemItemVoucher(request, callback);
         }
 
-        public static void CreateItemVouchers(int minEnergy, int total, Action<ItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
+        public static void CreateItemVouchers(CreateItemVouchersRequest request, Action<ItemVouchersResponse> callback)
         {
-            CallHandler.Instance.CreateItemVouchers(minEnergy, total, callback, andTags, orTags);
+            CallHandler.Instance.CreateItemVouchers(request, callback);
         }
 
-        public static void GetItemVoucher(int voucherId, Action<ItemVouchersResponse> callback)
+        public static void GetItemVoucher(ItemVoucherRequest request, Action<ItemVouchersResponse> callback)
         {
-            CallHandler.Instance.GetItemVoucher(voucherId, callback);
+            CallHandler.Instance.ItemVoucher(request, callback);
         }
 
     }

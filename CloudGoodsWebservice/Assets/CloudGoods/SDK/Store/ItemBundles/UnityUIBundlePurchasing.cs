@@ -138,20 +138,20 @@ namespace CloudGoods.ItemBundles
 
         public void PurchaseBundleWithStandardCurrency()
         {
-            ItemStoreServices.PurchaseItemBundle(currentItemBundle.Id, (int)CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
+            ItemStoreServices.PurchaseItemBundle(new ItemBundlePurchaseRequest(currentItemBundle.Id, (int)CurrencyType.Standard, purchaseContainerLocation), OnReceivedPurchaseCallback);
             ClosePurchaseWindow();
         }
 
         public void PurchaseBundleWithPremiumCurrency()
         {
-            ItemStoreServices.PurchaseItemBundle(currentItemBundle.Id, (int)CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
+            ItemStoreServices.PurchaseItemBundle(new ItemBundlePurchaseRequest(currentItemBundle.Id, (int)CurrencyType.Premium, purchaseContainerLocation), OnReceivedPurchaseCallback);
             ClosePurchaseWindow();
         }
 
         void OnReceivedPurchaseCallback(ItemBundlePurchaseResponse response)
         {
             ItemStoreServices.GetPremiumCurrencyBalance(null);
-            ItemStoreServices.GetStandardCurrencyBalance(0, null);
+            ItemStoreServices.GetStandardCurrencyBalance(new StandardCurrencyBalanceRequest(0), null);
 
             if (OnPurchaseSuccessful != null)
                 OnPurchaseSuccessful(response);

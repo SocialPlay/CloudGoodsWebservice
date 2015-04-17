@@ -19,38 +19,38 @@ namespace CloudGoods.Services
             CallHandler.Instance.GetPremiumCurrencyBalance(callback);
         }
 
-        public static void GetStandardCurrencyBalance(int accessLocation, Action<SimpleItemInfo> callback)
+        public static void GetStandardCurrencyBalance(StandardCurrencyBalanceRequest request, Action<SimpleItemInfo> callback)
         {
-            CallHandler.Instance.GetStandardCurrencyBalance(accessLocation, callback);
+            CallHandler.Instance.GetStandardCurrencyBalance(request, callback);
         }
 
-        public static void ConsumePremiumCurrency(int amount, Action<ConsumePremiumResponce> callback)
+        public static void ConsumePremiumCurrency(ConsumePremiumRequest request, Action<ConsumePremiumResponce> callback)
         {
-            CallHandler.Instance.ConsumePremiumCurrency(amount, callback);
+            CallHandler.Instance.ConsumePremiumCurrency(request, callback);
         }
-        public static void GetStoreItems(Action<List<StoreItem>> callback, string andTags = null, string orTags = null)
+        public static void GetStoreItems(StoreItemsRequest request, Action<List<StoreItem>> callback)
         {
-            CallHandler.Instance.GetStoreItems(andTags, orTags, callback);
-        }
-
-        public static void PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int amountToConsume = -1)
-        {
-            CallHandler.Instance.PurchaseItem(itemId, amount, paymentOption, saveLocation, callback, amountToConsume);
+            CallHandler.Instance.GetStoreItems(request, callback);
         }
 
-        public static void GetItemBundles(string andTags, string orTags, Action<ItemBundlesResponse> callback)
+        public static void PurchaseItem(PurchaseItemRequest request, Action<SimpleItemInfo> callback)
         {
-            CallHandler.Instance.GetItemBundles(andTags, orTags, callback);
+            CallHandler.Instance.PurchaseItem(request, callback);
         }
 
-        public static void PurchaseItemBundle(int bundleId, int paymentType, int location, Action<ItemBundlePurchaseResponse> callback)
+        public static void GetItemBundles(ItemBundlesRequest request, Action<ItemBundlesResponse> callback)
         {
-            CallHandler.Instance.PurchaseItemBundle(bundleId, paymentType, location, callback);
+            CallHandler.Instance.GetItemBundles(request, callback);
         }
 
-        public static void GetPremiumBundles(int platformId, Action<List<PremiumCurrencyBundle>> callback)
+        public static void PurchaseItemBundle(ItemBundlePurchaseRequest request, Action<ItemBundlePurchaseResponse> callback)
         {
-            CallHandler.Instance.GetPremiumBundles(platformId, callback);
+            CallHandler.Instance.PurchaseItemBundle(request, callback);
+        }
+
+        public static void GetPremiumBundles(PremiumBundlesRequest request, Action<List<PremiumCurrencyBundle>> callback)
+        {
+            CallHandler.Instance.PremiumBundles(request, callback);
         }
 
     }

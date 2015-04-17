@@ -38,6 +38,8 @@ namespace CloudGoods.Services.Webservice
         public WWW CreateGetServerTimeObject()
         {
             string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Time");
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
             return new WWW(urlString);
         }
 
@@ -135,52 +137,54 @@ namespace CloudGoods.Services.Webservice
 
         #endregion
 
-        public WWW CreateLoginCallObject(string userEmail, string password)
+        #region Account Management
+        public WWW CreateLoginCallObject(LoginRequest request)
         {
-            string loginUrl = string.Format("?appId={0}&email={1}&password={2}", CloudGoodsSettings.AppID, userEmail, password);
 
-            Dictionary<string, string> headers = CreateHeaders(loginUrl, false);
-            string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/Login" + loginUrl);
-            return new WWW(urlString, null, headers);
+            return GenerateWWWPost("Login", request, false);
         }
 
-        public WWW CreateLoginByPlatformCallObject(string userName, int platformId, string platformUserID)
+        public WWW CreateLoginByPlatformCallObject(LoginByPlatformRequest request)
         {
-            string loginUrl = string.Format("?appId={0}&userName={1}&platformId={2}&platformUserId={3}", CloudGoodsSettings.AppID, userName, platformId, platformUserID);
-
-            Dictionary<string, string> headers = CreateHeaders(loginUrl, false);
-            string urlString = string.Format(CloudGoodsSettings.Url + "api/CloudGoods/LoginByPlatform" + loginUrl);
-            return new WWW(urlString, null, headers);
+            return GenerateWWWPost("LoginByPlatform", request, false);
         }
 
         public WWW CreateRegisterUserCallObject(RegisterUserRequest request)
         {
-            return GenerateWWWPost("RegisterUser", request, true);
+            return GenerateWWWPost("RegisterUser", request);
         }
 
-        public WWW CreateForgotPasswordCallObject(string userEmail)
+        public WWW CreateForgotPasswordCallObject(ForgotPasswordRequest request)
         {
-            return GenerateWWWCallWithoutUser("ForgotPassword", 
-                GetParameter("appId", CloudGoodsSettings.AppID),
-                GetParameter("userEmail", userEmail));
+            return GenerateWWWPost("ForgotPassword", request);
         }
 
-        public WWW CreateResendVerificationEmailCallObject(string email)
+        public WWW CreateResendVerificationEmailCallObject(ResendVerificationRequest request)
         {
-            return GenerateWWWCallWithoutUser(
-                "ResendVerification",
-                GetParameter("appId", CloudGoodsSettings.AppID),
-                GetParameter("userEmail", email)
-                );
+            return GenerateWWWPost("ResendVerification", request);
+        }
+        #endregion
+
+        #region Item Manipulation
+
+        public WWW CreateUserItemsCallObject(UserItemsRequest request)
+        {
+            return GenerateWWWPost("UserItems", request);
         }
 
-        public WWW CreateGetUserItemsCallObject(int location, string andTags = null, string orTags = null)
+        public WWW CreateInstanceItemsRequest(InstanceItemsRequest request)
         {
-            return GenerateWWWCallWithoutUser("UserItems"
-                , GetParameter("location", location.ToString())
-                , GetParameter("andTags", andTags)
-                , GetParameter("orTags", orTags)
-                );
+            return GenerateWWWPost("InstanceItems", request);
+        }
+
+        public WWW CreateSessionItemsCallObject(SessionItemsRequest request)
+        {
+            return GenerateWWWPost("SessionItems", request);
+        }
+
+        public WWW CreateUserItemCall(OwnerItemRequest request)
+        {
+            return GenerateWWWPost("UserItem", request);
         }
 
         public WWW CreateMoveItemsCallObject(MoveItemsRequest request)
@@ -193,9 +197,9 @@ namespace CloudGoods.Services.Webservice
             return GenerateWWWPost("CreateItemVouchers", request);
         }
 
-        public WWW CreateItemVoucherCall(int voucherId)
+        public WWW CreateItemVoucherCall(ItemVoucherRequest request)
         {
-            return GenerateWWWCall("ItemVoucher", new KeyValuePair<string, string>("voucherId", voucherId.ToString()));
+            return GenerateWWWPost("ItemVoucher", request);
         }
 
         public WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request)
@@ -203,7 +207,7 @@ namespace CloudGoods.Services.Webservice
             return GenerateWWWPost("RedeemItemVouchers", request);
         }
 
-        public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request)
+        public WWW CreateUpdateItemByIdRequestCallObject(UpdateItemsByIdsRequest request)
         {
             return GenerateWWWPost("UpdateItemsById", request);
         }
@@ -212,35 +216,36 @@ namespace CloudGoods.Services.Webservice
         {
             return GenerateWWWPost("UpdateItemsByStackId", request);
         }
+        #endregion
 
-        public WWW CreateItemBundlesCall(string andTags, string orTags)
+        public WWW CreateItemBundlesCall(ItemBundlesRequest request)
         {
-            return GenerateWWWCall("ItemBundles", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
+            return GenerateWWWPost("ItemBundles", request);
         }
 
-        public WWW CreateCurrencyInfoCall()
+        public WWW CreateCurrencyInfoCall(CurrencyInfoRequest request)
         {
-            return GenerateWWWCall("CurrencyInfo");
+            return GenerateWWWPost("CurrencyInfo", request);
         }
 
-        public WWW CreatePremiumCurrencyBalanceCall()
+        public WWW CreatePremiumCurrencyBalanceCall(PremiumCurrencyBalanceRequest request)
         {
-            return GenerateWWWCall("PremiumCurrency");
+            return GenerateWWWPost("PremiumCurrency", request);
         }
 
-        public WWW CreateGetStoreItemsCall(string andTags, string orTags)
+        public WWW CreateStoreItemsCall(StoreItemsRequest request)
         {
-            return GenerateWWWCall("StoreItems", new KeyValuePair<string, string>("andTags", andTags), new KeyValuePair<string, string>("orTags", orTags));
+            return GenerateWWWPost("StoreItems", request);
         }
 
-        public WWW CreateStandardCurrencyBalanceCall(int accessLocation)
+        public WWW CreateStandardCurrencyBalanceCall(StandardCurrencyBalanceRequest request)
         {
-            return GenerateWWWCall("StandardCurrency", new KeyValuePair<string, string>("accessLocation", accessLocation.ToString()));
+            return GenerateWWWPost("StandardCurrency", request);
         }
 
-        public WWW CreateGetPremiumCurrencyBundlesCall(int PlatformId)
+        public WWW CreatePremiumCurrencyBundlesCall(PremiumBundlesRequest request)
         {
-            return GenerateWWWCall("PremiumCurrencyBundles", new KeyValuePair<string, string>("platformId", PlatformId.ToString()));
+            return GenerateWWWPost("PremiumCurrencyBundles", request);
         }
 
         public WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request)
@@ -260,48 +265,46 @@ namespace CloudGoods.Services.Webservice
         }
 
 
-        public WWW CreateUserDataCall(string key)
+        public WWW CreateUserDataCall(UserDataRequest request)
         {
-            return GenerateWWWCall("UserData", new KeyValuePair<string, string>("key", key));
+            return GenerateWWWPost("UserData", request);
         }
 
 
-        public WWW CreateUserDataUpdateCall(string key, string value)
+        public WWW CreateUserDataUpdateCall(UserDataUpdateRequest request)
         {
-            return GenerateWWWCall("UserDataUpdate", new KeyValuePair<string, string>("key", key), new KeyValuePair<string, string>("value", value));
+            return GenerateWWWPost("UserDataUpdate", request);
         }
 
-        public WWW CreateUserDataAllCall()
+        public WWW CreateUserDataAllCall(UserDataAllRequest request)
         {
-            return GenerateWWWCall("UserDataAll");
+            return GenerateWWWPost("UserDataAll", request);
         }
 
-        public WWW CreateUserDataByKeyCall(string key)
+        public WWW CreateUserDataByKeyCall(UserDataByKeyRequest request)
         {
-            return GenerateWWWCall("UserDataByKey", new KeyValuePair<string, string>("key", key));
+            return GenerateWWWPost("UserDataByKey", request);
+        }
+
+        public WWW CreateAppDataCall(AppDataRequest request)
+        {
+            return GenerateWWWPost("AppData", request);
+        }
+
+        public WWW CreateAppDataAllCall(AppDataAllRequest request)
+        {
+            return GenerateWWWPost("AppDataAll", request);
+        }
+
+        public WWW CreateAppDataUpdateCall(AppDataUpdateRequest request)
+        {
+            return GenerateWWWPost("AppDataUpdate", request);
         }
 
 
-        public WWW CreateUserItemCall(int itemId, int location)
-        {
-            return GenerateWWWCall("UserItem", GetParameter("itemId", itemId.ToString()), GetParameter("location", location.ToString()));
-        }
 
 
-        public WWW CreateAppDataCall(string key)
-        {
-            return GenerateWWWCall("AppData", GetParameter("key", key));
-        }
 
-        public WWW CreateAppDataAllCall()
-        {
-            return GenerateWWWCall("AppDataAll");
-        }
-
-        public WWW CreateUpdateAppDataCall(string key, string value)
-        {
-            return GenerateWWWCall("AppDataUpdate", GetParameter("key", key), GetParameter("value", value));
-        }
     }
 }
 

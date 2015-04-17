@@ -19,7 +19,7 @@ namespace CloudGoods.ItemBundles
 
         public void GetItemBundles()
         {
-            ItemStoreServices.GetItemBundles("", "", CloudGoods_OnStoreItemBundleListLoaded);
+            ItemStoreServices.GetItemBundles(new ItemBundlesRequest(), CloudGoods_OnStoreItemBundleListLoaded);
         }
 
         void CloudGoods_OnStoreItemBundleListLoaded(ItemBundlesResponse obj)

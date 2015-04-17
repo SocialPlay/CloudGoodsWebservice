@@ -124,7 +124,7 @@ namespace CloudGoods.SDK.Store.UI
             itemInfo = item;
             itemNameDisplay.text = item.storeItem.ItemInformation.Name;
 
-            if(item.storeItem.Sale.Count > 0)
+            if (item.storeItem.Sale.Count > 0)
             {
                 if (item.storeItem.CreditValue > 0)
                     premiumCurrencyCost = item.storeItem.Sale[0].PremiumCurrencySaleValue;
@@ -156,7 +156,7 @@ namespace CloudGoods.SDK.Store.UI
         {
             string statusText = "";
 
-            foreach (StoreItemDetail detail in storeItem.storeItem.ItemDetails)
+            foreach (StoreItem.StoreItemDetail detail in storeItem.storeItem.ItemDetails)
             {
                 statusText += detail.Name + " : " + detail.Value + "\n";
             }
@@ -167,20 +167,20 @@ namespace CloudGoods.SDK.Store.UI
         public void PurchaseItemWithPremiumCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            ItemStoreServices.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
+            ItemStoreServices.PurchaseItem(new PurchaseItemRequest(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), PurchaseItemRequest.PaymentType.Premium, 0), OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
         public void PurchaseItemWithStandardCurrency()
         {
             Debug.Log(int.Parse(itemQuantityAmount.text));
-            ItemStoreServices.PurchaseItem(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text), (int)CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+            ItemStoreServices.PurchaseItem(new PurchaseItemRequest(itemInfo.storeItem.ItemId, int.Parse(itemQuantityAmount.text),PurchaseItemRequest.PaymentType.Standard, 0), OnReceivedItemPurchaseConfirmation);
             ClosePanel();
         }
 
         void OnReceivedItemPurchaseConfirmation(SimpleItemInfo msg)
         {
-            ReloadContainerItems();       
+            ReloadContainerItems();
 
             if (OnPurchasedItem != null)
                 OnPurchasedItem(msg);

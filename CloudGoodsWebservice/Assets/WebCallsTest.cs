@@ -331,16 +331,13 @@ namespace WebCallTests
 
         static void UpdateItemById(int itemId, int amount, int location)
         {
-            List<UpdateItemByIdRequest.UpdateOrderByID> infos = new List<UpdateItemByIdRequest.UpdateOrderByID>(){
-                new UpdateItemByIdRequest.UpdateOrderByID(){location = location, itemId = itemId, amount = amount}
-            };
 
-            ItemManipulationServices.UpdateItemsByIds(infos, ItemManagerCalls.DisplayUpdatedItems);
+            ItemManipulationServices.UpdateItemsByIds(new UpdateItemsByIdsRequest(itemId, amount, location), ItemManagerCalls.DisplayUpdatedItems);
         }
 
         static void GetOwnerItem()
         {
-            ItemManipulationServices.UserItem(LookupItemId, 0, delegate(SimpleItemInfo item)
+            ItemManipulationServices.UserItem(new OwnerItemRequest(LookupItemId, 0), delegate(SimpleItemInfo item)
             {
                 if (item != null)
                 {
@@ -355,7 +352,7 @@ namespace WebCallTests
 
         static void LoadUserItems()
         {
-            ItemManipulationServices.GetUserItems(0, delegate(List<InstancedItemInformation> items)
+            ItemManipulationServices.UserItems(new UserItemsRequest(0), delegate(List<InstancedItemInformation> items)
             {
                 DisplayItems(items);
             });
@@ -363,7 +360,7 @@ namespace WebCallTests
 
         static void MoveItem(OwnedItemInformation item)
         {
-            ItemManipulationServices.MoveItem(item, destinationLocation, item.Amount, DisplayUpdatedItems);
+            ItemManipulationServices.MoveItem(new MoveItemsRequest(new MoveItemsRequest.MoveOrder(item.StackLocationId, item.Amount, destinationLocation)), DisplayUpdatedItems);
             UsersItems.Remove(item);
         }
 
@@ -411,7 +408,7 @@ namespace WebCallTests
                 });
             }
             DisplayHelper.NewDisplayLine(debugString);
-            
+
         }
 
 
@@ -567,16 +564,13 @@ namespace WebCallTests
 
         static void CreateItemVoucher()
         {
-            ItemManipulationServices.CreateItemVouchers(1, 700, DisaplayItemVouchers);
+            ItemManipulationServices.CreateItemVouchers(new CreateItemVouchersRequest(1, 700), DisaplayItemVouchers);
 
         }
 
         static void RedeemItemVoucher(VoucherItemInformation voucher)
         {
-
-            List<RedeemItemVouchersRequest.ItemVoucherSelection> selectedVouchers = new List<RedeemItemVouchersRequest.ItemVoucherSelection>() { new RedeemItemVouchersRequest.ItemVoucherSelection() { Amount = voucher.Amount, ItemId = voucher.Information.Id, Location = 0, VoucherId = voucher.VoucherId } };
-
-            ItemManipulationServices.RedeemItemVouchers(selectedVouchers, delegate(UpdatedStacksResponse response)
+            ItemManipulationServices.RedeemItemVouchers(new RedeemItemVouchersRequest(voucher.VoucherId, voucher.Information.Id, voucher.Amount, 0), delegate(UpdatedStacksResponse response)
             {
                 ItemManagerCalls.DisplayUpdatedItems(response);
                 CurrentVouchers.Remove(voucher);
@@ -587,7 +581,7 @@ namespace WebCallTests
 
         static void GetItemVoucher(int Id)
         {
-            ItemManipulationServices.GetItemVoucher(Id, DisaplayItemVouchers);
+            ItemManipulationServices.GetItemVoucher(new ItemVoucherRequest(Id), DisaplayItemVouchers);
         }
 
 
@@ -640,7 +634,7 @@ namespace WebCallTests
 
         static void GetItemBundles()
         {
-            ItemStoreServices.GetItemBundles("", "", delegate(ItemBundlesResponse response)
+            ItemStoreServices.GetItemBundles(new ItemBundlesRequest(), delegate(ItemBundlesResponse response)
             {
                 ItemBundleResponseHandler(response);
             });
@@ -669,7 +663,7 @@ namespace WebCallTests
 
         static void PurchaseItemBundle(int bundleId)
         {
-            ItemStoreServices.PurchaseItemBundle(bundleId, IsStandard ? 1 : 2, 0, PurchaseItemBundleHandler);
+            ItemStoreServices.PurchaseItemBundle(new ItemBundlePurchaseRequest( bundleId, IsStandard ? 1 : 2, 0), PurchaseItemBundleHandler);
         }
 
         static void PurchaseItemBundleHandler(ItemBundlePurchaseResponse response)
@@ -716,14 +710,14 @@ namespace WebCallTests
                 {
                     if (GUILayout.Button(string.Format("{1}: {0}", item.CreditValue, UsersCurrency.PremiumName())))
                     {
-                        ItemStoreServices.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Premium, 0, StoreItemPurchaseResponse);
+                        ItemStoreServices.PurchaseItem(new PurchaseItemRequest(item.ItemId, 1, PurchaseItemRequest.PaymentType.Premium, 0), StoreItemPurchaseResponse);
                     }
                 }
                 if (item.CoinValue != -1)
                 {
                     if (GUILayout.Button(string.Format("{1}: {0}", item.CoinValue, UsersCurrency.StandardName())))
                     {
-                        ItemStoreServices.PurchaseItem(item.ItemId, 1, (int)PurchaseItemRequest.PaymentType.Standard, 0, StoreItemPurchaseResponse);
+                        ItemStoreServices.PurchaseItem(new PurchaseItemRequest(item.ItemId, 1, PurchaseItemRequest.PaymentType.Standard, 0), StoreItemPurchaseResponse);
                     }
                 }
                 GUILayout.EndVertical();
@@ -747,7 +741,7 @@ namespace WebCallTests
 
         private static void GetStoreItems()
         {
-            ItemStoreServices.GetStoreItems(StoreResponse);
+            ItemStoreServices.GetStoreItems(new StoreItemsRequest(), StoreResponse);
         }
     }
 
@@ -782,7 +776,7 @@ namespace WebCallTests
                 premiumAmount = response.Amount;
             });
 
-            ItemStoreServices.GetStandardCurrencyBalance(0, delegate(SimpleItemInfo response)
+            ItemStoreServices.GetStandardCurrencyBalance(new StandardCurrencyBalanceRequest(0), delegate(SimpleItemInfo response)
             {
                 standardAmount = response.Amount;
             });
@@ -814,7 +808,7 @@ namespace WebCallTests
 
         static void ConsumePremium()
         {
-            ItemStoreServices.ConsumePremiumCurrency(consumeAmount, delegate(ConsumePremiumResponce responce)
+            ItemStoreServices.ConsumePremiumCurrency(new ConsumePremiumRequest( consumeAmount), delegate(ConsumePremiumResponce responce)
             {
                 if (responce.isSuccess)
                 {
@@ -963,7 +957,7 @@ namespace WebCallTests
                             PlayerPrefs.SetString("SPLogin_PlatformUserName", platformUserName);
                             PlayerPrefs.SetString("SPLogin_PlatformUserID", platformUserId);
                             PlayerPrefs.SetInt("SPLogin_PlatformId", platform);
-                            AccountServices.LoginByPlatform(platformUserName, (CloudGoodsPlatform)platform, platformUserId, OnReceivedUser);
+                            AccountServices.LoginByPlatform(new LoginByPlatformRequest(platformUserName, platform, platformUserId), OnReceivedUser);
 
                         }
                     }
@@ -977,7 +971,7 @@ namespace WebCallTests
                                 PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
                                 PlayerPrefs.SetString("SPLogin_Password", password);
                                 PlayerPrefs.SetString("SPLogin_UserName", userName);
-                                AccountServices.Register(CloudGoodsSettings.AppID, userName, userEmail, password, Registered);
+                                AccountServices.Register(new RegisterUserRequest(userName, userEmail, password), Registered);
 
                             }
                         }
@@ -988,7 +982,7 @@ namespace WebCallTests
                                 isSent = true;
                                 PlayerPrefs.SetString("SPLogin_UserEmail", userEmail);
                                 PlayerPrefs.SetString("SPLogin_Password", password);
-                                AccountServices.Login(userEmail, password, OnReceivedUser);
+                                AccountServices.Login(new LoginRequest(userEmail, password), OnReceivedUser);
                             }
                         }
                     }
@@ -1061,12 +1055,12 @@ namespace WebCallTests
             if (GUILayout.Button("Get User Key"))
             {
                 if (!String.IsNullOrEmpty(lookupKey))
-                    CloudDataServices.UserDataGet(lookupKey, OnReciveData);
+                    CloudDataServices.UserDataGet(new UserDataRequest(lookupKey), OnReciveData);
             }
             if (GUILayout.Button("Update User Key"))
             {
                 if (!String.IsNullOrEmpty(lookupKey) && !string.IsNullOrEmpty(lookupValue))
-                    CloudDataServices.UserDataUpdate(lookupKey, lookupValue, OnReciveData);
+                    CloudDataServices.UserDataUpdate(new UserDataUpdateRequest(lookupKey, lookupValue), OnReciveData);
             }
             if (GUILayout.Button("Get All Users Values"))
             {
@@ -1076,7 +1070,7 @@ namespace WebCallTests
             if (GUILayout.Button("Get all data by Key"))
             {
                 if (!String.IsNullOrEmpty(lookupKey))
-                    CloudDataServices.UserDataByKey(lookupKey, OnRecivedDataByKey);
+                    CloudDataServices.UserDataByKey(new UserDataByKeyRequest(lookupKey), OnRecivedDataByKey);
             }
             GUILayout.FlexibleSpace();
             foreach (CloudData udv in userDatas)

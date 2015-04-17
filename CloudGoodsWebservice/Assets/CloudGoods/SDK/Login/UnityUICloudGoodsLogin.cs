@@ -55,7 +55,7 @@ namespace CloudGoods.SDK.Login
 
         public bool IsKeptActiveOnAllPlatforms;
 
-     
+
 
         void Start()
         {
@@ -88,12 +88,12 @@ namespace CloudGoods.SDK.Login
             {
                 CloudGoodsUser userInfo = new CloudGoodsUser()
                 {
-                    UserID = PlayerPrefs.GetString("SocialPlay_UserGuid"), 
+                    UserID = PlayerPrefs.GetString("SocialPlay_UserGuid"),
                     UserName = PlayerPrefs.GetString("SocialPlay_UserName"),
                     UserEmail = PlayerPrefs.GetString("SocialPlay_UserEmail")
                 };
 
-                AccountServices.Login(userInfo.UserEmail, "", RecivedUserGuid);
+                AccountServices.Login(new LoginRequest(userInfo.UserEmail, ""), RecivedUserGuid);
 
                 RecivedUserGuid(userInfo);
             }
@@ -115,17 +115,6 @@ namespace CloudGoods.SDK.Login
             loginErrorLabel.text = "User logged in";
 
             CloseAllTabsOnLogin();
-        }
-
-        void ResentVerificationResponce(UserResponse responce)
-        {
-            resendVerificationTextObject.SetActive(false);
-            loginErrorLabel.text = responce.message;
-        }
-
-        void ForgotPasswordResponce(UserResponse responce)
-        {
-            confirmationStatus.text = responce.message;
         }
 
         void LoginSuccess(Guid userID)
@@ -197,7 +186,7 @@ namespace CloudGoods.SDK.Login
                 Debug.Log("login email: " + loginUserEmail.text + " login password: " + loginUserPassword.text);
 
                 PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.text);
-                AccountServices.Login(loginUserEmail.text.ToLower(), loginUserPassword.text, RecivedUserGuid);
+                AccountServices.Login(new LoginRequest(loginUserEmail.text.ToLower(), loginUserPassword.text), RecivedUserGuid);
             }
         }
 
@@ -219,7 +208,7 @@ namespace CloudGoods.SDK.Login
             if (string.IsNullOrEmpty(ErrorMsg))
             {
                 SwitchToConfirmation();
-                AccountServices.Register(CloudGoodsSettings.AppID, registerUserName.text, registerUserEmail.text, registerUserPassword.text, OnRegisteredUser);
+                AccountServices.Register(new RegisterUserRequest(registerUserName.text, registerUserEmail.text, registerUserPassword.text), OnRegisteredUser);
             }
         }
 
@@ -242,7 +231,7 @@ namespace CloudGoods.SDK.Login
             if (string.IsNullOrEmpty(ErrorMsg))
             {
                 SwitchToConfirmation();
-                AccountServices.ForgotPassword(loginUserEmail.text, OnSentPassword);
+                AccountServices.ForgotPassword(new ForgotPasswordRequest(loginUserEmail.text), OnSentPassword);
             }
         }
 
@@ -263,7 +252,7 @@ namespace CloudGoods.SDK.Login
             {
                 SwitchToConfirmation();
                 CloseResendVerificationTab();
-                AccountServices.ResendVerificationEmail(loginUserEmail.text, OnResentVerificationEmail);
+                AccountServices.ResendVerificationEmail(new ResendVerificationRequest(loginUserEmail.text), OnResentVerificationEmail);
             }
 
         }
@@ -285,12 +274,12 @@ namespace CloudGoods.SDK.Login
         {
             Debug.Log("ErrorOccured: " + obj.ErrorCode + "   message: " + obj.Message);
 
-            if(obj.ErrorCode == 1001 || obj.ErrorCode == 1000)
+            if (obj.ErrorCode == 1001 || obj.ErrorCode == 1000)
             {
                 confirmationStatus.text = obj.Message;
             }
-            
-            if(obj.ErrorCode == 1003)
+
+            if (obj.ErrorCode == 1003)
             {
                 ResendVerificationWindow.SetActive(true);
             }

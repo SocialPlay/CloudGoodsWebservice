@@ -235,17 +235,17 @@ namespace Steamworks {
 				fileBytes = Version.SteamAPI64DLLSize;
 			}
 
-			// If we can not find the file we'll just skip it and let the DllNotFoundException take care of it.
-			if (System.IO.File.Exists(file)) {
-				System.IO.FileInfo fInfo = new System.IO.FileInfo(file);
-				if (fInfo.Length != fileBytes) {
-					return false;
-				}
+            //// If we can not find the file we'll just skip it and let the DllNotFoundException take care of it.
+            //if (System.IO.File.Exists(file)) {
+            //    System.IO.FileInfo fInfo = new System.IO.FileInfo(file);
+            //    if (fInfo.Length != fileBytes) {
+            //        return false;
+            //    }
 
-				if (System.Diagnostics.FileVersionInfo.GetVersionInfo(file).FileVersion != Version.SteamAPIDLLVersion) {
-					return false;
-				}
-			}
+            //    if (System.Diagnostics.FileVersionInfo.GetVersionInfo(file).FileVersion != Version.SteamAPIDLLVersion) {
+            //        return false;
+            //    }
+            //}
 
 			return true;
 		}

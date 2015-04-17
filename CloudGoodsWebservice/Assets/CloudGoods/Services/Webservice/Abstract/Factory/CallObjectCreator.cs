@@ -9,51 +9,57 @@ namespace CloudGoods.Services.Webservice
 
     public interface CallObjectCreator
     {
-        WWW CreateLoginCallObject(string userEmail, string password);
-
-        WWW CreateRegisterUserCallObject(RegisterUserRequest request);
-
-        WWW CreateForgotPasswordCallObject(string userEmail);
-
-        WWW CreateResendVerificationEmailCallObject(string email);
-
-        WWW CreateLoginByPlatformCallObject( string userName, int platformId, string platformUserID);
-
-        WWW CreateGetUserItemsCallObject(int location, string andTags = null, string orTags = null);
-
-        WWW CreateMoveItemsCallObject(MoveItemsRequest request);
-
-        WWW CreateGetServerTimeObject();
-
-        WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
-
-        WWW CreateItemVoucherCall(int voucherId);
-
-        WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
-
-        WWW CreateUpdateItemByIdRequestCallObject(UpdateItemByIdRequest request);
-
-        WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request);
-
-        WWW CreateItemBundlesCall(string andTags, string orTags);
-
-        WWW CreateCurrencyInfoCall();
-
-        WWW CreatePremiumCurrencyBalanceCall();
-
-        WWW CreateGetPremiumCurrencyBundlesCall(int PlatformId);
-
-        WWW CreateGetStoreItemsCall(string andTags, string orTags);
-
-        WWW CreateStandardCurrencyBalanceCall(int accessLocation);
-
-        Dictionary<string, string> CreateHeaders(string urlString, bool isFull= true );
-
-        Dictionary<string, string> CreatePostHeaders(IRequestClass requestObject);
-
         int GetTimestamp();
 
         string GenerateNonce();
+
+        Dictionary<string, string> CreateHeaders(string urlString, bool isFull = true);
+
+        Dictionary<string, string> CreatePostHeaders(IRequestClass requestObject);
+
+        WWW CreateLoginCallObject(LoginRequest request);
+
+        WWW CreateRegisterUserCallObject(RegisterUserRequest request);
+
+        WWW CreateForgotPasswordCallObject(ForgotPasswordRequest request);
+
+        WWW CreateResendVerificationEmailCallObject(ResendVerificationRequest request);
+
+        WWW CreateLoginByPlatformCallObject( LoginByPlatformRequest request);
+
+        WWW CreateUserItemsCallObject(UserItemsRequest request);
+
+        WWW CreateInstanceItemsRequest(InstanceItemsRequest request);
+
+        WWW CreateSessionItemsCallObject(SessionItemsRequest request);
+
+        WWW CreateUserItemCall(OwnerItemRequest request);
+
+        WWW CreateMoveItemsCallObject(MoveItemsRequest request);
+
+        WWW CreateGetServerTimeObject();/// only get call
+
+        WWW CreateCreateItemVouchersCall(CreateItemVouchersRequest request);
+
+        WWW CreateItemVoucherCall(ItemVoucherRequest request);
+
+        WWW CreateRedeemItemVouchersCall(RedeemItemVouchersRequest request);
+
+        WWW CreateUpdateItemByIdRequestCallObject(UpdateItemsByIdsRequest request);
+
+        WWW CreateUpdateItemByStackIdRequestCallObject(UpdateItemsByStackIdRequest request);
+
+        WWW CreateItemBundlesCall(ItemBundlesRequest request);
+
+        WWW CreateCurrencyInfoCall(CurrencyInfoRequest request);
+
+        WWW CreatePremiumCurrencyBalanceCall(PremiumCurrencyBalanceRequest request);
+
+        WWW CreatePremiumCurrencyBundlesCall(PremiumBundlesRequest request);
+
+        WWW CreateStoreItemsCall(StoreItemsRequest request);
+
+        WWW CreateStandardCurrencyBalanceCall(StandardCurrencyBalanceRequest request);
 
         WWW ItemBundlePurchaseCall(ItemBundlePurchaseRequest request);
 
@@ -61,20 +67,22 @@ namespace CloudGoods.Services.Webservice
 
         WWW CreatePurchaseItemCall(PurchaseItemRequest request);
 
-        WWW CreateUserDataCall(string key);
+        WWW CreateUserDataCall(UserDataRequest request);
 
-        WWW CreateUserDataUpdateCall(string key, string value);
+        WWW CreateUserDataUpdateCall(UserDataUpdateRequest request);
 
-        WWW CreateUserDataAllCall();
+        WWW CreateUserDataAllCall(UserDataAllRequest request);
 
-        WWW CreateUserDataByKeyCall(string key);
+        WWW CreateUserDataByKeyCall(UserDataByKeyRequest request);
 
-        WWW CreateUserItemCall(int lookupItemId, int location);
+      
 
-        WWW CreateAppDataCall(string key);
+        WWW CreateAppDataCall(AppDataRequest request);
 
-        WWW CreateAppDataAllCall();
+        WWW CreateAppDataAllCall(AppDataAllRequest request);
 
-        WWW CreateUpdateAppDataCall(string key, string value);
+        WWW CreateAppDataUpdateCall(AppDataUpdateRequest request);
+
+       
     }
 }

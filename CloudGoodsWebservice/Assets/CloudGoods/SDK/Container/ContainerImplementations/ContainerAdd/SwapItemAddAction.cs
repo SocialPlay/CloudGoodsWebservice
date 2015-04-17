@@ -11,7 +11,7 @@ namespace CloudGoods.SDK.Container
         // which index of the container items will be swapped (default first item)
         public int swapIndex = 0;
 
-        //The amount of items needed in container until it is required to swap
+        //The Amount of items needed in container until it is required to swap
         public int swapItemLimit = 0;
 
         private ItemContainer itemContainer;

@@ -10,14 +10,14 @@ namespace CloudGoods.Services
 {
     public class CloudDataServices
     {
-        public static void UserDataGet(string key, Action<CloudData> callback)
+        public static void UserDataGet(UserDataRequest request, Action<CloudData> callback)
         {
-            CallHandler.Instance.GetUserData(key, callback);
+            CallHandler.Instance.GetUserData(request, callback);
         }
 
-        public static void UserDataUpdate(string key, string value, Action<CloudData> callback)
+        public static void UserDataUpdate(UserDataUpdateRequest request, Action<CloudData> callback)
         {
-            CallHandler.Instance.UserDataUpdate(key, value, callback);
+            CallHandler.Instance.UserDataUpdate(request, callback);
         }
 
         public static void UserDataAll(Action<List<CloudData>> callback)
@@ -25,14 +25,14 @@ namespace CloudGoods.Services
             CallHandler.Instance.UserDataAll(callback);
         }
 
-        public static void UserDataByKey(string key, Action<List<OwnedCloudData>> callback)
+        public static void UserDataByKey(UserDataByKeyRequest request, Action<List<OwnedCloudData>> callback)
         {
-            CallHandler.Instance.UserDataByKey(key, callback);
+            CallHandler.Instance.UserDataByKey(request, callback);
         }
 
-        public static void AppData(string key, Action<CloudData> callback)
+        public static void AppData(AppDataRequest request, Action<CloudData> callback)
         {
-            CallHandler.Instance.AppData(key, callback);
+            CallHandler.Instance.AppData(request, callback);
         }
 
         public static void AppDataAll(Action<List<CloudData>> callback)
@@ -40,9 +40,9 @@ namespace CloudGoods.Services
             CallHandler.Instance.AppDataAll(callback);
         }
 
-        public static void UpdateAppData(string key, string value, Action<CloudData> callback)
+        public static void UpdateAppData(AppDataUpdateRequest request , Action<CloudData> callback)
         {
-            CallHandler.Instance.UpdateAppData(key, value, callback);
+            CallHandler.Instance.UpdateAppData(request, callback);
         }
     }
 }

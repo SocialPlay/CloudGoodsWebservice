@@ -20,7 +20,7 @@ namespace CloudGoods.SDK.Container
 
         public void LoadItems()
         {
-            ItemManipulationServices.GetUserItems(Location, RecivedItems);
+            ItemManipulationServices.UserItems(new UserItemsRequest(Location), RecivedItems);
         }
 
         void Start()
@@ -94,7 +94,7 @@ namespace CloudGoods.SDK.Container
         {
             if (isSave == true)
             {
-                ItemManipulationServices.MoveItem(data, Location, data.Amount, x =>
+                ItemManipulationServices.MoveItem(new MoveItemsRequest(new MoveItemsRequest.MoveOrder( data.StackLocationId,data.Amount, Location)), x =>
                 {
                     data.StackLocationId = x.UpdatedStackIds[0].StackId;
                     data.IsLocked = false;
@@ -107,7 +107,7 @@ namespace CloudGoods.SDK.Container
             if (isSave == true)
             {
                 data.IsLocked = true;
-                ItemManipulationServices.MoveItem(data, Location, data.Amount, x =>
+                ItemManipulationServices.MoveItem(new MoveItemsRequest(new MoveItemsRequest.MoveOrder(data.StackLocationId, data.Amount, Location)), x =>
                 {
                     data.StackLocationId = x.UpdatedStackIds[0].StackId;
                     data.IsLocked = false;
@@ -119,7 +119,7 @@ namespace CloudGoods.SDK.Container
         {
             if (!isMoving)
             {
-                //CloudGoods.DeductStackAmount(data.stackID, -amount, delegate(string x)
+                //CloudGoods.DeductStackAmount(data.stackID, -Amount, delegate(string x)
                 //{
                 //    data.isLocked = false;
                 //});

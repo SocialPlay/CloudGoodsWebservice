@@ -25,7 +25,7 @@ public class TestWebservice : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        AccountServices.Login("lionel.sy@gmail.com", "123456", OnReceivedLoginResponse);
+        AccountServices.Login(new LoginRequest("lionel.sy@gmail.com", "123456"), OnReceivedLoginResponse);
     }
 
     void OnReceivedStatuseMessage(StatusMessageResponse response)
@@ -37,8 +37,8 @@ public class TestWebservice : MonoBehaviour {
     {
         ItemStoreServices.GetCurrencyInfo(OnReceivedCurrencyInfo);
         ItemStoreServices.GetPremiumCurrencyBalance(OnReceivedPremiumCurrencyBalance);
-        ItemStoreServices.GetStandardCurrencyBalance(0, OnReceivedStandardCurrencyBalance);
-        ItemStoreServices.GetStoreItems(OnReceivedStoreItems);
+        ItemStoreServices.GetStandardCurrencyBalance(new StandardCurrencyBalanceRequest(0), OnReceivedStandardCurrencyBalance);
+        ItemStoreServices.GetStoreItems(new StoreItemsRequest(), OnReceivedStoreItems);
     }
 
     void OnReceivedStoreItems(List<StoreItem> storeItems)
@@ -49,7 +49,7 @@ public class TestWebservice : MonoBehaviour {
         {
             Debug.Log("store item found: " + storeItem.ItemInformation.Name);
 
-            foreach(StoreItemDetail detail in storeItem.ItemDetails)
+            foreach(StoreItem.StoreItemDetail detail in storeItem.ItemDetails)
             {
                 Debug.Log(detail.Name);
             }

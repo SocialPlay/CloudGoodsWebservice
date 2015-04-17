@@ -25,7 +25,7 @@ public class CurrencyPurchaseExample : MonoBehaviour {
 
     void CallHandler_CloudGoodsInitilized()
     {
-        AccountServices.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
+        AccountServices.Login(new LoginRequest("lionel.sy@gmail.com", "123456"), OnRegisteredtoSession);
     }
 
     void OnRegisteredtoSession(CloudGoodsUser user)

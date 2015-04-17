@@ -19,8 +19,6 @@ namespace CloudGoods.Services.WebCommunication
         static public event Action CloudGoodsInitilized;
         static public event Action<string> onErrorEvent;
 
-        static bool isGettingWorldInfo = false;
-
         public static string SessionId = "";
         public static int ServerTimeDifference = 0;
 
@@ -62,49 +60,43 @@ namespace CloudGoods.Services.WebCommunication
 
         #region AccountManagemnt
 
-        public void Login(string userEmail, string password, Action<CloudGoodsUser> callback)
+        public void Login(LoginRequest request, Action<CloudGoodsUser> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(userEmail, password), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginCallObject(request), x =>
             {
                 callback(responseCreator.CreateLoginResponse(x));
             }));
         }
 
-        public void Register(string appId, string userName, string userEmail, string password, Action<RegisteredUser> callback)
+        public void Register(RegisterUserRequest request, Action<RegisteredUser> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateRegisterUserCallObject(new RegisterUserRequest()
-            {
-                AppId = appId,
-                UserName = userName,
-                UserEmail = userEmail,
-                Password = password
-            }), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateRegisterUserCallObject(request), x =>
             {
                 callback(responseCreator.CreateRegisteredUserResponse(x));
             }
             ));
         }
 
-        public void ForgotPassword(string userEmail, Action<StatusMessageResponse> callback)
+        public void ForgotPassword(ForgotPasswordRequest request, Action<StatusMessageResponse> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateForgotPasswordCallObject(userEmail), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateForgotPasswordCallObject(request), x =>
             {
                 callback(responseCreator.CreateStatusMessageResponse(x));
             }));
         }
 
-        public void ResendVerificationEmail(string email, Action<StatusMessageResponse> callback)
+        public void ResendVerificationEmail(ResendVerificationRequest request, Action<StatusMessageResponse> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateResendVerificationEmailCallObject(email), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateResendVerificationEmailCallObject(request), x =>
                 {
                     if (callback != null)
                         callback(responseCreator.CreateStatusMessageResponse(x));
                 }));
         }
 
-        public void LoginByPlatform(string userName, CloudGoodsPlatform cloudGoodsPlatform, string platformUserID, Action<CloudGoodsUser> callback)
+        public void LoginByPlatform(LoginByPlatformRequest request, Action<CloudGoodsUser> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginByPlatformCallObject(userName, (int)cloudGoodsPlatform, platformUserID), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateLoginByPlatformCallObject(request), x =>
             {
                 callback(responseCreator.CreateLoginResponse(x));
             }));
@@ -114,79 +106,74 @@ namespace CloudGoods.Services.WebCommunication
 
         #region Item Manipulation Services
 
-        public void GetUserItems(int location, Action<List<InstancedItemInformation>> callback)
+        public void UserItems(UserItemsRequest request, Action<List<InstancedItemInformation>> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateGetUserItemsCallObject(location), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateUserItemsCallObject(request), x =>
             {
                 callback(responseCreator.CreateItemDataListResponse(x));
             }));
         }
 
-        public void UserItem(int lookupItemId, int location, Action<SimpleItemInfo> callback)
+        public void InstanceItems(InstanceItemsRequest request, Action<List<InstancedItemInformation>> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateUserItemCall(lookupItemId, location), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateInstanceItemsRequest(request), x =>
+          {
+              callback(responseCreator.CreateItemDataListResponse(x));
+          }));
+        }
+
+        public void UserItem(OwnerItemRequest request, Action<SimpleItemInfo> callback)
+        {
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateUserItemCall(request), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateSimpleItemInfoResponse(x));
             }));
         }
 
-        public void MoveItems(List<MoveItemsRequest.MoveOrder> orders, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public void MoveItems(MoveItemsRequest request, Action<UpdatedStacksResponse> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemsCallObject(new MoveItemsRequest() { MoveOrders = orders, OtherOwner = otherOwner }), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateMoveItemsCallObject(request), x =>
                 {
                     callback(responseCreator.CreateUpdatedStacksResponse(x));
                 }));
         }
 
-        public void UpdateItemsByIds(List<UpdateItemByIdRequest.UpdateOrderByID> orders, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public void UpdateItemsByIds(UpdateItemsByIdsRequest request, Action<UpdatedStacksResponse> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByIdRequestCallObject(new UpdateItemByIdRequest() { Orders = orders, OtherOwner = otherOwner }), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByIdRequestCallObject(request), x =>
             {
                 callback(responseCreator.CreateUpdatedStacksResponse(x));
             }));
         }
 
-        public void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, OtherOwner destinationOwner = null)
+        public void UpdateItemByStackIds(List<UpdateItemsByStackIdRequest.UpdateOrderByStackId> orders, Action<UpdatedStacksResponse> callback, AlternateDestinationOwner destinationOwner = null)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByStackIdRequestCallObject(new UpdateItemsByStackIdRequest() { Orders = orders, DestinationOwner = destinationOwner }), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateItemByStackIdRequestCallObject(new UpdateItemsByStackIdRequest() { Orders = orders, AlternateDestination = destinationOwner }), x =>
             {
                 callback(responseCreator.CreateUpdatedStacksResponse(x));
             }));
         }
 
-        public void RedeemItemVoucher(List<RedeemItemVouchersRequest.ItemVoucherSelection> selections, Action<UpdatedStacksResponse> callback, OtherOwner otherOwner = null)
+        public void RedeemItemVoucher(RedeemItemVouchersRequest request, Action<UpdatedStacksResponse> callback)
         {
-            RedeemItemVouchersRequest request = new RedeemItemVouchersRequest()
-                {
-                    SelectedVouchers = selections,
-                    OtherOwner = otherOwner
-                };
-
             StartCoroutine(ServiceGetString(callObjectCreator.CreateRedeemItemVouchersCall(request), x =>
             {
                 callback(responseCreator.CreateUpdatedStacksResponse(x));
             }));
         }
 
-        public void CreateItemVouchers(int minEnergy, int total, Action<ItemVouchersResponse> callback, List<string> andTags = null, List<string> orTags = null)
+        public void CreateItemVouchers(CreateItemVouchersRequest request, Action<ItemVouchersResponse> callback)
         {
-            CloudGoods.SDK.Models.CreateItemVouchersRequest request = new CreateItemVouchersRequest()
-            {
-                MinimumEnergy = minEnergy,
-                TotalEnergy = total,
-                AndTags = andTags.ToCommaSeparated(),
-                OrTags = orTags.ToCommaSeparated()
-            };
             StartCoroutine(ServiceGetString(callObjectCreator.CreateCreateItemVouchersCall(request), x =>
             {
                 callback(responseCreator.CreateItemVoucherResponse(x));
             }));
         }
 
-        public void GetItemVoucher(int voucherId, Action<ItemVouchersResponse> callback)
+        public void ItemVoucher(ItemVoucherRequest request, Action<ItemVouchersResponse> callback)
         {
-            StartCoroutine(ServiceGetString(callObjectCreator.CreateItemVoucherCall(voucherId), x =>
+            StartCoroutine(ServiceGetString(callObjectCreator.CreateItemVoucherCall(request), x =>
             {
                 callback(responseCreator.CreateItemVoucherResponse(x));
             }));
@@ -198,7 +185,7 @@ namespace CloudGoods.Services.WebCommunication
 
         public void GetCurrencyInfo(Action<CurrencyInfoResponse> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateCurrencyInfoCall(), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateCurrencyInfoCall(new CurrencyInfoRequest()), x =>
             {
                 callback(responseCreator.CreateCurrencyInfoResponse(x));
             }));
@@ -206,71 +193,63 @@ namespace CloudGoods.Services.WebCommunication
 
         public void GetPremiumCurrencyBalance(Action<CurrencyBalanceResponse> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBalanceCall(), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBalanceCall(new PremiumCurrencyBalanceRequest()), x =>
                 {
                     callback(responseCreator.CreateCurrencyBalanceResponse(x));
                 }));
         }
 
-        public void GetStandardCurrencyBalance(int accessLocation, Action<SimpleItemInfo> callback)
+        public void GetStandardCurrencyBalance(StandardCurrencyBalanceRequest request, Action<SimpleItemInfo> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStandardCurrencyBalanceCall(accessLocation), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStandardCurrencyBalanceCall(request), x =>
             {
                 callback(responseCreator.CreateSimpleItemInfoResponse(x));
             }));
         }
 
-        public void ConsumePremiumCurrency(int amount, Action<ConsumePremiumResponce> callback)
+        public void ConsumePremiumCurrency(ConsumePremiumRequest request, Action<ConsumePremiumResponce> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumePremiumCall(new ConsumePremiumRequest() { Amount = amount }), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumePremiumCall(request), x =>
             {
                 callback(responseCreator.CreateConsumePremiumResponce(x));
             }));
         }
 
-        public void GetStoreItems(string andTags, string orTags, Action<List<StoreItem>> callback)
+        public void GetStoreItems(StoreItemsRequest request, Action<List<StoreItem>> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetStoreItemsCall(andTags, orTags), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStoreItemsCall(request), x =>
             {
                 callback(responseCreator.CreateGetStoreItemResponse(x));
             }));
         }
 
-        public void PurchaseItem(int itemId, int amount, int paymentOption, int saveLocation, Action<SimpleItemInfo> callback, int amountToConsume = -1)
-        {
-            PurchaseItemRequest request = new PurchaseItemRequest()
-            {
-                ItemId = itemId,
-                BuyAmount = amount,
-                PaymentOption = (PurchaseItemRequest.PaymentType)paymentOption,
-                SaveLocation = saveLocation,
-                Consume = amountToConsume == -1 ? null : new PurchaseItemRequest.ConsumeUponPurchase() { Amount = amountToConsume }
-            };
+        public void PurchaseItem(PurchaseItemRequest request, Action<SimpleItemInfo> callback)
+        {          
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePurchaseItemCall(request), x =>
             {
                 callback(responseCreator.CreateSimpleItemInfoResponse(x));
             }));
         }
 
-        public void GetItemBundles(string andTags, string orTags, Action<ItemBundlesResponse> callback)
+        public void GetItemBundles(ItemBundlesRequest request, Action<ItemBundlesResponse> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateItemBundlesCall(andTags, orTags), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateItemBundlesCall(request), x =>
             {
                 callback(responseCreator.CreateItemBundlesResponse(x));
             }));
         }
 
-        public void PurchaseItemBundle(int bundleId, int paymentType, int location, Action<ItemBundlePurchaseResponse> callback)
+        public void PurchaseItemBundle(ItemBundlePurchaseRequest request, Action<ItemBundlePurchaseResponse> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.ItemBundlePurchaseCall(new ItemBundlePurchaseRequest() { BundleID = bundleId, PaymentType = paymentType, Location = location }), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.ItemBundlePurchaseCall(request), x =>
             {
                 callback(responseCreator.CreateItemBundlePurchaseResponse(x));
             }));
         }
 
-        public void GetPremiumBundles(int platformId, Action<List<PremiumCurrencyBundle>> callback)
+        public void PremiumBundles(PremiumBundlesRequest request, Action<List<PremiumCurrencyBundle>> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateGetPremiumCurrencyBundlesCall(platformId), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBundlesCall(request), x =>
                 {
                     callback(responseCreator.CreatePremiumCurrencyBundleResponse(x));
                 }));
@@ -280,18 +259,18 @@ namespace CloudGoods.Services.WebCommunication
 
         #region Cloud Data Services
 
-        public void GetUserData(string key, Action<CloudData> callback)
+        public void GetUserData(UserDataRequest request, Action<CloudData> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataCall(key), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataCall(request), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateCloudDataResponse(x));
             }));
         }
 
-        public void UserDataUpdate(string key, string value, Action<CloudData> callback)
+        public void UserDataUpdate(UserDataUpdateRequest request, Action<CloudData> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataUpdateCall(key, value), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataUpdateCall(request), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateCloudDataResponse(x));
@@ -300,25 +279,25 @@ namespace CloudGoods.Services.WebCommunication
 
         public void UserDataAll(Action<List<CloudData>> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataAllCall(), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataAllCall(new UserDataAllRequest()), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateCloudDataListResponse(x));
             }));
         }
 
-        public void UserDataByKey(string key, Action<List<OwnedCloudData>> callback)
+        public void UserDataByKey(UserDataByKeyRequest request, Action<List<OwnedCloudData>> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataByKeyCall(key), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUserDataByKeyCall(request), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateUserDataByKeyResponse(x));
             }));
         }
 
-        public void AppData(string key, Action<CloudData> callback)
+        public void AppData(AppDataRequest request, Action<CloudData> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataCall(key), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataCall(request), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateCloudDataResponse(x));
@@ -327,16 +306,16 @@ namespace CloudGoods.Services.WebCommunication
 
         public void AppDataAll(Action<List<CloudData>> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataAllCall(), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataAllCall(new AppDataAllRequest()), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateCloudDataListResponse(x));
             }));
         }
 
-        public void UpdateAppData(string key, string value, Action<CloudData> callback)
+        public void UpdateAppData(AppDataUpdateRequest request, Action<CloudData> callback)
         {
-            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateUpdateAppDataCall(key, value), x =>
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateAppDataUpdateCall(request), x =>
             {
                 if (callback != null)
                     callback(responseCreator.CreateCloudDataResponse(x));
