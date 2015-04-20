@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{72928E56-1016-0CE0-28DA-E8B56338F299}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+	<BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_5_0_0;UNITY_5_0;UNITY_5;ENABLE_LICENSE_RENAME;ENABLE_NEW_BUGREPORTER;ENABLE_2D_PHYSICS;ENABLE_4_6_FEATURES;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MULTIPLE_DISPLAYS;ENABLE_NEW_HIERARCHY;ENABLE_PHYSICS;ENABLE_PHYSICS_PHYSX3;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_UNITYEVENTS;ENABLE_WWW;ENABLE_AUDIOMIXER_SUSPEND;ENABLE_NONPRO;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;RENDER_SOFTWARE_CURSOR;UNITY_WEBGL;ENABLE_TEXTUREID_MAP;ENABLE_IL2CPP;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="System.Xml.Linq" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\CallHandlerInit.cs" />
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\CurrencyPurchaseExample.cs" />
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\ItemBundleStoreExample.cs" />
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\SteamScript.cs" />
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\StoreExample.cs" />
+     <Compile Include="Assets\CloudGoods\Example Scenes\Scripts\TransactionWindow.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerAdd\BasicAddContainer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerAdd\IContainerAddAction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerAdd\SwapItemAddAction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\AddOnlyRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\ClassIDRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\CollectionsIDRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\IContainerRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\ItemIDRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\ItemLimitRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\NoActionRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ContainerImplementations\ContainerResctrictions\RemoveOnlyRestriction.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ItemContainer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ItemContainerManager.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\ItemContainerRestrictor.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\PersistentItemContainer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Container\UI\ItemContainerDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\CurrencyManager.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\ItemDataComponent.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\ItemDataSelector.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\ItemPrefabInitilizer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\ITooltipSetup.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\ItemDataDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\UnityItemDataDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Item\UI\UnityUIItemDragComponent.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\InputFieldEmailValidation.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\InputFieldPasswordValidation.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\InputFieldValidation.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Login\UnityUICloudGoodsLogin.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Models\CloudGoodsModels.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\Abstract\StoreLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\AndroidPremiumCurrencyPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\FaceBookPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\GUIStorePlatform.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\Interfaces\IFacebookPurchase.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\Interfaces\IPlatformPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\KongregatePurchase.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\LoadPlatformSetup.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\PremiumBundle.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\PremiumCurrencyBundleStore.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\UnityUIPremiumBundle.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\CurrencyPurchase\iOSPremiumCurrencyPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\FilterNewestItems.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundleItemInfo.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundleItemScroll.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundlePurchasePopupHandler.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIBundlePurchasing.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIItemBundle.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\ItemBundles\UnityUIItemBundleLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\Sortables\ISortItem.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\Sortables\SortByProperty.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\StoreInitializer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\StoreOrganizer.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUICurrencyNameLabel.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIItemPurchase.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUILabelCurrency.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIPageInfo.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIPurchaseButtonDisplay.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIPurchaseStatus.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIStoreItem.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUIStoreLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Store\UI\UnityUITextureCurrency.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\BuildPlatform.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\GridLoader\IGridLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\GridLoader\UIGridLoader.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\IgnoreRaycast.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\InputValueChange.cs" />
+     <Compile Include="Assets\CloudGoods\SDK\Utilities\ItemTextureCache.cs" />
+     <Compile Include="Assets\CloudGoods\Scripts\Store\CurrencyPurchase\SteamPremiumCurrencyPurchaser.cs" />
+     <Compile Include="Assets\CloudGoods\Services\AccountServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CallHandler.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CloudDataServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CloudGoodsEnums.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CloudGoodsSettings.cs" />
+     <Compile Include="Assets\CloudGoods\Services\CraftingServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\ItemManipulationServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\ItemStoreServices.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Abstract\Factory\CallObjectCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Abstract\Factory\HashCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Abstract\Factory\ResponseCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Concrete\Factory\LitJsonResponseCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Concrete\Factory\StandardHashCreator.cs" />
+     <Compile Include="Assets\CloudGoods\Services\Webservice\Concrete\Factory\WebAPICallObjectCreator.cs" />
+     <Compile Include="Assets\Steamwork.NET\SteamManager.cs" />
+     <None Include="Assets\Plugins\Android\facebook\res\values\attrs.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_activity_circle_row.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_tooltip_bubble.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-iw\strings.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_picker_top_button.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_search_box.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-ldpi\dimens.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values\colors.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_friendpickerfragment.xml" />
+     <None Include="Assets\Plugins\Android\facebook\bin\proguard.txt" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_top_button.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_usersettingsfragment.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_checkbox.xml" />
+     <None Include="Assets\Plugins\Android\facebook\bin\R.txt" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_title_bar_stub.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values\strings.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_picker_item_background.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_image.xml" />
+     <None Include="Assets\Plugins\Steam\Steamworks.NET\redist\steam_appid.txt" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_top_background.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-hdpi\dimens.xml" />
+     <None Include="Assets\Plugins\Android\facebook\build.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_button_blue.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_picker_list_selector.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_search_bar_layout.xml" />
+     <None Include="Assets\Plugins\Android\facebook\bin\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_login_activity_layout.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-mdpi\dimens.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_list_section_header.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_title_bar.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_usersettingsfragment_background_gradient.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_placepickerfragment.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_placepickerfragment_list_row.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values\drawables.xml" />
+     <None Include="Assets\Plugins\Android\facebook\proguard-project.txt" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_loginbutton_silver.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_picker_list_selector_background_transition.xml" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-he\strings.xml" />
+     <None Include="Assets\Plugins\Android\facebook\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-es\strings.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\drawable\com_facebook_button_check.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\layout\com_facebook_picker_list_row.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values\styles.xml" />
+     <None Include="Assets\Plugins\Android\facebook\res\values-xhdpi\dimens.xml" />
+ <Reference Include="UnityEngine.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="JsonFx.Json">
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/WebGLTest/Assets/CloudGoods/Plugins/dlls/JsonFx.Json.dll</HintPath>
+ </Reference>
+ <Reference Include="LitJson">
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/WebGLTest/Assets/CloudGoods/Plugins/dlls/LitJson.dll</HintPath>
+ </Reference>
+ <Reference Include="protobuf-net">
+ <HintPath>C:/Users/User/Documents/Socialplay/CloudGoodsWebservice/WebGLTest/Assets/CloudGoods/Plugins/dlls/protobuf-net.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{B64B193D-0D78-B782-6BA6-0697AF69CB1A}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

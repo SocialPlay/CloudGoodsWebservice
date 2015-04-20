@@ -195,7 +195,8 @@ namespace CloudGoods.Services.WebCommunication
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBalanceCall(new PremiumCurrencyBalanceRequest()), x =>
                 {
-                    callback(responseCreator.CreateCurrencyBalanceResponse(x));
+                    if(callback != null)
+                        callback(responseCreator.CreateCurrencyBalanceResponse(x));
                 }));
         }
 
@@ -203,7 +204,8 @@ namespace CloudGoods.Services.WebCommunication
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateStandardCurrencyBalanceCall(request), x =>
             {
-                callback(responseCreator.CreateSimpleItemInfoResponse(x));
+                if(callback != null)
+                    callback(responseCreator.CreateSimpleItemInfoResponse(x));
             }));
         }
 

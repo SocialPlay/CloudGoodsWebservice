@@ -19,6 +19,7 @@ namespace CloudGoods.CurrencyPurchase
 {
     public class PremiumCurrencyBundleStore : MonoBehaviour
     {
+        public static event Action<PurchasePremiumCurrencyBundleResponse> OnPremiumCurrencyPurchased;
         public GameObject Grid;
         [HideInInspector]
         public bool isInitialized = false;
@@ -126,6 +127,7 @@ namespace CloudGoods.CurrencyPurchase
             creditBundle.Amount = item.CreditAmount.ToString();
             creditBundle.Cost = item.Cost.ToString();
 
+
             //if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
             //{
             //    creditBundle.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
@@ -166,12 +168,14 @@ namespace CloudGoods.CurrencyPurchase
         {
             Debug.Log("Received purchase response:  " + data);
             isPurchaseRequest = false;
-            ItemStoreServices.GetPremiumCurrencyBalance(null);
+
+            if (OnPremiumCurrencyPurchased != null)
+                OnPremiumCurrencyPurchased(data);
         }
 
         void platformPurchasor_OnPurchaseErrorEvent(PurchasePremiumCurrencyBundleResponse obj)
         {
-            Debug.Log("Purchase Platform Error: " + obj);
+            Debug.LogError("Purchase Platform Error: " + obj);
 
             isPurchaseRequest = false;
         }
