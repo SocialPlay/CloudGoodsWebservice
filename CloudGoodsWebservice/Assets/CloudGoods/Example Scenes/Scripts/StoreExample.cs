@@ -15,12 +15,15 @@ public class StoreExample : MonoBehaviour
 
     void Awake()
     {
+        Debug.LogError("Start");
         CallHandler.CloudGoodsInitilized += CallHandler_CloudGoodsInitilized;
         CallHandler.Initialize();
     }
 
     void CallHandler_CloudGoodsInitilized()
     {
+
+        Debug.LogError("Initialized");
         AccountServices.Login("lionel.sy@gmail.com", "123456", OnRegisteredtoSession);
     }
 
