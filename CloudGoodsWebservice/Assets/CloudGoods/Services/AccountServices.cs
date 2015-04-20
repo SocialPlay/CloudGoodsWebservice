@@ -30,7 +30,7 @@ namespace CloudGoods.Services
             CallHandler.Instance.Login(request, user =>
             {
                 _ActiveUser = user;
-                Debug.Log("User Set" + "\nSession: " + _ActiveUser.SessionId);
+                Debug.Log("User Set" +"\nSession: "+_ActiveUser.SessionId);
 
                 callback(user);
             });

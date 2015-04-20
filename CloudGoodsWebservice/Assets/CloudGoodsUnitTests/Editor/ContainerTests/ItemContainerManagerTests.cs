@@ -11,7 +11,7 @@ public class ItemContainerManagerTests : MonoBehaviour
 {
 
     List<ItemContainer> ItemContainers;
-    List<OwnedItemInformation> ItemDatas;
+   public List<OwnedItemInformation> ItemDatas;
     ContainerTestUtilities containerTestUtilities;
 
     [SetUp]

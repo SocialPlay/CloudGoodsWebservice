@@ -379,6 +379,7 @@ namespace CloudGoods.Services.WebCommunication
                 cg.CalculateServerClientTimeDifference(int.Parse(x));
                 isInitialized = true;
 
+
                 if (CloudGoodsInitilized != null)
                     CloudGoodsInitilized();
             }));

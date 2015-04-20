@@ -15,8 +15,10 @@ namespace CloudGoods.SDK.Models
         public string ToHashable()
         {
             string hashable = MinimumEnergy.ToString() + TotalEnergy.ToString();
-            AndTags.ForEach(tag => { hashable += tag; });
-            OrTags.ForEach(tag => { hashable += tag; });
+            if (AndTags != null)
+                AndTags.ForEach(tag => { hashable += tag; });
+            if (OrTags != null)
+                OrTags.ForEach(tag => { hashable += tag; });
             return hashable;
         }
 

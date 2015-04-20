@@ -14,8 +14,10 @@ namespace CloudGoods.SDK.Models
         public string ToHashable()
         {
             string hashable = string.Empty;
-            AndTags.ForEach(tag => hashable += tag);
-            OrTags.ForEach(tag => hashable += tag);
+            if (AndTags != null)
+                AndTags.ForEach(tag => { hashable += tag; });
+            if (OrTags != null)
+                OrTags.ForEach(tag => { hashable += tag; });
             return hashable;
         }
         public ItemBundlesRequest(List<string> andTags = null, List<string> orTags = null)

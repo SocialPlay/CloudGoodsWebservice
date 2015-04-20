@@ -16,8 +16,10 @@ namespace CloudGoods.SDK.Models
 
         public string ToHashable()
         {
-            return AppId + UserName + PlatformId + PlatformUserId+ DeviceType;
+            return AppId + UserName + PlatformId + PlatformUserId + DeviceType;
         }
+
+        public LoginByPlatformRequest() { }
 
         public LoginByPlatformRequest(string userName, CloudGoodsPlatform platformId, string platformUserId, int deviceType = -1)
         {

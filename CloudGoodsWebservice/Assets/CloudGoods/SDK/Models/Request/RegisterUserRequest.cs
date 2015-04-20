@@ -7,21 +7,23 @@ namespace CloudGoods.SDK.Models
     public class RegisterUserRequest : IRequestClass
     {
         public string AppId;
-        public string Name;
-        public string Email;
+        public string UserName;
+        public string UserEmail;
         public string Password;
+
+        public RegisterUserRequest() { }
 
         public RegisterUserRequest(string name, string email, string password)
         {
-            Name = name;
-            Email = email;
+            UserName = name;
+            UserEmail = email;
             Password = password;
             AppId = CloudGoodsSettings.AppID;
         }
 
         public string ToHashable()
         {
-            return AppId + Name + Email + Password;
+            return AppId + UserName + UserEmail + Password;
         }
     }
 }

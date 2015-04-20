@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using LitJson;
 using CloudGoods.SDK.Models;
+using CloudGoods.Services;
 
 namespace CloudGoods.CurrencyPurchase
 {
@@ -120,15 +121,16 @@ namespace CloudGoods.CurrencyPurchase
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
             bundlePurchaseRequest.BundleID = currentBundleID;
-            bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString();
+           // bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = message;
 
             //TODO implement platform check for platform premium currency bundle purchase
             bundlePurchaseRequest.PaymentPlatform = 3;
 
-            string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
+          //  string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-            CloudGoods.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
+        
+          //  CloudGoods.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
         }
         else
         {

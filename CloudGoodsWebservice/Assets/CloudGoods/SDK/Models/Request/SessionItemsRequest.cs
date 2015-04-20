@@ -12,9 +12,11 @@ namespace CloudGoods.SDK.Models
 
         public string ToHashable()
         {
-            string hashable = Location.ToString();      
-            AndTags.ForEach(tag => { hashable += tag; });       
-            OrTags.ForEach(tag => { hashable += tag; });
+            string hashable = Location.ToString();
+            if (AndTags != null)
+                AndTags.ForEach(tag => { hashable += tag; });
+            if (OrTags != null)
+                OrTags.ForEach(tag => { hashable += tag; });
             return hashable;
         }
 

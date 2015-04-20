@@ -92,39 +92,6 @@ namespace CloudGoods.Services.Webservice
             return new KeyValuePair<string, string>(key, value);
         }
 
-        WWW GenerateWWWCall(string controller, params KeyValuePair<string, string>[] urlPrams)
-        {
-            string createdURL = "";
-            foreach (KeyValuePair<string, string> urlA in urlPrams)
-            {
-                if (createdURL == "")
-                    createdURL += "?";
-                else
-                    createdURL += "&";
-                createdURL += urlA.Key + "=" + urlA.Value;
-            }
-            Dictionary<string, string> headers = CreateHeaders(createdURL);
-            string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
-            return new WWW(urlString, null, headers);
-        }
-
-
-        WWW GenerateWWWCallWithoutUser(string controller, params KeyValuePair<string, string>[] urlPrams)
-        {
-            string createdURL = "";
-            foreach (KeyValuePair<string, string> urlA in urlPrams)
-            {
-                if (createdURL == "")
-                    createdURL += "?";
-                else
-                    createdURL += "&";
-                createdURL += urlA.Key + "=" + urlA.Value;
-            }
-            Dictionary<string, string> headers = CreateHeaders(createdURL, false);
-            string urlString = string.Format("{0}api/CloudGoods/{1}{2}", CloudGoodsSettings.Url, controller, createdURL);
-            return new WWW(urlString, null, headers);
-        }
-
         WWW GenerateWWWPost(string controller, IRequestClass dataObject, bool fullHeaders = true)
         {
             string objectString = LitJson.JsonMapper.ToJson(dataObject);
@@ -151,17 +118,17 @@ namespace CloudGoods.Services.Webservice
 
         public WWW CreateRegisterUserCallObject(RegisterUserRequest request)
         {
-            return GenerateWWWPost("RegisterUser", request);
+            return GenerateWWWPost("RegisterUser", request, false);
         }
 
         public WWW CreateForgotPasswordCallObject(ForgotPasswordRequest request)
         {
-            return GenerateWWWPost("ForgotPassword", request);
+            return GenerateWWWPost("ForgotPassword", request, false);
         }
 
         public WWW CreateResendVerificationEmailCallObject(ResendVerificationRequest request)
         {
-            return GenerateWWWPost("ResendVerification", request);
+            return GenerateWWWPost("ResendVerification", request, false);
         }
         #endregion
 

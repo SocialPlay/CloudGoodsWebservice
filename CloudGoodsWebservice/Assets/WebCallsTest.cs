@@ -8,6 +8,7 @@ using CloudGoods.Services;
 using CloudGoods.Enums;
 using System.Linq;
 using System;
+using CloudGoods.SDK;
 
 
 namespace WebCallTests
@@ -221,6 +222,7 @@ namespace WebCallTests
 
         public static void Draw()
         {
+
             if (GUILayout.Button("Load users Items"))
             {
                 ItemManagerCalls.LoadUserItems();
@@ -254,7 +256,7 @@ namespace WebCallTests
                 }
                 else
                 {
-                    GetOwnerItem();
+                    GetOwnerItem(LookupLocationId);
                 }
             }
 
@@ -335,9 +337,9 @@ namespace WebCallTests
             ItemManipulationServices.UpdateItemsByIds(new UpdateItemsByIdsRequest(itemId, amount, location), ItemManagerCalls.DisplayUpdatedItems);
         }
 
-        static void GetOwnerItem()
+        static void GetOwnerItem(int location)
         {
-            ItemManipulationServices.UserItem(new OwnerItemRequest(LookupItemId, 0), delegate(SimpleItemInfo item)
+            ItemManipulationServices.UserItem(new OwnerItemRequest(LookupItemId, location), delegate(SimpleItemInfo item)
             {
                 if (item != null)
                 {
@@ -352,10 +354,18 @@ namespace WebCallTests
 
         static void LoadUserItems()
         {
-            ItemManipulationServices.UserItems(new UserItemsRequest(0), delegate(List<InstancedItemInformation> items)
+            try
             {
-                DisplayItems(items);
-            });
+                ItemManipulationServices.UserItems(new UserItemsRequest(0), delegate(List<InstancedItemInformation> items)
+                {
+                    DisplayItems(items);
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+
         }
 
         static void MoveItem(OwnedItemInformation item)
@@ -612,6 +622,7 @@ namespace WebCallTests
 
         public static void DrawGUI()
         {
+            UsersCurrency.SimpleDisplay();
             if (GUILayout.Button("Get Item Bundles"))
             {
                 GetItemBundles();
@@ -625,7 +636,7 @@ namespace WebCallTests
             GUILayout.EndHorizontal();
             foreach (ItemBundleInfo info in bundles)
             {
-                if (GUILayout.Button(string.Format("Buy: {0}\nItems {1}\nCost:\nStandard:{2},Premium :{3}", info.Name, info.Items.Count, info.StandardPrice, info.PremiumPrice)))
+                if (GUILayout.Button(string.Format("Buy: {0}\nItems {1}\nCost:\nStandard:{2},Premium :{3}", info.Name, info.Items.Count, info.StandardPrice != -1 ? info.StandardPrice.ToString() : "N/A", info.PremiumPrice != -1 ? info.PremiumPrice.ToString() : "N/A")))
                 {
                     ItemBundlesCalls.PurchaseItemBundle(info.Id);
                 }
@@ -663,7 +674,7 @@ namespace WebCallTests
 
         static void PurchaseItemBundle(int bundleId)
         {
-            ItemStoreServices.PurchaseItemBundle(new ItemBundlePurchaseRequest( bundleId, IsStandard ? 1 : 2, 0), PurchaseItemBundleHandler);
+            ItemStoreServices.PurchaseItemBundle(new ItemBundlePurchaseRequest(bundleId, IsStandard ? 1 : 2, 0), PurchaseItemBundleHandler);
         }
 
         static void PurchaseItemBundleHandler(ItemBundlePurchaseResponse response)
@@ -710,7 +721,17 @@ namespace WebCallTests
                 {
                     if (GUILayout.Button(string.Format("{1}: {0}", item.CreditValue, UsersCurrency.PremiumName())))
                     {
-                        ItemStoreServices.PurchaseItem(new PurchaseItemRequest(item.ItemId, 1, PurchaseItemRequest.PaymentType.Premium, 0), StoreItemPurchaseResponse);
+                        try
+                        {
+                            ItemStoreServices.PurchaseItem(new PurchaseItemRequest(item.ItemId, 1, PurchaseItemRequest.PaymentType.Premium, 0), StoreItemPurchaseResponse);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError(e.Message);
+                        }
+                        finally { Debug.Log("Clikced Purchase premium"); }
+
+
                     }
                 }
                 if (item.CoinValue != -1)
@@ -732,6 +753,9 @@ namespace WebCallTests
 
             string debugString = "Purchased item success";
             debugString = string.Format("{0}\nItem\n   Amount:{1}\n   Location:{2}\n   stack Id:{3}", debugString, info.Amount, info.Location, info.StackId);
+            DisplayHelper.NewDisplayLine(debugString);
+            UsersCurrency.GetUserAmounts();
+
         }
 
         private static void StoreResponse(List<StoreItem> items)
@@ -769,7 +793,7 @@ namespace WebCallTests
             }
         }
 
-        private static void GetUserAmounts()
+        public static void GetUserAmounts()
         {
             ItemStoreServices.GetPremiumCurrencyBalance(delegate(CurrencyBalanceResponse response)
             {
@@ -808,7 +832,7 @@ namespace WebCallTests
 
         static void ConsumePremium()
         {
-            ItemStoreServices.ConsumePremiumCurrency(new ConsumePremiumRequest( consumeAmount), delegate(ConsumePremiumResponce responce)
+            ItemStoreServices.ConsumePremiumCurrency(new ConsumePremiumRequest(consumeAmount), delegate(ConsumePremiumResponce responce)
             {
                 if (responce.isSuccess)
                 {
@@ -889,8 +913,20 @@ namespace WebCallTests
             {
 
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Login")) isRegister = false;
-                if (GUILayout.Button("Register")) isRegister = true;
+                if (GUILayout.Button("Login"))
+                {
+                    isRegister = false;
+                    platformUserName = PlayerPrefs.GetString("SPLogin_PlatformUserName", "");
+                    platformUserId = PlayerPrefs.GetString("SPLogin_PlatformUserID", "");
+                    platform = PlayerPrefs.GetInt("SPLogin_PlatformId", 1);
+                }
+                if (GUILayout.Button("Register"))
+                {
+                    isRegister = true;
+                    platformUserName = PlayerPrefs.GetString("SPLogin_PlatformUserName", "");
+                    platformUserId = PlayerPrefs.GetString("SPLogin_PlatformUserID", "");
+                    platform = PlayerPrefs.GetInt("SPLogin_PlatformId", 1);
+                }
                 GUILayout.EndHorizontal();
                 GUILayout.Label("User Email");
                 userEmail = GUILayout.TextField(userEmail);
