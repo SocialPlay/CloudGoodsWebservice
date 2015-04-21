@@ -270,7 +270,7 @@ namespace CloudGoods.Services.Webservice
 
         public WWW CreateSteamPremiumPurchaseCall(SteamPurchaseRequest request)
         {
-            return GenerateWWWPost("SteamPremiumCurrencyPurchase", request); ;
+            return GenerateWWWPost("SteamPremiumCurrencyPurchase", request);
         }
 
         public WWW CreateSteamOrderConfirmationCall(SteamOrderConfirmationRequest request)

@@ -45,14 +45,14 @@ public class SteamPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser {
             //TODO Handle error for error when trying to pop up transaction window from steam
             SteamCurrencyTransactionResponse txnResponse = JsonMapper.ToObject<SteamCurrencyTransactionResponse>(JsonMapper.ToObject(x)["response"].ToJson());
 
-            //if(txnResponse.result == "OK")
-            //{
-            //    //Transaction Window pop up successfull
-            //}
-            //else
-            //{
-            //    //Error occured when trying to pop up steam transaction window
-            //}
+            if (txnResponse.result == "OK")
+            {
+                //Transaction Window pop up successfull
+            }
+            else
+            {
+                //Error occured when trying to pop up steam transaction window
+            }
         }));
     }
 
@@ -85,21 +85,21 @@ public class SteamPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser {
 
             SteamCurrencyTransactionResponse txnResponse = JsonMapper.ToObject<SteamCurrencyTransactionResponse>(JsonMapper.ToObject(x)["response"].ToJson());
 
-            //if (txnResponse.result == "OK")
-            //{
-            //    OnReceivedPurchaseResponse(new PurchasePremiumCurrencyBundleResponse()
-            //        {
-            //            Message = "Transaction Complete"
-            //        });
-            //    CallHandler.Instance.GetPremiumCurrencyBalance(null);
-            //}
-            //else
-            //{
-            //    OnPurchaseErrorEvent(new PurchasePremiumCurrencyBundleResponse()
-            //    {
-            //        Message = "Transaction Error"
-            //    });
-            //}
+            if (txnResponse.result == "OK")
+            {
+                OnReceivedPurchaseResponse(new PurchasePremiumCurrencyBundleResponse()
+                    {
+                        Message = "Transaction Complete"
+                    });
+                CallHandler.Instance.GetPremiumCurrencyBalance(null);
+            }
+            else
+            {
+                OnPurchaseErrorEvent(new PurchasePremiumCurrencyBundleResponse()
+                {
+                    Message = "Transaction Error"
+                });
+            }
         }));
     }
 
