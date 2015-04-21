@@ -268,10 +268,15 @@ namespace CloudGoods.Services.Webservice
             return GenerateWWWPost("AppDataUpdate", request);
         }
 
+        public WWW CreateSteamPremiumPurchaseCall(SteamPurchaseRequest request)
+        {
+            return GenerateWWWPost("SteamPremiumCurrencyPurchase", request); ;
+        }
 
-
-
-
+        public WWW CreateSteamOrderConfirmationCall(SteamOrderConfirmationRequest request)
+        {
+            return GenerateWWWPost("SteamOrderConfirmation", request);
+        }
     }
 }
 

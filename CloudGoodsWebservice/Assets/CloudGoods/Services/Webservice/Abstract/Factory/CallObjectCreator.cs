@@ -83,6 +83,8 @@ namespace CloudGoods.Services.Webservice
 
         WWW CreateAppDataUpdateCall(AppDataUpdateRequest request);
 
-       
+        WWW CreateSteamPremiumPurchaseCall(SteamPurchaseRequest request);
+
+        WWW CreateSteamOrderConfirmationCall(SteamOrderConfirmationRequest request);
     }
 }

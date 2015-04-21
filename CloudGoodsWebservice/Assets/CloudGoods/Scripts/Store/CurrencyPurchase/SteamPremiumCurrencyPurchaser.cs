@@ -36,19 +36,23 @@ public class SteamPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser {
     {
         currentPremiumBundle = bundle;
 
-        StartCoroutine(ServiceGetString(callCreator.CreateSteamPremiumPurchaseCall(SteamUser.GetSteamID().ToString(), bundle.BundleID), x =>
+        SteamPurchaseRequest request = new SteamPurchaseRequest();
+        request.bundleId = int.Parse(bundle.BundleID);
+        request.SteamUserId = SteamUser.GetSteamID().ToString();
+
+        StartCoroutine(ServiceGetString(callCreator.CreateSteamPremiumPurchaseCall(request), x =>
         {
             //TODO Handle error for error when trying to pop up transaction window from steam
             SteamCurrencyTransactionResponse txnResponse = JsonMapper.ToObject<SteamCurrencyTransactionResponse>(JsonMapper.ToObject(x)["response"].ToJson());
 
-            if(txnResponse.result == "OK")
-            {
-                //Transaction Window pop up successfull
-            }
-            else
-            {
-                //Error occured when trying to pop up steam transaction window
-            }
+            //if(txnResponse.result == "OK")
+            //{
+            //    //Transaction Window pop up successfull
+            //}
+            //else
+            //{
+            //    //Error occured when trying to pop up steam transaction window
+            //}
         }));
     }
 
@@ -70,32 +74,32 @@ public class SteamPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser {
         SteamOrderConfirmationRequest request = new SteamOrderConfirmationRequest()
         {
             AppId = response.m_unAppID.ToString(),
-            OrderId = response.m_ulOrderID.ToString(),
+            OrderId = int.Parse(response.m_ulOrderID.ToString()),
             BundleId = int.Parse(currentPremiumBundle.BundleID)
 
         };
 
-        StartCoroutine(ServiceGetString(callCreator.CreatSteamOrderConfirmationCall(request), x =>
+        StartCoroutine(ServiceGetString(callCreator.CreateSteamOrderConfirmationCall(request), x =>
         {
             Debug.LogError("Received Confirmation: " + x);
 
             SteamCurrencyTransactionResponse txnResponse = JsonMapper.ToObject<SteamCurrencyTransactionResponse>(JsonMapper.ToObject(x)["response"].ToJson());
 
-            if (txnResponse.result == "OK")
-            {
-                OnReceivedPurchaseResponse(new PurchasePremiumCurrencyBundleResponse()
-                    {
-                        Message = "Transaction Complete"
-                    });
-                CallHandler.Instance.GetPremiumCurrencyBalance(null);
-            }
-            else
-            {
-                OnPurchaseErrorEvent(new PurchasePremiumCurrencyBundleResponse()
-                {
-                    Message = "Transaction Error"
-                });
-            }
+            //if (txnResponse.result == "OK")
+            //{
+            //    OnReceivedPurchaseResponse(new PurchasePremiumCurrencyBundleResponse()
+            //        {
+            //            Message = "Transaction Complete"
+            //        });
+            //    CallHandler.Instance.GetPremiumCurrencyBalance(null);
+            //}
+            //else
+            //{
+            //    OnPurchaseErrorEvent(new PurchasePremiumCurrencyBundleResponse()
+            //    {
+            //        Message = "Transaction Error"
+            //    });
+            //}
         }));
     }
 
