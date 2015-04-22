@@ -9,6 +9,6 @@ public class SteamPurchaseRequest : IRequestClass {
 
     public string ToHashable()
     {
-        return (SteamUserId + bundleId.ToString());
+        return SteamUserId + bundleId;
     }
 }
