@@ -136,6 +136,8 @@ namespace CloudGoods.SDK.Container
 
         public void Add(OwnedItemInformation itemData, int amount = -1, bool isSave = true)
         {
+            Debug.Log("owned item amount: " + itemData.Amount + " owned amount: " + amount);
+
             ContainerAddAction.AddItem(itemData, amount, isSave);
         }
 

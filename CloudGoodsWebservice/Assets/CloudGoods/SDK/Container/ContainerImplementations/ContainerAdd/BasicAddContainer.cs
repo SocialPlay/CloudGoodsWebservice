@@ -21,6 +21,9 @@ namespace CloudGoods.SDK.Container
             if (amount == -1 || amount > addItem.Amount)
             {
                 amount = addItem.Amount;
+
+                Debug.Log("add item amount: " + addItem.Amount + " amount: " + amount);
+
                 addItem.OwnerContainer = ItemContainer;
                 if (!AddToExistingStack(addItem, addItem.Amount, isSave))
                 {
@@ -44,11 +47,9 @@ namespace CloudGoods.SDK.Container
         {
             foreach (OwnedItemInformation item in ItemContainer.containerItems)
             {
-                Debug.Log("Checking Id: " + item.Information.Id + "  with ID: " + data.Information.Id);
 
                 if (item.Information.Id.Equals(data.Information.Id))
                 {
-                    Debug.Log("add to existing stack");
 
                     ItemContainer.ModifiedItemEvent(data, isSave);
 
