@@ -9,25 +9,18 @@ namespace CloudGoods.SDK.Models
     {
         public int MinimumEnergy;
         public int TotalEnergy;
-        public List<string> AndTags = null;
-        public List<string> OrTags = null;
+        public TagSelection Tags = null;
 
         public string ToHashable()
         {
-            string hashable = MinimumEnergy.ToString() + TotalEnergy.ToString();
-            if (AndTags != null)
-                AndTags.ForEach(tag => { hashable += tag; });
-            if (OrTags != null)
-                OrTags.ForEach(tag => { hashable += tag; });
-            return hashable;
+            return MinimumEnergy.ToString() + TotalEnergy.ToString() + (Tags != null ? Tags.ToHashable() : "");
         }
 
-        public CreateItemVouchersRequest(int minimumEnergy, int totalEnergy, List<string> andTags = null, List<string> orTags = null)
+        public CreateItemVouchersRequest(int minimumEnergy, int totalEnergy, TagSelection tags = null)
         {
             MinimumEnergy = minimumEnergy;
             TotalEnergy = totalEnergy;
-            AndTags = andTags;
-            OrTags = orTags;
+            Tags = tags;
         }
     }
 }

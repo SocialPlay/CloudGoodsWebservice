@@ -8,22 +8,15 @@ namespace CloudGoods.SDK.Models
 
     public class ItemBundlesRequest : IRequestClass
     {
-       public List<string> AndTags = null;
-      public  List<string> OrTags = null;
+       public TagSelection Tags = null;
 
         public string ToHashable()
         {
-            string hashable = string.Empty;
-            if (AndTags != null)
-                AndTags.ForEach(tag => { hashable += tag; });
-            if (OrTags != null)
-                OrTags.ForEach(tag => { hashable += tag; });
-            return hashable;
+            return Tags != null ? Tags.ToHashable() : "ItemBundles";
         }
-        public ItemBundlesRequest(List<string> andTags = null, List<string> orTags = null)
+        public ItemBundlesRequest(TagSelection tags =null)
         {
-            AndTags = andTags;
-            OrTags = orTags;
+            Tags = tags;
         }
 
     }

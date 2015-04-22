@@ -42,8 +42,8 @@ namespace CloudGoods.CurrencyPurchase
             set { } //if (description != null) description.text = value; }
         }
 
-        public string ProductID { get; set; }
-        public string BundleID { get; set; }
+       // public string ProductID { get; set; }
+       // public string BundleID { get; set; }
 
         public Text amount;
         public Text currenyName;
