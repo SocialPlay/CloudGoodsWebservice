@@ -6,23 +6,16 @@ namespace CloudGoods.SDK.Models
 {
     public class StoreItemsRequest : IRequestClass
     {
-        public List<string> AndTags;
-        public List<string> OrTags;
+        public TagSelection Tags = null;
 
         public string ToHashable()
         {
-            string hashable = string.Empty;
-            if (AndTags != null)
-                AndTags.ForEach(tag => { hashable += tag; });
-            if (OrTags != null)
-                OrTags.ForEach(tag => { hashable += tag; });
-            return hashable;
+            return Tags != null ? Tags.ToHashable() : "StoreItems";
         }
 
-        public StoreItemsRequest(List<string> andTags = null, List<string> orTags = null)
+        public StoreItemsRequest(TagSelection tags = null)
         {
-            AndTags = andTags;
-            OrTags = orTags;
+            Tags = tags;
         }
     }
 }

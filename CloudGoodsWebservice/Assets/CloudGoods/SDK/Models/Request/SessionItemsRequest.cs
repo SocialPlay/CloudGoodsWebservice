@@ -7,24 +7,16 @@ namespace CloudGoods.SDK.Models
     public class SessionItemsRequest : IRequestClass
     {
         public int Location;
-        public List<string> AndTags;
-        public List<string> OrTags;
-
+        public TagSelection Tags = null;
         public string ToHashable()
         {
-            string hashable = Location.ToString();
-            if (AndTags != null)
-                AndTags.ForEach(tag => { hashable += tag; });
-            if (OrTags != null)
-                OrTags.ForEach(tag => { hashable += tag; });
-            return hashable;
+            return Location.ToString() + (Tags != null ? Tags.ToHashable() : "");
         }
 
-        public SessionItemsRequest(int location, List<string> andTags = null, List<string> orTags = null)
+        public SessionItemsRequest(int location, TagSelection tags=null)
         {
             Location = location;
-            AndTags = andTags;
-            OrTags = orTags;
+            Tags = tags;
         }
     }
 }

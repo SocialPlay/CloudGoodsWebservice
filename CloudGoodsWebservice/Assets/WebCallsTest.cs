@@ -49,8 +49,14 @@ namespace WebCallTests
 
         void Start()
         {
+
             CallHandler.Initialize();
             title = "Basic item calls";
+        }
+
+        void Awake()
+        {
+            TagsDisplay.Init();
         }
 
         void Instance_CloudGoodsInitilized()
@@ -63,6 +69,8 @@ namespace WebCallTests
         {
             drawLeft();
             DisplayHelper.DrawRight();
+
+            TagsDisplay.Draw();
         }
 
         void drawLeft()
@@ -176,7 +184,7 @@ namespace WebCallTests
 
         public static void DrawRight()
         {
-            GUILayout.BeginArea(new Rect(Screen.width / 2, 0, Screen.width, Screen.height));
+            GUILayout.BeginArea(new Rect(Screen.width / 2, 0, Screen.width, Screen.height - 200));
 
             GUI.color = currentColor;
             GUILayout.TextArea(Last);
@@ -1167,5 +1175,138 @@ namespace WebCallTests
             }
             DisplayHelper.NewDisplayLine(debugString);
         }
+    }
+
+
+    internal static class TagsDisplay
+    {
+        enum TagType
+        {
+            And, Or, Not
+        }
+        static TagType type = TagType.And;
+        static TagSelection selection;
+        static string name = "";
+        static Vector2 scroll = Vector2.zero;
+
+
+
+        public static void Init()
+        {
+            selection = new TagSelection();
+        }
+
+
+        public static void Draw()
+        {
+            if (selection == null) return;
+
+            GUILayout.BeginArea(new Rect(Screen.width / 2, Screen.height - 200, Screen.width / 2, 200));
+            scroll = GUILayout.BeginScrollView(scroll, GUI.skin.box);
+            GUILayout.Label("Tags");
+            GUILayout.BeginHorizontal();
+            name = GUILayout.TextField(name);
+            if (GUILayout.Button("+", GUILayout.Width(90)))
+            {
+                switch (type)
+                {
+                    case TagType.And:
+                        addAnd();
+                        break;
+                    case TagType.Or:
+                        addOr();
+                        break;
+                    case TagType.Not:
+                        addNot();
+                        break;
+                }
+            }
+            GUILayout.EndHorizontal();
+            if (GUILayout.Button(type.ToString()))
+            {
+                switch (type)
+                {
+                    case TagType.And:
+                        type = TagType.Or;
+                        break;
+                    case TagType.Or:
+                        type = TagType.Not;
+                        break;
+                    case TagType.Not:
+                        type = TagType.And;
+                        break;
+                }
+            }
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.Label("And", GUI.skin.box);
+            if (selection.AndTags != null)
+            {
+                foreach (string tag in selection.AndTags)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(tag);
+                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    {
+                        selection.AndTags.Remove(tag);
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.Label("Or", GUI.skin.box);
+            if (selection.OrTags != null)
+            {
+                foreach (string tag in selection.OrTags)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(tag);
+                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    {
+                        selection.OrTags.Remove(tag);
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.Label("Not", GUI.skin.box);
+            if (selection.NotTags != null)
+            {
+                foreach (string tag in selection.NotTags)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(tag);
+                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    {
+                        selection.NotTags.Remove(tag);
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
+
+        }
+
+        public static void addAnd()
+        {
+            if (name.Length != 0 && !selection.AndTags.Contains(name))
+                selection.AndTags.Add(name);
+        }
+        public static void addOr()
+        {
+            if (name.Length != 0 && !selection.OrTags.Contains(name))
+                selection.OrTags.Add(name);
+        }
+        public static void addNot()
+        {
+            if (name.Length != 0 && !selection.NotTags.Contains(name))
+                selection.NotTags.Add(name);
+        }
+
     }
 }
