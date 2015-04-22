@@ -54,13 +54,20 @@ namespace CloudGoods.SDK.Container
                 {
                     case ContainerMoveState.ActionState.Add:
 
-                        OwnedItemInformation newItemData = movingItemData;
+                        OwnedItemInformation newItemData = new OwnedItemInformation();
+                        newItemData.Amount = movingItemData.Amount;
+                        newItemData.Information = movingItemData.Information;
+                        newItemData.OwnerContainer = movingItemData.OwnerContainer;
+                        newItemData.StackLocationId = movingItemData.StackLocationId;
+                        newItemData.Location = movingItemData.Location;
 
                         if (movingItemData.OwnerContainer != null)
                         {
                             if (RemoveItem(movingItemData, movingItemData.OwnerContainer) == ContainerMoveState.ActionState.No)
                                 return ContainerMoveState.ActionState.No;
                         }
+                        Debug.Log("new item data amount: " + newItemData.Amount + "   Possible add amount: " + targetAddState.PossibleAddAmount);
+
 
                         targetContainer.Add(newItemData, targetAddState.PossibleAddAmount);
 

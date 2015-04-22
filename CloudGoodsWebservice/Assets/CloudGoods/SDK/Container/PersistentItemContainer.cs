@@ -49,6 +49,7 @@ namespace CloudGoods.SDK.Container
         {
             foreach (InstancedItemInformation item in receivedItems)
             {
+                Debug.Log("item amount: " + item.Amount);
                 Container.Add(new OwnedItemInformation()
                 {
                     Location = item.Location,
@@ -107,8 +108,10 @@ namespace CloudGoods.SDK.Container
             if (isSave == true)
             {
                 data.IsLocked = true;
+        
                 ItemManipulationServices.MoveItem(new MoveItemsRequest(new MoveItemsRequest.MoveOrder(data.StackLocationId, data.Amount, Location)), x =>
                 {
+                    Debug.Log(x.UpdatedStackIds[0].StackId);
                     data.StackLocationId = x.UpdatedStackIds[0].StackId;
                     data.IsLocked = false;
                 });
