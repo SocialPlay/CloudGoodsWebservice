@@ -131,16 +131,18 @@ namespace CloudGoods.SDK.Store.UI
             itemInfo = item;
             itemNameDisplay.text = item.storeItem.ItemInformation.Name;
 
+            Debug.Log("Sale: " + item.storeItem.Sale.Count);
+
             if (item.storeItem.Sale.Count > 0)
             {
-                if (item.storeItem.CreditValue > 0)
+                if (item.storeItem.Sale[0].PremiumCurrencySaleValue > 0)
                     premiumCurrencyCost = item.storeItem.Sale[0].PremiumCurrencySaleValue;
                 else
                 {
                     premiumCurrencyCost = item.storeItem.CreditValue;
                 }
 
-                if (item.storeItem.CoinValue > 0)
+                if (item.storeItem.Sale[0].StandardCurrencySaleValue > 0)
                     standardCurrencyCost = item.storeItem.Sale[0].StandardCurrencySaleValue;
                 else
                     standardCurrencyCost = item.storeItem.CoinValue;

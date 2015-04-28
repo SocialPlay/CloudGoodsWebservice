@@ -58,6 +58,8 @@ namespace CloudGoods.CurrencyPurchase
         currentBundleID = int.Parse(bundleItem.BundleID);
         currentProductID = bundleItem.ProductID;
 
+        Debug.Log("Current product id: " + currentProductID);
+
         using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))

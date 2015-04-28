@@ -114,20 +114,38 @@ namespace CloudGoods.SDK.Store.UI
                 SaleName.text = storeItem.ItemInformation.Name;
                 IsSale = true;
 
-                ChangeSalePriceDisplay();
+                ChangeSalePriceDisplay(storeItem.Sale[0]);
             }
 
             ChangePurchaseButtonDisplay();
         }
 
-        void ChangeSalePriceDisplay()
+        void ChangeSalePriceDisplay(SalePrices salePrices)
         {
-            StandardCurrencyFullWindow.GetComponent<Image>().color = Color.green;
-            PremiumCurrencyFullWindow.GetComponent<Image>().color = Color.green;
+
             Image[] tmpImages = CurrencyHalfWindow.GetComponentsInChildren<Image>();
 
-            tmpImages[2].color = Color.green;
-            tmpImages[1].color = Color.green;
+            if (salePrices.StandardCurrencySaleValue > 0)
+            {
+                StandardCurrencyFullWindow.GetComponent<Image>().color = Color.green;
+                tmpImages[1].color = Color.green;
+            }
+            else
+            {
+                StandardCurrencyFullWindow.GetComponent<Image>().color = Color.white;
+                tmpImages[1].color = Color.white;
+            }
+
+            if (salePrices.PremiumCurrencySaleValue > 0)
+            {
+                PremiumCurrencyFullWindow.GetComponent<Image>().color = Color.green;
+                tmpImages[2].color = Color.green;
+            }
+            else
+            {
+                StandardCurrencyFullWindow.GetComponent<Image>().color = Color.white;
+                tmpImages[2].color = Color.white;
+            }
             
         }
 
