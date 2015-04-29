@@ -6,6 +6,7 @@ using CloudGoods.Enums;
 using CloudGoods.SDK.Models;
 using CloudGoods.SDK.Utilities;
 using CloudGoods.Services;
+using CloudGoods.Services.WebCommunication;
 
 namespace CloudGoods.SDK.Login
 {
@@ -55,6 +56,10 @@ namespace CloudGoods.SDK.Login
 
         public bool IsKeptActiveOnAllPlatforms;
 
+        void Awake()
+        {
+            CallHandler.IsError += CallHandler_onErrorEvent;
+        }
 
 
         void Start()
