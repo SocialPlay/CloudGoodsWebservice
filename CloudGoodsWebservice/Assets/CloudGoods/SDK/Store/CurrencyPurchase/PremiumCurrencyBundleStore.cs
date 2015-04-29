@@ -68,7 +68,7 @@ namespace CloudGoods.CurrencyPurchase
                     platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
                     break;
                 case BuildPlatform.BuildPlatformType.Kongergate:
-                    platformPurchasor = gameObject.AddComponent<SteamPremiumCurrencyPurchaser>();
+                    platformPurchasor = gameObject.AddComponent<KongregatePurchase>();
                     break;
                 case BuildPlatform.BuildPlatformType.Android:
                     platformPurchasor = gameObject.AddComponent<AndroidPremiumCurrencyPurchaser>();
