@@ -364,7 +364,7 @@ namespace WebCallTests
         {
             try
             {
-                ItemManipulationServices.UserItems(new UserItemsRequest(0), delegate(List<InstancedItemInformation> items)
+                ItemManipulationServices.UserItems(new UserItemsRequest(0, TagsDisplay.Selection), delegate(List<InstancedItemInformation> items)
                 {
                     DisplayItems(items);
                 });
@@ -529,6 +529,14 @@ namespace WebCallTests
     {
         static List<VoucherItemInformation> CurrentVouchers = new List<VoucherItemInformation>();
         static int voucherModifyamount = 0;
+
+        static int totalEnergy = 1000;
+        static int minEnergy = 1;
+        static int maxEnergy = 500;
+
+        static string minEnergyField = minEnergy.ToString();
+        static string maxEnergyField = maxEnergy.ToString();
+        static string totalEnergyField = totalEnergy.ToString();
         static Vector2 scroll = Vector2.zero;
 
         public static void Draw()
@@ -537,6 +545,31 @@ namespace WebCallTests
             {
                 CreateItemVoucher();
             }
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(new GUIContent("Min energy", "the lowest possible energy for a single item to be selected"));
+            minEnergyField = GUILayout.TextField(minEnergyField);
+            int.TryParse(minEnergyField, out minEnergy);
+            if (!string.IsNullOrEmpty(minEnergyField))
+                minEnergyField = minEnergy.ToString();
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(new GUIContent("Max energy", "the Highest possible energy for a single item to be selected"));
+            maxEnergyField = GUILayout.TextField(maxEnergyField);
+            int.TryParse(maxEnergyField, out maxEnergy);
+            if (!string.IsNullOrEmpty(maxEnergyField))
+                maxEnergyField = maxEnergy.ToString();
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(new GUIContent("Total energy", "the total energy to be used to pick the entire collection of items"));
+            totalEnergyField = GUILayout.TextField(totalEnergyField);
+            int.TryParse(totalEnergyField, out totalEnergy);
+            if (!string.IsNullOrEmpty(totalEnergyField))
+                totalEnergyField = totalEnergy.ToString();
+            GUILayout.EndHorizontal();
+
+
             GUILayout.Label(string.Format("Item Vouchers ({0})", CurrentVouchers.Count));
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("+"))
@@ -564,7 +597,7 @@ namespace WebCallTests
             foreach (VoucherItemInformation voucher in CurrentVouchers)
             {
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button(string.Format("({0}) {1} : {2}", voucher.VoucherId, voucher.Information.Id, voucher.Information.Name)))
+                if (GUILayout.Button(string.Format("(voucher ID:{0}){2}\n Item Id:{1}\n possible Amount: {3}", voucher.VoucherId, voucher.Information.Id, voucher.Information.Name,voucher.Amount)))
                 {
                     RedeemItemVoucher(voucher);
 
@@ -582,7 +615,8 @@ namespace WebCallTests
 
         static void CreateItemVoucher()
         {
-            ItemManipulationServices.CreateItemVouchers(new CreateItemVouchersRequest(1, 700), DisaplayItemVouchers);
+
+            ItemManipulationServices.CreateItemVouchers(new CreateItemVouchersRequest(totalEnergy, minEnergy, maxEnergy, TagsDisplay.Selection), DisaplayItemVouchers);
 
         }
 
@@ -608,7 +642,7 @@ namespace WebCallTests
             string debugString = "Vouchers Items";
             foreach (VoucherItemInformation voucher in response.Vouchers)
             {
-                var existing = CurrentVouchers.FirstOrDefault(v => v.VoucherId == voucher.VoucherId);
+                var existing = CurrentVouchers.FirstOrDefault(v => v.VoucherId == voucher.VoucherId && v.Information.Id == voucher.Information.Id);
                 if (existing != null)
                 {
                     existing.Amount = voucher.Amount;
@@ -617,7 +651,7 @@ namespace WebCallTests
                 {
                     CurrentVouchers.Add(voucher);
                 }
-                debugString += string.Format("\n{0}\nId: {1}", voucher.Information.Name, voucher.VoucherId);
+                debugString += string.Format("\n{0}\n  Id: {1}", voucher.Information.Name, voucher.VoucherId);
             }
             DisplayHelper.NewDisplayLine(debugString);
         }
@@ -1185,7 +1219,21 @@ namespace WebCallTests
             And, Or, Not
         }
         static TagType type = TagType.And;
-        static TagSelection selection;
+
+        static bool IsActive;
+        public static TagSelection Selection
+        {
+            get
+            {
+                if (IsActive)
+                {
+                    return _selection;
+                }
+                else
+                    return null;
+            }
+        }
+        private static TagSelection _selection;
         static string name = "";
         static Vector2 scroll = Vector2.zero;
 
@@ -1193,17 +1241,28 @@ namespace WebCallTests
 
         public static void Init()
         {
-            selection = new TagSelection();
+            _selection = new TagSelection();
         }
 
 
         public static void Draw()
         {
-            if (selection == null) return;
+            if (_selection == null) return;
 
             GUILayout.BeginArea(new Rect(Screen.width / 2, Screen.height - 200, Screen.width / 2, 200));
             scroll = GUILayout.BeginScrollView(scroll, GUI.skin.box);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
             GUILayout.Label("Tags");
+            GUILayout.FlexibleSpace();
+            IsActive = GUILayout.Toggle(IsActive, ":Enabled");
+            GUILayout.EndHorizontal();
+            if (!IsActive)
+            {
+                GUILayout.EndScrollView();
+                GUILayout.EndArea();
+                return;
+            }
             GUILayout.BeginHorizontal();
             name = GUILayout.TextField(name);
             if (GUILayout.Button("+", GUILayout.Width(90)))
@@ -1240,15 +1299,15 @@ namespace WebCallTests
             GUILayout.BeginHorizontal();
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label("And", GUI.skin.box);
-            if (selection.AndTags != null)
+            if (_selection.AndTags != null)
             {
-                foreach (string tag in selection.AndTags)
+                foreach (string tag in _selection.AndTags)
                 {
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(tag);
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
-                        selection.AndTags.Remove(tag);
+                        _selection.AndTags.Remove(tag);
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -1256,15 +1315,15 @@ namespace WebCallTests
             GUILayout.EndVertical();
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label("Or", GUI.skin.box);
-            if (selection.OrTags != null)
+            if (_selection.OrTags != null)
             {
-                foreach (string tag in selection.OrTags)
+                foreach (string tag in _selection.OrTags)
                 {
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(tag);
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
-                        selection.OrTags.Remove(tag);
+                        _selection.OrTags.Remove(tag);
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -1272,15 +1331,15 @@ namespace WebCallTests
             GUILayout.EndVertical();
             GUILayout.BeginVertical(GUI.skin.box);
             GUILayout.Label("Not", GUI.skin.box);
-            if (selection.NotTags != null)
+            if (_selection.NotTags != null)
             {
-                foreach (string tag in selection.NotTags)
+                foreach (string tag in _selection.NotTags)
                 {
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(tag);
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
-                        selection.NotTags.Remove(tag);
+                        _selection.NotTags.Remove(tag);
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -1294,18 +1353,18 @@ namespace WebCallTests
 
         public static void addAnd()
         {
-            if (name.Length != 0 && !selection.AndTags.Contains(name))
-                selection.AndTags.Add(name);
+            if (name.Length != 0 && !_selection.AndTags.Contains(name))
+                _selection.AndTags.Add(name);
         }
         public static void addOr()
         {
-            if (name.Length != 0 && !selection.OrTags.Contains(name))
-                selection.OrTags.Add(name);
+            if (name.Length != 0 && !_selection.OrTags.Contains(name))
+                _selection.OrTags.Add(name);
         }
         public static void addNot()
         {
-            if (name.Length != 0 && !selection.NotTags.Contains(name))
-                selection.NotTags.Add(name);
+            if (name.Length != 0 && !_selection.NotTags.Contains(name))
+                _selection.NotTags.Add(name);
         }
 
     }
