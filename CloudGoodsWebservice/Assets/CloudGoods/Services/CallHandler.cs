@@ -253,6 +253,7 @@ namespace CloudGoods.Services.WebCommunication
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBundlesCall(request), x =>
                 {
+                    Debug.Log(x);
                     callback(responseCreator.CreatePremiumCurrencyBundleResponse(x));
                 }));
         }

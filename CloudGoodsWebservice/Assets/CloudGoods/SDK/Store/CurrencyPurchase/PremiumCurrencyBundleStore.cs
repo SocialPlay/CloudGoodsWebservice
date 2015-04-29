@@ -115,6 +115,8 @@ namespace CloudGoods.CurrencyPurchase
 
         void OnPurchaseBundlesRecieved(List<PremiumCurrencyBundle> data)
         {
+            Debug.Log("purchase bundles: " + data);
+
             Debug.Log("Got credit bundles");
             gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
             gridLoader.ItemAdded += OnItemInGrid;
@@ -127,11 +129,10 @@ namespace CloudGoods.CurrencyPurchase
             creditBundle.Amount = item.CreditAmount.ToString();
             creditBundle.Cost = item.Cost.ToString();
 
-
-            //if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
-            //{
-            //    creditBundle.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
-            //}
+            if (item.Data.Count > 0)
+            {
+                creditBundle.ProductID = item.Data[0].Value;
+            }
 
             //if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
             //    creditBundle.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();

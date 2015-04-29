@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace CloudGoods.SDK.Models
 {
@@ -12,5 +13,6 @@ namespace CloudGoods.SDK.Models
         public double Cost;
         public int CreditAmount;
         public string Currency;
+        public List<KeyValuePair<string, string>> Data;
     }
 }
