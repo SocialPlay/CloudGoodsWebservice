@@ -17,7 +17,7 @@ namespace CloudGoods.SDK.Models
             return AppId + UserEmail + Password + DeviceType;
         }
 
-        public LoginRequest(string userEmail, string password,int deviceType = -1)
+        public LoginRequest(string userEmail, string password, int deviceType = 0)
         {
             AppId = CloudGoodsSettings.AppID;
             UserEmail = userEmail;
