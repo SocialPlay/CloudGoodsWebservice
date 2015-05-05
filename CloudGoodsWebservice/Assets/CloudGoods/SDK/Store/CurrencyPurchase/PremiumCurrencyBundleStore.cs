@@ -33,8 +33,6 @@ namespace CloudGoods.CurrencyPurchase
 
         public CurrencyType type = CurrencyType.Standard;
 
-
-
         void Start()
         {
             this.gameObject.name = "PremiumCurrencyBundleStore";
