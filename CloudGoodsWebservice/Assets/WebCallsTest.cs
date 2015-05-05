@@ -756,7 +756,7 @@ namespace WebCallTests
             foreach (StoreItem item in storeItems)
             {
                 GUILayout.BeginHorizontal(GUI.skin.box);
-                GUILayout.Label(string.Format("{1}\n  ID:{0}", item.ItemId, item.ItemId));
+                GUILayout.Label(string.Format("{2}\n{1}\n  ID:{0}", item.ItemId, item.ItemId,item.ItemInformation.Name));
                 GUILayout.FlexibleSpace();
                 GUILayout.BeginVertical(GUILayout.Width(300));
                 if (item.CreditValue != -1)
@@ -783,6 +783,14 @@ namespace WebCallTests
                         ItemStoreServices.PurchaseItem(new PurchaseItemRequest(item.ItemId, 1, PurchaseItemRequest.PaymentType.Standard, 0), StoreItemPurchaseResponse);
                     }
                 }
+
+                if (item.CoinValue == -1 && item.CreditValue == -1)
+                {
+                    if (GUILayout.Button("Free"))
+                    {
+                        ItemStoreServices.PurchaseItem(new PurchaseItemRequest(item.ItemId, 1, PurchaseItemRequest.PaymentType.Free, 0), StoreItemPurchaseResponse);
+                    }
+                }
                 GUILayout.EndVertical();
                 GUILayout.EndHorizontal();
             }
@@ -791,8 +799,7 @@ namespace WebCallTests
 
         private static void StoreItemPurchaseResponse(SimpleItemInfo info)
         {
-            ItemManagerCalls.AddSimpleItemInfo(info);
-
+            ItemManagerCalls.AddSimpleItemInfo(info);           
             string debugString = "Purchased item success";
             debugString = string.Format("{0}\nItem\n   Amount:{1}\n   Location:{2}\n   stack Id:{3}", debugString, info.Amount, info.Location, info.StackId);
             DisplayHelper.NewDisplayLine(debugString);
@@ -802,7 +809,7 @@ namespace WebCallTests
 
         private static void StoreResponse(List<StoreItem> items)
         {
-            storeItems = items;
+            storeItems = items;          
         }
 
         private static void GetStoreItems()
