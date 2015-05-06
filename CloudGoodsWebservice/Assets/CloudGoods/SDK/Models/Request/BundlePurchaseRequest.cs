@@ -5,11 +5,13 @@ namespace CloudGoods.SDK.Models
 {
     public class BundlePurchaseRequest : IRequestClass
     {
-        public string payload;
+        public int BundleID;
+        public int PaymentPlatform;
+        public string ReceiptToken;
 
         public string ToHashable()
         {
-            return payload;
+            return BundleID + PaymentPlatform + ReceiptToken;
         }
     }
 }

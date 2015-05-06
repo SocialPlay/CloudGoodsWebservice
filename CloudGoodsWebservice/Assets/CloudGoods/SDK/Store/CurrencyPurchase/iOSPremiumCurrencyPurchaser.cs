@@ -54,16 +54,10 @@ namespace CloudGoods.CurrencyPurchase
 
         void SendReceiptTokenForVerification(string data, int platform)
         {
-            BundlePurchasePayload bundlePayload = new BundlePurchasePayload();
-            bundlePayload.BundleID = currentBundleID;
-            bundlePayload.ReceiptToken = data;
-            bundlePayload.PaymentPlatform = platform;
-            string bundleJsonString = JsonMapper.ToJson(bundlePayload);
-
-            Debug.Log("Sending bundle purchase: " + bundleJsonString);
-
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
-            bundlePurchaseRequest.payload = bundleJsonString;
+            bundlePurchaseRequest.BundleID = currentBundleID;
+            bundlePurchaseRequest.ReceiptToken = data;
+            bundlePurchaseRequest.PaymentPlatform = platform;
 
             CallHandler.Instance.PurchasePremiumCurrencyBundle(bundlePurchaseRequest, OnReceivedPurchaseResponse);
         }
