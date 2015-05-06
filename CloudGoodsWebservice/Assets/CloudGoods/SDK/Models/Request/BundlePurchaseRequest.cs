@@ -3,11 +3,13 @@ using System.Collections;
 
 namespace CloudGoods.SDK.Models
 {
-    public class BundlePurchaseRequest
+    public class BundlePurchaseRequest : IRequestClass
     {
-        public int BundleID;
-        public string UserID;
-        public string ReceiptToken;
-        public int PaymentPlatform;
+        public string payload;
+
+        public string ToHashable()
+        {
+            return payload;
+        }
     }
 }

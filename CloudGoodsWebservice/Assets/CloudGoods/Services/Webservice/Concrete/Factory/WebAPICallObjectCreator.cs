@@ -277,6 +277,12 @@ namespace CloudGoods.Services.Webservice
         {
             return GenerateWWWPost("SteamOrderConfirmation", request);
         }
+
+
+        public WWW CreatePremiumCurrencyBundlePurchaseCall(BundlePurchaseRequest request)
+        {
+            return GenerateWWWPost("PremiumBundlePurchase", request);
+        }
     }
 }
 

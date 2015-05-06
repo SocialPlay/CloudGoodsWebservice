@@ -209,6 +209,14 @@ namespace CloudGoods.Services.WebCommunication
             }));
         }
 
+        public void PurchasePremiumCurrencyBundle(BundlePurchaseRequest request, Action<PurchasePremiumCurrencyBundleResponse> callback)
+        {
+            Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreatePremiumCurrencyBundlePurchaseCall(request), x =>
+            {
+                
+            }));
+        }
+
         public void ConsumePremiumCurrency(ConsumePremiumRequest request, Action<ConsumePremiumResponce> callback)
         {
             Instance.StartCoroutine(ServiceGetString(callObjectCreator.CreateConsumePremiumCall(request), x =>

@@ -57,6 +57,8 @@ namespace CloudGoods.Services.Webservice
 
         WWW CreatePremiumCurrencyBundlesCall(PremiumBundlesRequest request);
 
+        WWW CreatePremiumCurrencyBundlePurchaseCall(BundlePurchaseRequest request);
+
         WWW CreateStoreItemsCall(StoreItemsRequest request);
 
         WWW CreateStandardCurrencyBalanceCall(StandardCurrencyBalanceRequest request);
@@ -74,8 +76,6 @@ namespace CloudGoods.Services.Webservice
         WWW CreateUserDataAllCall(UserDataAllRequest request);
 
         WWW CreateUserDataByKeyCall(UserDataByKeyRequest request);
-
-      
 
         WWW CreateAppDataCall(AppDataRequest request);
 
