@@ -41,9 +41,10 @@ namespace CloudGoods.SDK.Models
 
         public enum PaymentType
         {
-            NotValid,
+            NotValid = 0,
             Standard = 1,
-            Premium = 2
+            Premium = 2,
+            Free = 3
         }
     }
 }

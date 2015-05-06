@@ -21,7 +21,7 @@ namespace CloudGoods.SDK.Models
 
         public LoginByPlatformRequest() { }
 
-        public LoginByPlatformRequest(string userName, CloudGoodsPlatform platformId, string platformUserId, int deviceType = -1)
+        public LoginByPlatformRequest(string userName, CloudGoodsPlatform platformId, string platformUserId, int deviceType =0)
         {
             UserName = userName;
             PlatformId = (int)platformId;
@@ -30,7 +30,7 @@ namespace CloudGoods.SDK.Models
             DeviceType = deviceType;
         }
 
-        public LoginByPlatformRequest(string userName, int platformId, string platformUserId, int deviceType = -1)
+        public LoginByPlatformRequest(string userName, int platformId, string platformUserId, int deviceType = 0)
         {
             UserName = userName;
             PlatformId = platformId;
