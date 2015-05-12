@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using CloudGoods.Services;
 using CloudGoods.Services.WebCommunication;
 using CloudGoods.SDK.Models;
+using CloudGoods.ItemBundles;
 
 namespace CloudGoods.SDK.Store.UI
 {
@@ -16,6 +17,7 @@ namespace CloudGoods.SDK.Store.UI
         void Awake()
         {
             UnityUIItemPurchase.OnPurchasedItem += UnityUIItemPurchase_OnPurchasedItem;
+            UnityUIBundlePurchasing.OnPurchaseSuccessful += UnityUIBundlePurchaseSuccessful;
             CallHandler.IsError += CallHandler_IsError;
         }
 
@@ -29,6 +31,12 @@ namespace CloudGoods.SDK.Store.UI
         }
 
         void UnityUIItemPurchase_OnPurchasedItem(SimpleItemInfo obj)
+        {
+            purchasePopup.SetActive(true);
+            purchasePopup.GetComponentInChildren<Text>().text = "Purchase Successful";
+        }
+
+        void UnityUIBundlePurchaseSuccessful(ItemBundlePurchaseResponse response)
         {
             purchasePopup.SetActive(true);
             purchasePopup.GetComponentInChildren<Text>().text = "Purchase Successful";

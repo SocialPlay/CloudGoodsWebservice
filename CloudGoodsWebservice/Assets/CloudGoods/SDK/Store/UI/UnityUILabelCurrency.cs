@@ -5,6 +5,7 @@ using CloudGoods.SDK.Models;
 using CloudGoods.Enums;
 using CloudGoods.SDK;
 using CloudGoods.CurrencyPurchase;
+using CloudGoods.ItemBundles;
 
 
 namespace CloudGoods.SDK.Store.UI
@@ -20,11 +21,14 @@ namespace CloudGoods.SDK.Store.UI
         {
             UnityUIItemPurchase.OnPurchasedItem += UnityUIItemPurchase_OnPurchasedItem;
             PremiumCurrencyBundleStore.OnPremiumCurrencyPurchased += PremiumCurrencyBundleStore_OnPremiumCurrencyPurchased;
+            UnityUIBundlePurchasing.OnPurchaseSuccessful += ItemBundlePurchaseSuccess;
         }
 
         void OnDisable()
         {
             UnityUIItemPurchase.OnPurchasedItem -= UnityUIItemPurchase_OnPurchasedItem;
+            PremiumCurrencyBundleStore.OnPremiumCurrencyPurchased -= PremiumCurrencyBundleStore_OnPremiumCurrencyPurchased;
+            UnityUIBundlePurchasing.OnPurchaseSuccessful -= ItemBundlePurchaseSuccess;
         }
 
         void UnityUIItemPurchase_OnPurchasedItem(SimpleItemInfo obj)
@@ -33,6 +37,11 @@ namespace CloudGoods.SDK.Store.UI
         }
 
         void PremiumCurrencyBundleStore_OnPremiumCurrencyPurchased(PurchasePremiumCurrencyBundleResponse obj)
+        {
+            UpdateLabels();
+        }
+
+        void ItemBundlePurchaseSuccess(ItemBundlePurchaseResponse response)
         {
             UpdateLabels();
         }

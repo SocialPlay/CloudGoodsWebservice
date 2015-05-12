@@ -15,28 +15,17 @@ namespace CloudGoods.ItemBundles
 
         bool platformPurchaserSet = false;
 
-
-        // Use this for initialization
-        void Update()
+        void OnEnable()
         {
-            //if (bundleStore.platformPurchasor != null && platformPurchaserSet == false)
-            //{
-            //    Debug.Log("platform purchase set");
-            //    bundleStore.platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_RecievedPurchaseResponse;
-            //    bundleStore.platformPurchasor.RecievedPurchaseResponse += platformPurchasor_RecievedPurchaseResponse;
-
-            //    platformPurchaserSet = true;
-            //}
+            UnityUIBundlePurchasing.OnPurchaseSuccessful += RecievedPurchaseResponse;
         }
 
         void OnDisable()
         {
-            //bundleStore.platformPurchasor.OnPurchaseErrorEvent -= platformPurchasor_RecievedPurchaseResponse;
-            //bundleStore.platformPurchasor.RecievedPurchaseResponse -= platformPurchasor_RecievedPurchaseResponse;
-
+            UnityUIBundlePurchasing.OnPurchaseSuccessful -= RecievedPurchaseResponse;
         }
 
-        void platformPurchasor_RecievedPurchaseResponse(PurchasePremiumCurrencyBundleResponse obj)
+        void RecievedPurchaseResponse(ItemBundlePurchaseResponse obj)
         {
             Debug.Log("Purchase popup event called");
 
@@ -45,7 +34,7 @@ namespace CloudGoods.ItemBundles
             if (obj.StatusCode == 1)
                 purchaseMessage.text = "Purchase Successful";
             else
-                purchaseMessage.text = obj.Message;
+                purchaseMessage.text = "Error Code: " +  obj.StatusCode;
         }
 
         public void CloseWindow()

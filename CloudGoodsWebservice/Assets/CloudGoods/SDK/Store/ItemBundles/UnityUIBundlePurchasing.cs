@@ -150,6 +150,8 @@ namespace CloudGoods.ItemBundles
 
         void OnReceivedPurchaseCallback(ItemBundlePurchaseResponse response)
         {
+            Debug.Log("Successfully purchased item bundle:" + response.PremiumBalance);
+
             ItemStoreServices.GetPremiumCurrencyBalance(null);
             ItemStoreServices.GetStandardCurrencyBalance(new StandardCurrencyBalanceRequest(0), null);
 
