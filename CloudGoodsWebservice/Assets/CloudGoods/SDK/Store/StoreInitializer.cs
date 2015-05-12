@@ -10,6 +10,8 @@ namespace CloudGoods.SDK.Store
 {
     public class StoreInitializer : MonoBehaviour
     {
+
+        public static event Action<List<StoreItem>> OnInitializedStoreItems;
         public StoreLoader StoreLoader;
         public FilterNewestItems.SortTimeType timeFilterType = FilterNewestItems.SortTimeType.hours;
         public int itemDisplayCount = 0;
@@ -31,7 +33,9 @@ namespace CloudGoods.SDK.Store
                 storeItems.Add(newStoreItems[i]);
             }
 
-            StoreLoader.LoadStoreWithPaging(newStoreItems, 0);
+            OnInitializedStoreItems(storeItems);
+
+            //StoreLoader.LoadStoreWithPaging(newStoreItems, 0);
         }
 
     }

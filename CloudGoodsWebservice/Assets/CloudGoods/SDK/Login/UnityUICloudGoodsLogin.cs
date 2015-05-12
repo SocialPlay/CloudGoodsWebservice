@@ -99,8 +99,6 @@ namespace CloudGoods.SDK.Login
                 };
 
                 AccountServices.Login(new LoginRequest(userInfo.UserEmail, ""), RecivedUserGuid);
-
-                RecivedUserGuid(userInfo);
             }
 
         }

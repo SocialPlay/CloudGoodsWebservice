@@ -15,6 +15,16 @@ namespace CloudGoods.SDK.Store
         protected List<StoreItem> filteredList = new List<StoreItem>();
         protected List<GameObject> currentPageItems = new List<GameObject>();
 
+        void OnEnable()
+        {
+            StoreInitializer.OnInitializedStoreItems += OnStoreListLoaded;
+        }
+
+        void OnDisable()
+        {
+            StoreInitializer.OnInitializedStoreItems -= OnStoreListLoaded;
+        }
+
 
         protected void OnStoreListLoaded(List<StoreItem> listItems)
         {
