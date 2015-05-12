@@ -39,13 +39,6 @@ namespace CloudGoods.SDK.Container
                 ContainerAddAction = gameObject.AddComponent<BasicAddContainer>();
             else
                 ContainerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
-
-            //CloudGoods.OnRegisteredUserToSession += OnRegisteredSession;
-        }
-
-        void OnDestroy()
-        {
-            //CloudGoods.OnRegisteredUserToSession -= OnRegisteredSession;
         }
 
         void OnRegisteredSession(string user)
@@ -136,8 +129,6 @@ namespace CloudGoods.SDK.Container
 
         public void Add(OwnedItemInformation itemData, int amount = -1, bool isSave = true)
         {
-            Debug.Log("owned item amount: " + itemData.Amount + " owned amount: " + amount);
-
             ContainerAddAction.AddItem(itemData, amount, isSave);
         }
 
@@ -199,44 +190,6 @@ namespace CloudGoods.SDK.Container
                 Clear();
             }
         }
-
-        //public void UpdateContainerWithItems(List<GiveGeneratedItemResult> givenUserItems)
-        //{
-        //    bool IsItemInContainer = false;
-
-        //    foreach (GiveGeneratedItemResult givenUserItem in givenUserItems)
-        //    {
-        //        IsItemInContainer = false;
-
-        //        OwnedItemInformation givenItemData;
-
-        //        if (!string.IsNullOrEmpty(givenUserItem.StackLocationId))
-        //        {
-        //            givenItemData = containerItems.FirstOrDefault(x => x.StackLocationId == givenUserItem.StackLocationId);
-
-        //            if (givenItemData != null)
-        //            {
-        //                IsItemInContainer = true;
-        //                givenItemData.Amount = givenUserItem.Amount;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            givenItemData = containerItems.FirstOrDefault(x => x.Information.Id == givenUserItem.ItemId);
-
-        //            if (givenItemData != null)
-        //            {
-        //                IsItemInContainer = true;
-        //                givenItemData.Amount += givenUserItem.Amount;
-        //            }
-        //        }
-        //    }
-
-        //    if (IsItemInContainer == false)
-        //    {
-        //        RefreshContainer();
-        //    }
-        //}
     }
 }
 

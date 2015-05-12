@@ -72,11 +72,11 @@ namespace CloudGoods.SDK.Container
 
         public virtual void ModifiedItem(OwnedItemInformation itemData, bool isSaving)
         {
+
             foreach (ItemDataDisplay display in currentDisplayObjects)
             {
                 if (display.itemObject.itemData.IsSameItemAs(itemData))
                 {
-                    display.itemObject.itemData.Amount += itemData.Amount;
                     display.SetAmountText(display.itemObject.itemData.Amount.ToString());
                     return;
                 }

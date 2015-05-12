@@ -49,7 +49,6 @@ namespace CloudGoods.SDK.Container
         {
             foreach (InstancedItemInformation item in receivedItems)
             {
-                Debug.Log("item amount: " + item.Amount);
                 Container.Add(new OwnedItemInformation()
                 {
                     Location = item.Location,
@@ -59,7 +58,7 @@ namespace CloudGoods.SDK.Container
                     OwnerContainer = Container,
                     StackLocationId = item.StackLocationId
 
-                }, -1, false);
+                }, -1,false);
             }
 
             if (LoadedItemsForContainerEvent != null)

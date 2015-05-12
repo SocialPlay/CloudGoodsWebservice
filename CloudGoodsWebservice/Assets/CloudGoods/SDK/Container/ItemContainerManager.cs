@@ -66,7 +66,6 @@ namespace CloudGoods.SDK.Container
                             if (RemoveItem(movingItemData, movingItemData.OwnerContainer) == ContainerMoveState.ActionState.No)
                                 return ContainerMoveState.ActionState.No;
                         }
-                        Debug.Log("new item data amount: " + newItemData.Amount + "   Possible add amount: " + targetAddState.PossibleAddAmount);
 
 
                         targetContainer.Add(newItemData, targetAddState.PossibleAddAmount);

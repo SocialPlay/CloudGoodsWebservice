@@ -389,7 +389,6 @@ namespace CloudGoods.Services.WebCommunication
             {
                 cg.CalculateServerClientTimeDifference(int.Parse(x));
                 isInitialized = true;
-                Debug.Log(x);
 
                 if (CloudGoodsInitilized != null)
                     CloudGoodsInitilized();
@@ -399,7 +398,6 @@ namespace CloudGoods.Services.WebCommunication
         void CalculateServerClientTimeDifference(int serverTime)
         {
             ServerTimeDifference = DateTime.UtcNow.ConvertToUnixTimestamp() - serverTime;
-            Debug.Log("Server time difference: " + ServerTimeDifference);
         }
 
         #endregion

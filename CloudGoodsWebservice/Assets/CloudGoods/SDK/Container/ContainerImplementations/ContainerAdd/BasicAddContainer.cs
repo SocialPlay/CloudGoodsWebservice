@@ -21,10 +21,9 @@ namespace CloudGoods.SDK.Container
             if (amount == -1 || amount > addItem.Amount)
             {
                 amount = addItem.Amount;
-
-                Debug.Log("add item amount: " + addItem.Amount + " amount: " + amount);
-
                 addItem.OwnerContainer = ItemContainer;
+
+
                 if (!AddToExistingStack(addItem, addItem.Amount, isSave))
                 {
                     ItemContainer.containerItems.Add(addItem);
@@ -53,13 +52,13 @@ namespace CloudGoods.SDK.Container
 
                     ItemContainer.ModifiedItemEvent(data, isSave);
 
-
                     item.Amount = item.Amount + amount;
                     data.Amount -= amount;
 
                     return true;
                 }
             }
+
             return false;
         }
 
